@@ -1,0 +1,70 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import TreeNavigation from "./TreeNavigation";
+
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  // Close sidebar on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // Prevent body scroll when mobile sidebar is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const handleNavigate = () => {
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth < 768) {
+      onClose();
+    }
+  };
+
+  return (
+    <>
+      {/* Mobile overlay backdrop */}
+      {isOpen && (
+        <div
+          className="overlay-backdrop fixed inset-0 z-20 md:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        ref={sidebarRef}
+        className={`
+          sidebar-transition fixed left-0 top-14 z-20 h-[calc(100vh-3.5rem)] w-[280px] shrink-0
+          overflow-y-auto border-r border-border bg-bg-sidebar
+          md:relative md:top-0 md:z-0 md:block md:h-[calc(100vh-3.5rem)]
+          ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 md:translate-x-0 md:opacity-100"}
+        `}
+        aria-label="Sidebar navigation"
+      >
+        <TreeNavigation onNavigate={handleNavigate} />
+      </aside>
+    </>
+  );
+}
