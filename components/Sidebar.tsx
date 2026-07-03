@@ -55,9 +55,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       <aside
         ref={sidebarRef}
         className={`
-          fixed left-4 top-[4.25rem] z-20 h-[calc(100vh-6rem)] w-[240px] shrink-0
+          fixed left-4 top-[4.25rem] z-20 h-[calc(100vh-6rem)] w-[220px] shrink-0
           overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg
-          md:relative md:left-0 md:top-0 md:z-0 md:block md:h-[calc(100vh-6rem)] md:ml-4
+          md:relative md:left-0 md:top-0 md:z-0 md:block md:h-[calc(100vh-6rem)] md:ml-6
           ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 md:translate-x-0 md:opacity-100"}
           transition-all duration-300 ease-out
         `}
