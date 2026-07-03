@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { themes, type ThemeId } from "@/lib/themes";
+import SFSymbol from "./SFSymbol";
 
 interface ThemeSwitcherProps {
   currentTheme: ThemeId;
@@ -38,15 +39,16 @@ export default function ThemeSwitcher({ currentTheme, onThemeChange }: ThemeSwit
         </div>
       )}
 
-      {/* Main toggle button */}
+      {/* Main toggle button — iOS-style rounded square icon */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         onMouseEnter={() => setHoveredTheme(currentTheme)}
         onMouseLeave={() => setHoveredTheme(null)}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-lg font-bold text-white apple-shadow-md transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95"
+        className="flex h-12 w-12 items-center justify-center rounded-2xl text-white apple-shadow-md transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95"
+        style={{ background: current.iconBg }}
         aria-label="Переключить тему"
       >
-        {current.icon}
+        <SFSymbol name={current.icon} size={20} className="text-white" />
       </button>
 
       {/* Theme selection menu */}
@@ -69,7 +71,13 @@ export default function ThemeSwitcher({ currentTheme, onThemeChange }: ThemeSwit
                     : "bg-white/90 text-text-secondary ring-1 ring-black/5 hover:bg-white hover:text-text-primary"
                 }`}
               >
-                <span className="text-lg">{theme.icon}</span>
+                {/* iOS-style rounded square icon */}
+                <span
+                  className="flex h-7 w-7 items-center justify-center rounded-[7px] text-white"
+                  style={{ background: theme.iconBg }}
+                >
+                  <SFSymbol name={theme.icon} size={14} className="text-white" />
+                </span>
                 <span className="whitespace-nowrap">{theme.label}</span>
                 {isActive && (
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

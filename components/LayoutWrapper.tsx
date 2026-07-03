@@ -6,6 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import FooterCredit from "@/components/FooterCredit";
 import CursorTrail from "@/components/CursorTrail";
+import BackgroundOrbs from "@/components/BackgroundOrbs";
 import { type ThemeId } from "@/lib/themes";
 
 export default function LayoutWrapper({
@@ -35,13 +36,14 @@ export default function LayoutWrapper({
 
   return (
     <>
+      <BackgroundOrbs />
       <CursorTrail />
       <Header onMenuToggle={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <div className="flex flex-1 px-0 md:px-0">
         <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
         <main
           id="main-content"
-          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 md:py-8"
+          className="flex-1 overflow-y-auto px-4 py-6 md:px-10 md:py-10"
         >
           {children}
         </main>

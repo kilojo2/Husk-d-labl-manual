@@ -1,97 +1,117 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 
-interface Dimple {
+interface Point {
   x: number;
   y: number;
-  age: number;
 }
 
-const TRAIL_LENGTH = 6;
-const SPACING_MS = 40;
-const FADE_DURATION_MS = 600;
-const DIMPLE_SIZE = 48;
+const TRAIL_COUNT = 8;
+const LERP_ALPHA = 0.15;
+const DIMPLE_SIZE = 40;
 
 export default function CursorTrail() {
-  const dimplesRef = useRef<Dimple[]>([]);
+  const pointsRef = useRef<Point[]>([]);
   const rafRef = useRef<number | null>(null);
-  const lastTimeRef = useRef<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<Point>({ x: 0, y: 0 });
+  const hasMovedRef = useRef(false);
 
-  const updateDimples = useCallback((time: number) => {
-    const dimples = dimplesRef.current;
+  useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Remove old dimples
-    const alive = dimples.filter((d) => time - d.age < FADE_DURATION_MS);
-
-    // Update positions and opacities
-    const fragment = document.createDocumentFragment();
-    const existing = container.querySelectorAll(".cursor-dimple");
-
-    alive.forEach((dimple, i) => {
-      const elapsed = time - dimple.age;
-      const progress = elapsed / FADE_DURATION_MS;
-      const opacity = 1 - progress;
-      const scale = 1 - progress * 0.4;
-
-      let el = existing[i] as HTMLElement | undefined;
-      if (!el) {
-        el = document.createElement("div");
-        el.className = "cursor-dimple";
-        container.appendChild(el);
-      }
-      el.style.left = `${dimple.x}px`;
-      el.style.top = `${dimple.y}px`;
-      el.style.width = `${DIMPLE_SIZE}px`;
-      el.style.height = `${DIMPLE_SIZE}px`;
-      el.style.opacity = String(opacity);
-      el.style.transform = `translate(-50%, -50%) scale(${scale})`;
-      el.style.background = `radial-gradient(circle at 50% 50%, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.02) 30%, transparent 70%)`;
-    });
-
-    // Remove excess elements
-    for (let i = alive.length; i < existing.length; i++) {
-      existing[i]?.remove();
+    // Create dimple elements once
+    const elements: HTMLDivElement[] = [];
+    for (let i = 0; i < TRAIL_COUNT; i++) {
+      const el = document.createElement("div");
+      el.className = "cursor-dimple";
+      const delay = (i / (TRAIL_COUNT - 1)) * 0.6;
+      const size = DIMPLE_SIZE * (1 - i * 0.06);
+      el.style.width = `${size}px`;
+      el.style.height = `${size}px`;
+      el.style.transition = `opacity 0.3s ease`;
+      el.style.opacity = "0";
+      el.style.background = `radial-gradient(circle at 50% 50%, rgba(0,0,0,0.045) 0%, rgba(0,0,0,0.02) 30%, transparent 70%)`;
+      container.appendChild(el);
+      elements.push(el);
     }
 
-    dimplesRef.current = alive;
-    rafRef.current = requestAnimationFrame(updateDimples);
-  }, []);
+    // Initialize points at center
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    pointsRef.current = Array(TRAIL_COUNT).fill(null).map(() => ({ x: cx, y: cy }));
 
-  useEffect(() => {
+    const animate = () => {
+      const points = pointsRef.current;
+      const target = targetRef.current;
+
+      if (hasMovedRef.current) {
+        // Each point follows the one before it with lerp
+        points[0] = {
+          x: points[0].x + (target.x - points[0].x) * LERP_ALPHA,
+          y: points[0].y + (target.y - points[0].y) * LERP_ALPHA,
+        };
+
+        for (let i = 1; i < TRAIL_COUNT; i++) {
+          points[i] = {
+            x: points[i].x + (points[i - 1].x - points[i].x) * LERP_ALPHA,
+            y: points[i].y + (points[i - 1].y - points[i].y) * LERP_ALPHA,
+          };
+        }
+
+        // Update DOM
+        for (let i = 0; i < TRAIL_COUNT; i++) {
+          const el = elements[i];
+          if (!el) break;
+          const p = points[i];
+          el.style.left = `${p.x}px`;
+          el.style.top = `${p.y}px`;
+          el.style.transform = `translate(-50%, -50%)`;
+          el.style.opacity = String(1 - i * 0.1);
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
-      const now = performance.now();
-      if (now - lastTimeRef.current < SPACING_MS) return;
-      lastTimeRef.current = now;
-
-      dimplesRef.current.push({
-        x: e.clientX,
-        y: e.clientY,
-        age: now,
-      });
-
-      // Keep only recent enough
-      if (dimplesRef.current.length > TRAIL_LENGTH * 2) {
-        dimplesRef.current = dimplesRef.current.slice(-TRAIL_LENGTH);
+      targetRef.current = { x: e.clientX, y: e.clientY };
+      if (!hasMovedRef.current) {
+        hasMovedRef.current = true;
+        // Snap first point immediately
+        for (let i = 0; i < TRAIL_COUNT; i++) {
+          pointsRef.current[i] = { x: e.clientX, y: e.clientY };
+        }
       }
+    };
 
-      if (!rafRef.current) {
-        rafRef.current = requestAnimationFrame(updateDimples);
+    const handleMouseLeave = () => {
+      hasMovedRef.current = false;
+      for (const el of elements) {
+        el.style.opacity = "0";
       }
+    };
+
+    const handleMouseEnter = () => {
+      hasMovedRef.current = true;
     };
 
     document.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseenter", handleMouseEnter);
+
+    rafRef.current = requestAnimationFrame(animate);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseenter", handleMouseEnter);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      for (const el of elements) el.remove();
     };
-  }, [updateDimples]);
+  }, []);
 
   return <div ref={containerRef} className="fixed inset-0 pointer-events-none z-[9999]" />;
 }

@@ -154,6 +154,42 @@ body {
   will-change: transform, opacity;
 }
 
+/* ─── Background Floating Orbs ─── */
+@keyframes float-orb {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  25% {
+    transform: translate(8vw, -6vh) scale(1.05);
+  }
+  50% {
+    transform: translate(-5vw, 4vh) scale(0.95);
+  }
+  75% {
+    transform: translate(6vw, -3vh) scale(1.02);
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-4vw, 8vh) scale(0.98);
+    opacity: 0;
+  }
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: float-orb linear infinite;
+  filter: blur(60px);
+}
+
 /* ═══════════════════════════════════════════════════════
    THEME 1 — Deep Space Galaxy
    ═══════════════════════════════════════════════════════ */
