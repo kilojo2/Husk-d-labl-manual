@@ -6,25 +6,29 @@ interface ArticlePageProps {
 
 export default function ArticlePage({ title, description, children }: ArticlePageProps) {
   return (
-    <article className="mx-auto max-w-3xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-text-primary md:text-4xl">
+    <article className="mx-auto max-w-4xl">
+      {/* Title section */}
+      <div className="mb-8 text-center md:text-left">
+        <h1 className="text-4xl font-bold tracking-tight text-text-primary md:text-5xl md:leading-tight">
           {title}
         </h1>
         {description && (
-          <p className="mt-3 text-lg text-text-secondary">{description}</p>
+          <p className="mt-3 text-lg text-text-secondary md:text-xl">
+            {description}
+          </p>
         )}
       </div>
 
-      <div className="rounded-xl border border-border bg-bg-surface p-8">
+      {/* Content card — Apple-style floating card */}
+      <div className="apple-card p-6 md:p-10">
         {children ?? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
+          <div className="flex flex-col items-center justify-center py-20 text-center">
             <svg
-              className="mb-4 h-12 w-12 text-text-muted"
+              className="mb-4 h-14 w-14 text-text-muted"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={1.5}
+              strokeWidth={1.2}
             >
               <path
                 strokeLinecap="round"

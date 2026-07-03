@@ -35,7 +35,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   }, [isOpen]);
 
   const handleNavigate = () => {
-    // Close sidebar on mobile after navigation
     if (window.innerWidth < 768) {
       onClose();
     }
@@ -46,20 +45,21 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Mobile overlay backdrop */}
       {isOpen && (
         <div
-          className="overlay-backdrop fixed inset-0 z-20 md:hidden"
+          className="fixed inset-0 z-20 bg-black/20 backdrop-blur-sm md:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar — floating glass panel */}
       <aside
         ref={sidebarRef}
         className={`
-          sidebar-transition fixed left-0 top-14 z-20 h-[calc(100vh-3.5rem)] w-[280px] shrink-0
-          overflow-y-auto border-r border-border bg-bg-sidebar
-          md:relative md:top-0 md:z-0 md:block md:h-[calc(100vh-3.5rem)]
+          fixed left-4 top-[4.25rem] z-20 h-[calc(100vh-6rem)] w-[280px] shrink-0
+          overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg
+          md:relative md:left-0 md:top-0 md:z-0 md:block md:h-[calc(100vh-6rem)] md:ml-4
           ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 md:translate-x-0 md:opacity-100"}
+          transition-all duration-300 ease-out
         `}
         aria-label="Sidebar navigation"
       >

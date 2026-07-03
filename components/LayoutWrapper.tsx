@@ -34,7 +34,7 @@ export default function LayoutWrapper({
   return (
     <>
       <Header onMenuToggle={toggleSidebar} isSidebarOpen={isSidebarOpen} />
-      <div className="flex flex-1">
+      <div className="flex flex-1 px-0 md:px-0">
         <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
         <main
           id="main-content"
