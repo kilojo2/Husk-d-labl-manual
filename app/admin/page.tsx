@@ -71,7 +71,7 @@ interface StatsData {
   realtime: RealtimeStat;
   totals: Totals;
   recent: RecentVisit[];
-  security: SecurityData;
+  security?: SecurityData;
 }
 
 export default function AdminPage() {
