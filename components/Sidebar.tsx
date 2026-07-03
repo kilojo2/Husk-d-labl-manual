@@ -51,19 +51,29 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar — floating glass panel */}
+      {/* Mobile sidebar — fixed overlay */}
       <aside
         ref={sidebarRef}
         className={`
-          fixed left-4 top-[4.25rem] z-20 h-[calc(100vh-6rem)] w-[220px] shrink-0
+          fixed left-4 top-[4.25rem] z-20 h-[calc(100vh-6rem)] w-[280px] shrink-0
           overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg
-          md:relative md:left-0 md:top-0 md:z-0 md:block md:h-[calc(100vh-6rem)] md:ml-6
-          ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 md:translate-x-0 md:opacity-100"}
+          md:hidden
+          ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"}
           transition-all duration-300 ease-out
         `}
-        aria-label="Sidebar navigation"
+        aria-label="Mobile sidebar navigation"
       >
         <TreeNavigation onNavigate={handleNavigate} />
+      </aside>
+
+      {/* Desktop sidebar — static in flex flow */}
+      <aside
+        className="hidden md:block md:w-[220px] md:ml-6 md:mr-4 md:shrink-0"
+        aria-label="Sidebar navigation"
+      >
+        <div className="h-[calc(100vh-6rem)] overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg">
+          <TreeNavigation onNavigate={handleNavigate} />
+        </div>
       </aside>
     </>
   );
