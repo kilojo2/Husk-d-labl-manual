@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Configure for Vercel deployment
   reactStrictMode: true,
+  // Allow sql.js (native module) to be bundled on the server
+  serverExternalPackages: ["sql.js"],
 };
 
 export default nextConfig;

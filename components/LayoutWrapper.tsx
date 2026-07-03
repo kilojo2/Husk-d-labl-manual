@@ -7,6 +7,7 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import FooterCredit from "@/components/FooterCredit";
 import CursorTrail from "@/components/CursorTrail";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
+import VisitTracker from "@/components/VisitTracker";
 import { type ThemeId } from "@/lib/themes";
 
 export default function LayoutWrapper({
@@ -38,6 +39,7 @@ export default function LayoutWrapper({
     <>
       <BackgroundOrbs />
       <CursorTrail />
+      <VisitTracker />
       <Header onMenuToggle={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <div className="flex flex-1 px-0 md:px-0">
         <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
