@@ -33,6 +33,36 @@ interface RecentVisit {
   date: string;
   time: string;
   userAgent: string;
+  ipHash: string | null;
+  isProxy: boolean;
+}
+
+interface BlockedIp {
+  ipHash: string;
+  reason: string;
+  bannedAt: number;
+  expiresAt: number;
+}
+
+interface AnomalyEvent {
+  type: string;
+  ipHash: string;
+  details: string;
+  timestamp: string;
+}
+
+interface AnomalyStats {
+  totalAnomalies: number;
+  proxyDetections: number;
+  pathScans: number;
+  invalidIps: number;
+  knownBots: number;
+}
+
+interface SecurityData {
+  blockedIps: BlockedIp[];
+  anomalyStats: AnomalyStats;
+  recentAnomalies: AnomalyEvent[];
 }
 
 interface StatsData {
@@ -41,6 +71,7 @@ interface StatsData {
   realtime: RealtimeStat;
   totals: Totals;
   recent: RecentVisit[];
+  security: SecurityData;
 }
 
 export default function AdminPage() {
@@ -207,6 +238,17 @@ export default function AdminPage() {
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr + "T00:00:00");
     return d.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+  };
+
+  // Format timestamp for display
+  const formatTimestamp = (ts: string) => {
+    const d = new Date(ts);
+    return d.toLocaleString("ru-RU", {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   // Build bar chart data
@@ -399,6 +441,7 @@ export default function AdminPage() {
                     <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Время</th>
                     <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Страница</th>
                     <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Referrer</th>
+                    <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>IP Hash</th>
                     <th style={{ padding: "0 0 8px 0", textAlign: "left", fontWeight: 500 }}>User-Agent</th>
                   </tr>
                 </thead>
@@ -414,6 +457,14 @@ export default function AdminPage() {
                       <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {visit.referrer || "—"}
                       </td>
+                      <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", fontFamily: "monospace", fontSize: "11px" }}>
+                        {visit.ipHash || "—"}
+                        {visit.isProxy && (
+                          <span style={{ marginLeft: "6px", fontSize: "10px", color: "#ff9f0a", background: "rgba(255,159,10,0.15)", padding: "1px 5px", borderRadius: "4px" }}>
+                            PROXY
+                          </span>
+                        )}
+                      </td>
                       <td style={{ padding: "8px 0", color: "rgba(255,255,255,0.5)", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {visit.userAgent || "—"}
                       </td>
@@ -422,6 +473,133 @@ export default function AdminPage() {
                 </tbody>
               </table>
             </div>
+          )}
+        </GlassSection>
+
+        {/* Security Section */}
+        <GlassSection title="Безопасность">
+          {data.security ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+              {/* Anomaly Stats */}
+              <div>
+                <p style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Статистика аномалий
+                </p>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+                    gap: "8px",
+                  }}
+                >
+                  <MiniKpiCard label="Всего" value={data.security.anomalyStats?.totalAnomalies ?? 0} color="#ff9f0a" />
+                  <MiniKpiCard label="Прокси" value={data.security.anomalyStats?.proxyDetections ?? 0} color="#ff453a" />
+                  <MiniKpiCard label="Сканирование" value={data.security.anomalyStats?.pathScans ?? 0} color="#bf5af2" />
+                  <MiniKpiCard label="Невалидные IP" value={data.security.anomalyStats?.invalidIps ?? 0} color="#ff375f" />
+                  <MiniKpiCard label="Боты" value={data.security.anomalyStats?.knownBots ?? 0} color="#64d2ff" />
+                </div>
+              </div>
+
+              {/* Blocked IPs */}
+              <div>
+                <p style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Заблокированные IP ({data.security.blockedIps?.length ?? 0})
+                </p>
+                {data.security.blockedIps && data.security.blockedIps.length > 0 ? (
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", fontSize: "12px", borderCollapse: "collapse" }}>
+                      <thead>
+                        <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", fontSize: "10px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                          <th style={{ padding: "0 8px 6px 0", textAlign: "left", fontWeight: 500 }}>IP Hash</th>
+                          <th style={{ padding: "0 8px 6px 0", textAlign: "left", fontWeight: 500 }}>Причина</th>
+                          <th style={{ padding: "0 0 6px 0", textAlign: "left", fontWeight: 500 }}>Истекает</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.security.blockedIps.map((b, i) => (
+                          <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                            <td style={{ padding: "6px 8px 6px 0", fontFamily: "monospace", fontSize: "11px", color: "#ff453a" }}>
+                              {b.ipHash.slice(0, 16)}...
+                            </td>
+                            <td style={{ padding: "6px 8px 6px 0", color: "rgba(255,255,255,0.6)" }}>
+                              {b.reason}
+                            </td>
+                            <td style={{ padding: "6px 0", color: "rgba(255,255,255,0.4)", whiteSpace: "nowrap" }}>
+                              {new Date(b.expiresAt).toLocaleString("ru-RU")}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Нет заблокированных IP</p>
+                )}
+              </div>
+
+              {/* Recent Anomalies */}
+              <div>
+                <p style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Последние аномалии
+                </p>
+                {data.security.recentAnomalies && data.security.recentAnomalies.length > 0 ? (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    {data.security.recentAnomalies.map((a, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "12px",
+                          padding: "8px 12px",
+                          borderRadius: "10px",
+                          background: "rgba(255,255,255,0.03)",
+                          fontSize: "12px",
+                        }}
+                      >
+                        <span
+                          style={{
+                            padding: "2px 8px",
+                            borderRadius: "6px",
+                            fontSize: "10px",
+                            fontWeight: 600,
+                            textTransform: "uppercase",
+                            background:
+                              a.type === "proxy_chain" ? "rgba(255,69,58,0.2)" :
+                              a.type === "path_scan" ? "rgba(191,90,242,0.2)" :
+                              a.type === "invalid_ip" ? "rgba(255,55,95,0.2)" :
+                              "rgba(100,210,255,0.2)",
+                            color:
+                              a.type === "proxy_chain" ? "#ff453a" :
+                              a.type === "path_scan" ? "#bf5af2" :
+                              a.type === "invalid_ip" ? "#ff375f" :
+                              "#64d2ff",
+                          }}
+                        >
+                          {a.type === "proxy_chain" ? "Прокси" :
+                           a.type === "path_scan" ? "Скан" :
+                           a.type === "invalid_ip" ? "IP" :
+                           a.type === "known_bot" ? "Бот" : a.type}
+                        </span>
+                        <span style={{ fontFamily: "monospace", fontSize: "11px", color: "rgba(255,255,255,0.5)" }}>
+                          {a.ipHash}
+                        </span>
+                        <span style={{ color: "rgba(255,255,255,0.6)", flex: 1 }}>
+                          {a.details}
+                        </span>
+                        <span style={{ color: "rgba(255,255,255,0.3)", whiteSpace: "nowrap", fontSize: "11px" }}>
+                          {formatTimestamp(a.timestamp)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Аномалий не обнаружено</p>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Данные безопасности недоступны</p>
           )}
         </GlassSection>
       </div>
@@ -488,6 +666,27 @@ function KpiCard({
           {subtitle}
         </p>
       )}
+    </div>
+  );
+}
+
+function MiniKpiCard({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <div
+      style={{
+        background: "rgba(255,255,255,0.04)",
+        borderRadius: "12px",
+        padding: "12px",
+        border: "1px solid rgba(255,255,255,0.06)",
+        textAlign: "center",
+      }}
+    >
+      <p style={{ fontSize: "20px", fontWeight: 700, margin: 0, color }}>
+        {value}
+      </p>
+      <p style={{ fontSize: "10px", fontWeight: 600, margin: "2px 0 0", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+        {label}
+      </p>
     </div>
   );
 }

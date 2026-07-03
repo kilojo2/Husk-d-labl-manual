@@ -43,6 +43,7 @@ export async function getDb(): Promise<SqlJsDatabase> {
   db.run("PRAGMA synchronous=NORMAL;");
 
   createTables(db);
+  migrateSchema(db);
 
   return db;
 }
@@ -53,17 +54,22 @@ export async function getDb(): Promise<SqlJsDatabase> {
 function createTables(database: SqlJsDatabase): void {
   database.run(`
     CREATE TABLE IF NOT EXISTS visits (
-      id            INTEGER PRIMARY KEY AUTOINCREMENT,
-      visitor_id    TEXT NOT NULL,
-      page_path     TEXT NOT NULL,
-      page_title    TEXT DEFAULT '',
-      referrer      TEXT DEFAULT '',
-      user_agent    TEXT DEFAULT '',
-      screen_width  INTEGER DEFAULT 0,
-      screen_height INTEGER DEFAULT 0,
-      visit_date    TEXT NOT NULL,
-      visit_time    TEXT NOT NULL,
-      created_at    TEXT NOT NULL DEFAULT (datetime('now'))
+      id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+      visitor_id          TEXT NOT NULL,
+      page_path           TEXT NOT NULL,
+      page_title          TEXT DEFAULT '',
+      referrer            TEXT DEFAULT '',
+      user_agent          TEXT DEFAULT '',
+      screen_width        INTEGER DEFAULT 0,
+      screen_height       INTEGER DEFAULT 0,
+      ip_address_encrypted TEXT DEFAULT '',
+      ip_hash             TEXT DEFAULT '',
+      is_proxy            INTEGER DEFAULT 0,
+      country             TEXT DEFAULT '',
+      city                TEXT DEFAULT '',
+      visit_date          TEXT NOT NULL,
+      visit_time          TEXT NOT NULL,
+      created_at          TEXT NOT NULL DEFAULT (datetime('now'))
     )
   `);
 
@@ -90,7 +96,28 @@ function createTables(database: SqlJsDatabase): void {
     )
   `);
 
-  // Index for fast daily lookups
+  database.run(`
+    CREATE TABLE IF NOT EXISTS blocked_ips (
+      id              INTEGER PRIMARY KEY AUTOINCREMENT,
+      ip_hash         TEXT NOT NULL UNIQUE,
+      reason          TEXT DEFAULT '',
+      blocked_at      TEXT NOT NULL DEFAULT (datetime('now')),
+      expires_at      TEXT,
+      violation_count INTEGER DEFAULT 1
+    )
+  `);
+
+  database.run(`
+    CREATE TABLE IF NOT EXISTS anomaly_log (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      event_type  TEXT NOT NULL,
+      ip_hash     TEXT DEFAULT '',
+      details     TEXT DEFAULT '',
+      created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+    )
+  `);
+
+  // Indexes
   database.run(`
     CREATE INDEX IF NOT EXISTS idx_visits_date ON visits(visit_date)
   `);
@@ -100,6 +127,65 @@ function createTables(database: SqlJsDatabase): void {
   database.run(`
     CREATE INDEX IF NOT EXISTS idx_visits_page ON visits(page_path)
   `);
+  database.run(`
+    CREATE INDEX IF NOT EXISTS idx_visits_ip_hash ON visits(ip_hash)
+  `);
+  database.run(`
+    CREATE INDEX IF NOT EXISTS idx_anomaly_type ON anomaly_log(event_type)
+  `);
+  database.run(`
+    CREATE INDEX IF NOT EXISTS idx_anomaly_created ON anomaly_log(created_at)
+  `);
+}
+
+/**
+ * Migrate existing database schema to add IP columns if missing.
+ * Safe to call on every startup — checks column existence first.
+ */
+function migrateSchema(database: SqlJsDatabase): void {
+  try {
+    const columns = database.exec("PRAGMA table_info(visits)");
+    const existingColumns: string[] =
+      columns.length > 0
+        ? columns[0].values.map((c: any) => c[1])
+        : [];
+
+    if (!existingColumns.includes("ip_hash")) {
+      database.run(`ALTER TABLE visits ADD COLUMN ip_address_encrypted TEXT DEFAULT ''`);
+      database.run(`ALTER TABLE visits ADD COLUMN ip_hash TEXT DEFAULT ''`);
+      database.run(`ALTER TABLE visits ADD COLUMN is_proxy INTEGER DEFAULT 0`);
+      database.run(`ALTER TABLE visits ADD COLUMN country TEXT DEFAULT ''`);
+      database.run(`ALTER TABLE visits ADD COLUMN city TEXT DEFAULT ''`);
+      database.run(`CREATE INDEX IF NOT EXISTS idx_visits_ip_hash ON visits(ip_hash)`);
+    }
+
+    // Create new tables if they don't exist (safe even if already created above)
+    database.run(`
+      CREATE TABLE IF NOT EXISTS blocked_ips (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        ip_hash         TEXT NOT NULL UNIQUE,
+        reason          TEXT DEFAULT '',
+        blocked_at      TEXT NOT NULL DEFAULT (datetime('now')),
+        expires_at      TEXT,
+        violation_count INTEGER DEFAULT 1
+      )
+    `);
+
+    database.run(`
+      CREATE TABLE IF NOT EXISTS anomaly_log (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        event_type  TEXT NOT NULL,
+        ip_hash     TEXT DEFAULT '',
+        details     TEXT DEFAULT '',
+        created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+      )
+    `);
+
+    database.run(`CREATE INDEX IF NOT EXISTS idx_anomaly_type ON anomaly_log(event_type)`);
+    database.run(`CREATE INDEX IF NOT EXISTS idx_anomaly_created ON anomaly_log(created_at)`);
+  } catch (err) {
+    console.warn("[DB] Migration skipped or already applied:", err);
+  }
 }
 
 /**

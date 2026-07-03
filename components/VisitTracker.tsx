@@ -7,8 +7,10 @@ import { usePathname } from "next/navigation";
  * VisitTracker — Client component that fires a POST /api/track
  * request whenever the page path changes.
  *
- * Renders nothing (returns null). Must be placed inside a Client Component
- * that has access to the router context (e.g., LayoutWrapper).
+ * Primary: fetch with keepalive
+ * Fallback: Image beacon (works when fetch is blocked by Brave/ETP)
+ *
+ * Renders nothing (returns null).
  */
 export default function VisitTracker() {
   const pathname = usePathname();
@@ -32,14 +34,27 @@ export default function VisitTracker() {
       screenHeight: window.screen.height,
     };
 
-    // Fire and forget — use keepalive for reliability
+    // Primary: fetch with keepalive
     fetch("/api/track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
       keepalive: true,
     }).catch(() => {
-      // Silently fail — tracking should never break the user experience
+      // Fallback: Image beacon (works even when fetch is blocked)
+      try {
+        const img = new Image();
+        img.src = `/api/track/beacon?d=${btoa(JSON.stringify(payload))}`;
+        img.style.display = "none";
+        document.body.appendChild(img);
+        setTimeout(() => {
+          if (document.body.contains(img)) {
+            document.body.removeChild(img);
+          }
+        }, 1000);
+      } catch {
+        // Silently fail — tracking should never break the user experience
+      }
     });
   }, [pathname]);
 

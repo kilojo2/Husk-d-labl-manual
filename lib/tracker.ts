@@ -3,9 +3,15 @@
  *
  * Records a visit event into the SQLite database and updates
  * aggregated daily and per-page statistics.
+ *
+ * Extended with IP address collection:
+ * - IP is encrypted (AES-256-GCM) before storage
+ * - IP is SHA-256 hashed for deduplication
+ * - Raw IP is never logged or exposed
  */
 
 import { getDb, saveDb } from "./db";
+import { encryptIp } from "./crypto";
 
 export interface VisitEvent {
   pagePath: string;
@@ -15,6 +21,12 @@ export interface VisitEvent {
   screenWidth: number;
   screenHeight: number;
   visitorId: string;
+  /** AES-256-GCM encrypted IP address */
+  ipAddressEncrypted?: string;
+  /** SHA-256 hash of the raw IP for deduplication */
+  ipHash?: string;
+  /** Whether the request came through a proxy/VPN */
+  isProxy?: boolean;
 }
 
 /**
@@ -30,8 +42,11 @@ export async function recordVisit(event: VisitEvent): Promise<void> {
 
   // 1. Insert raw visit record
   db.run(
-    `INSERT INTO visits (visitor_id, page_path, page_title, referrer, user_agent, screen_width, screen_height, visit_date, visit_time)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO visits
+       (visitor_id, page_path, page_title, referrer, user_agent,
+        screen_width, screen_height, ip_address_encrypted, ip_hash, is_proxy,
+        visit_date, visit_time)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       event.visitorId,
       event.pagePath,
@@ -40,6 +55,9 @@ export async function recordVisit(event: VisitEvent): Promise<void> {
       event.userAgent,
       event.screenWidth,
       event.screenHeight,
+      event.ipAddressEncrypted || "",
+      event.ipHash || "",
+      event.isProxy ? 1 : 0,
       dateStr,
       timeStr,
     ]

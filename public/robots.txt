@@ -1,0 +1,39 @@
+# Husk'd Labl Manuals — robots.txt
+# Production environment — restrict crawlers
+
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /admin
+Disallow: /api/track/
+Disallow: /api/track
+Disallow: /api/honeypot/
+Disallow: /api/honeypot
+Disallow: /api/privacy/
+Disallow: /api/privacy
+Disallow: /api/stats/
+Disallow: /api/stats
+
+# Decoy paths for scrapers
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /administrator/
+Disallow: /backup/
+Disallow: /config/
+Disallow: /database/
+Disallow: /sql/
+Disallow: /phpmyadmin/
+Disallow: /_debug/
+Disallow: /test/
+Disallow: /dev/
+Disallow: /private/
+
+# Allow all content pages
+Allow: /getting-started/
+Allow: /broadcasting/
+Allow: /scripts-and-dialogues/
+Allow: /general-rules/
+Allow: /situation-handling/
+
+# Sitemap
+Sitemap: https://huskd-labl-manuals.vercel.app/sitemap.xml
