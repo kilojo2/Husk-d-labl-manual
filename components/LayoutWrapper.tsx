@@ -15,12 +15,12 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [theme, setTheme] = useState<ThemeId>("default");
+  const [theme, setTheme] = useState<ThemeId>("apple");
 
   // Load theme from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem("hl-theme") as ThemeId | null;
-    if (saved && ["default", "galaxy", "apple", "retro"].includes(saved)) {
+    if (saved && ["apple", "retro"].includes(saved)) {
       setTheme(saved);
     }
   }, []);

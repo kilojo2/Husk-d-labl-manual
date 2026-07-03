@@ -1,4 +1,4 @@
-export type ThemeId = "default" | "galaxy" | "apple" | "retro";
+export type ThemeId = "apple" | "retro";
 
 export interface Theme {
   id: ThemeId;
@@ -9,20 +9,6 @@ export interface Theme {
 }
 
 export const themes: Theme[] = [
-  {
-    id: "default",
-    label: "Husk'd Labl",
-    icon: "sparkles",
-    iconBg: "linear-gradient(135deg, #007AFF, #5856D6)",
-    description: "Тёмная тема по умолчанию",
-  },
-  {
-    id: "galaxy",
-    label: "Deep Space",
-    icon: "moon.stars",
-    iconBg: "linear-gradient(135deg, #A855F7, #6366F1)",
-    description: "Космическая галактика",
-  },
   {
     id: "apple",
     label: "Apple Style",
