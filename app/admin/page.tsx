@@ -69,7 +69,7 @@ export default function AdminPage() {
       const json: StatsData = await res.json();
       setData(json);
       setAuthenticated(true);
-    } catch (err) {
+    } catch {
       setError("Не удалось загрузить статистику");
     } finally {
       setLoading(false);
@@ -91,27 +91,91 @@ export default function AdminPage() {
   // Login screen
   if (!authenticated) {
     return (
-      <div className="mx-auto mt-20 max-w-md">
-        <div className="apple-card rounded-2xl p-8">
-          <h1 className="mb-6 text-center text-2xl font-semibold text-text-primary">
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#1c1c1e",
+          padding: "16px",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "400px",
+            background: "rgba(255,255,255,0.08)",
+            backdropFilter: "blur(30px)",
+            WebkitBackdropFilter: "blur(30px)",
+            borderRadius: "16px",
+            padding: "32px",
+            border: "1px solid rgba(255,255,255,0.1)",
+          }}
+        >
+          <h1
+            style={{
+              marginBottom: "24px",
+              textAlign: "center",
+              fontSize: "22px",
+              fontWeight: 600,
+              color: "#ffffff",
+            }}
+          >
             Статистика посещений
           </h1>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <input
               type="password"
               value={token}
               onChange={(e) => setToken(e.target.value)}
               placeholder="Токен доступа"
-              className="w-full rounded-xl border border-border bg-bg-surface px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
               autoFocus
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                borderRadius: "12px",
+                border: "1px solid rgba(255,255,255,0.15)",
+                background: "rgba(255,255,255,0.06)",
+                color: "#ffffff",
+                fontSize: "14px",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = "#007AFF";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = "rgba(255,255,255,0.15)";
+              }}
             />
             {error && (
-              <p className="text-sm text-red-500">{error}</p>
+              <p style={{ fontSize: "13px", color: "#ff453a", margin: 0 }}>{error}</p>
             )}
             <button
               type="submit"
-              disabled={loading || !token}
-              className="w-full rounded-xl bg-accent px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+              disabled={loading || !token.trim()}
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                borderRadius: "12px",
+                border: "none",
+                background: !token.trim() || loading ? "rgba(255,255,255,0.12)" : "#007AFF",
+                color: !token.trim() || loading ? "rgba(255,255,255,0.3)" : "#ffffff",
+                fontSize: "14px",
+                fontWeight: 500,
+                cursor: !token.trim() || loading ? "not-allowed" : "pointer",
+                transition: "opacity 0.2s",
+                boxSizing: "border-box",
+              }}
+              onMouseEnter={(e) => {
+                if (token.trim() && !loading) {
+                  e.currentTarget.style.opacity = "0.85";
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = "1";
+              }}
             >
               {loading ? "Загрузка..." : "Войти"}
             </button>
@@ -123,8 +187,18 @@ export default function AdminPage() {
 
   if (!data) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="text-text-muted">Загрузка...</div>
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#1c1c1e",
+          color: "rgba(255,255,255,0.5)",
+          fontSize: "16px",
+        }}
+      >
+        Загрузка...
       </div>
     );
   }
@@ -140,178 +214,245 @@ export default function AdminPage() {
   const maxViews = Math.max(...data.daily.map((d) => d.pageViews), 1);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 px-4 py-10">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-semibold text-text-primary">
-          Статистика посещений
-        </h1>
-        <p className="mt-1 text-sm text-text-muted">
-          Панель управления — данные обновляются каждые 30 секунд
-        </p>
-      </div>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#1c1c1e",
+        color: "#ffffff",
+        padding: "40px 16px",
+      }}
+    >
+      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+        {/* Header */}
+        <div style={{ marginBottom: "32px" }}>
+          <h1 style={{ fontSize: "28px", fontWeight: 600, margin: 0 }}>
+            Статистика посещений
+          </h1>
+          <p style={{ margin: "4px 0 0", fontSize: "13px", color: "rgba(255,255,255,0.5)" }}>
+            Панель управления — данные обновляются каждые 30 секунд
+          </p>
+        </div>
 
-      {/* KPI Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard
-          label="Сегодня (визиты)"
-          value={data.realtime.todayVisits}
-          subtitle={`уникальных: ${data.realtime.todayUnique}`}
-        />
-        <KpiCard
-          label="Сегодня (просмотры)"
-          value={data.realtime.todayPageViews}
-        />
-        <KpiCard
-          label="Всего визитов"
-          value={data.totals.allTimeVisits}
-        />
-        <KpiCard
-          label="Всего просмотров"
-          value={data.totals.allTimePageViews}
-        />
-      </div>
+        {/* KPI Cards */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "12px",
+            marginBottom: "24px",
+          }}
+        >
+          <KpiCard
+            label="Сегодня (визиты)"
+            value={data.realtime.todayVisits}
+            subtitle={`уникальных: ${data.realtime.todayUnique}`}
+          />
+          <KpiCard
+            label="Сегодня (просмотры)"
+            value={data.realtime.todayPageViews}
+          />
+          <KpiCard
+            label="Всего визитов"
+            value={data.totals.allTimeVisits}
+          />
+          <KpiCard
+            label="Всего просмотров"
+            value={data.totals.allTimePageViews}
+          />
+        </div>
 
-      {/* Daily Chart */}
-      <div className="apple-card rounded-2xl p-6">
-        <h2 className="mb-4 text-lg font-semibold text-text-primary">
-          Визиты по дням
-        </h2>
-        {data.daily.length === 0 ? (
-          <p className="text-sm text-text-muted">Данных пока нет</p>
-        ) : (
-          <div className="space-y-6">
-            {/* Visits bar chart */}
-            <div>
-              <p className="mb-2 text-xs font-medium text-text-muted">Визиты</p>
-              <div className="flex items-end gap-1">
-                {[...data.daily].reverse().map((day) => (
-                  <div
-                    key={day.date}
-                    className="group relative flex flex-1 flex-col items-center"
-                  >
-                    <div className="mb-1 text-[10px] text-text-muted opacity-0 group-hover:opacity-100">
-                      {day.totalVisits}
-                    </div>
+        {/* Daily Chart */}
+        <GlassSection title="Визиты по дням">
+          {data.daily.length === 0 ? (
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Данных пока нет</p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+              {/* Visits bar chart */}
+              <div>
+                <p style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Визиты
+                </p>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "2px" }}>
+                  {[...data.daily].reverse().map((day) => (
                     <div
-                      className="w-full rounded-t bg-accent/70 transition-all hover:bg-accent"
+                      key={day.date}
                       style={{
-                        height: `${Math.max((day.totalVisits / maxVisits) * 120, 4)}px`,
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        position: "relative",
                       }}
-                      title={`${day.date}: ${day.totalVisits} визитов`}
-                    />
-                    <div className="mt-1 text-[10px] text-text-muted">
-                      {formatDate(day.date)}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                          borderRadius: "4px 4px 0 0",
+                          background: "#007AFF",
+                          opacity: 0.7,
+                          height: `${Math.max((day.totalVisits / maxVisits) * 120, 4)}px`,
+                          transition: "opacity 0.2s",
+                          cursor: "pointer",
+                        }}
+                        title={`${day.date}: ${day.totalVisits} визитов`}
+                        onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.opacity = "0.7"; }}
+                      />
+                      <div style={{ marginTop: "4px", fontSize: "9px", color: "rgba(255,255,255,0.4)" }}>
+                        {formatDate(day.date)}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Page views bar chart */}
-            <div>
-              <p className="mb-2 text-xs font-medium text-text-muted">Просмотры страниц</p>
-              <div className="flex items-end gap-1">
-                {[...data.daily].reverse().map((day) => (
-                  <div
-                    key={`views-${day.date}`}
-                    className="group relative flex flex-1 flex-col items-center"
-                  >
-                    <div className="mb-1 text-[10px] text-text-muted opacity-0 group-hover:opacity-100">
-                      {day.pageViews}
-                    </div>
-                    <div
-                      className="w-full rounded-t bg-green-500/60 transition-all hover:bg-green-500"
-                      style={{
-                        height: `${Math.max((day.pageViews / maxViews) * 120, 4)}px`,
-                      }}
-                      title={`${day.date}: ${day.pageViews} просмотров`}
-                    />
-                    <div className="mt-1 text-[10px] text-text-muted">
-                      {formatDate(day.date)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Top Pages */}
-      <div className="apple-card rounded-2xl p-6">
-        <h2 className="mb-4 text-lg font-semibold text-text-primary">
-          Популярные страницы
-        </h2>
-        {data.pages.length === 0 ? (
-          <p className="text-sm text-text-muted">Данных пока нет</p>
-        ) : (
-          <div className="space-y-2">
-            {data.pages.map((page, i) => (
-              <div
-                key={page.pagePath}
-                className="flex items-center justify-between rounded-xl bg-bg-surface/50 px-4 py-3"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-medium text-text-muted">
-                    #{i + 1}
-                  </span>
-                  <div>
-                    <p className="text-sm font-medium text-text-primary">
-                      {page.pageTitle || page.pagePath}
-                    </p>
-                    <p className="text-xs text-text-muted">{page.pagePath}</p>
-                  </div>
+                  ))}
                 </div>
-                <span className="text-sm font-semibold text-accent">
-                  {page.views}
-                </span>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
 
-      {/* Recent Visits */}
-      <div className="apple-card rounded-2xl p-6">
-        <h2 className="mb-4 text-lg font-semibold text-text-primary">
-          Последние визиты
-        </h2>
-        {data.recent.length === 0 ? (
-          <p className="text-sm text-text-muted">Данных пока нет</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-border text-xs text-text-muted">
-                  <th className="pb-2 pr-4 font-medium">Время</th>
-                  <th className="pb-2 pr-4 font-medium">Страница</th>
-                  <th className="pb-2 pr-4 font-medium">Referrer</th>
-                  <th className="pb-2 font-medium">User-Agent</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.recent.map((visit, i) => (
-                  <tr key={i} className="border-b border-border/50">
-                    <td className="py-2 pr-4 text-text-muted">
-                      {visit.date} {visit.time}
-                    </td>
-                    <td className="py-2 pr-4 text-text-primary">
-                      {visit.pageTitle || visit.pagePath}
-                    </td>
-                    <td className="max-w-[200px] truncate py-2 pr-4 text-text-muted">
-                      {visit.referrer || "—"}
-                    </td>
-                    <td className="max-w-[200px] truncate py-2 text-text-muted">
-                      {visit.userAgent || "—"}
-                    </td>
+              {/* Page views bar chart */}
+              <div>
+                <p style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Просмотры страниц
+                </p>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "2px" }}>
+                  {[...data.daily].reverse().map((day) => (
+                    <div
+                      key={`views-${day.date}`}
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                          borderRadius: "4px 4px 0 0",
+                          background: "#30d158",
+                          opacity: 0.6,
+                          height: `${Math.max((day.pageViews / maxViews) * 120, 4)}px`,
+                          transition: "opacity 0.2s",
+                          cursor: "pointer",
+                        }}
+                        title={`${day.date}: ${day.pageViews} просмотров`}
+                        onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.opacity = "0.6"; }}
+                      />
+                      <div style={{ marginTop: "4px", fontSize: "9px", color: "rgba(255,255,255,0.4)" }}>
+                        {formatDate(day.date)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </GlassSection>
+
+        {/* Top Pages */}
+        <GlassSection title="Популярные страницы">
+          {data.pages.length === 0 ? (
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Данных пока нет</p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {data.pages.map((page, i) => (
+                <div
+                  key={page.pagePath}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "12px 16px",
+                    borderRadius: "12px",
+                    background: "rgba(255,255,255,0.04)",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <span style={{ fontSize: "13px", fontWeight: 500, color: "rgba(255,255,255,0.4)", minWidth: "24px" }}>
+                      #{i + 1}
+                    </span>
+                    <div>
+                      <p style={{ fontSize: "14px", fontWeight: 500, margin: 0, color: "#ffffff" }}>
+                        {page.pageTitle || page.pagePath}
+                      </p>
+                      <p style={{ fontSize: "12px", margin: 0, color: "rgba(255,255,255,0.4)" }}>
+                        {page.pagePath}
+                      </p>
+                    </div>
+                  </div>
+                  <span style={{ fontSize: "15px", fontWeight: 700, color: "#007AFF" }}>
+                    {page.views}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </GlassSection>
+
+        {/* Recent Visits */}
+        <GlassSection title="Последние визиты">
+          {data.recent.length === 0 ? (
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Данных пока нет</p>
+          ) : (
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", fontSize: "13px", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                    <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Время</th>
+                    <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Страница</th>
+                    <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Referrer</th>
+                    <th style={{ padding: "0 0 8px 0", textAlign: "left", fontWeight: 500 }}>User-Agent</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+                <tbody>
+                  {data.recent.map((visit, i) => (
+                    <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                      <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", whiteSpace: "nowrap" }}>
+                        {visit.date} {visit.time}
+                      </td>
+                      <td style={{ padding: "8px 12px 8px 0", color: "#ffffff" }}>
+                        {visit.pageTitle || visit.pagePath}
+                      </td>
+                      <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {visit.referrer || "—"}
+                      </td>
+                      <td style={{ padding: "8px 0", color: "rgba(255,255,255,0.5)", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {visit.userAgent || "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </GlassSection>
       </div>
+    </div>
+  );
+}
+
+function GlassSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        background: "rgba(255,255,255,0.06)",
+        backdropFilter: "blur(30px)",
+        WebkitBackdropFilter: "blur(30px)",
+        borderRadius: "16px",
+        padding: "24px",
+        border: "1px solid rgba(255,255,255,0.08)",
+        marginBottom: "16px",
+      }}
+    >
+      <h2
+        style={{
+          fontSize: "17px",
+          fontWeight: 600,
+          margin: "0 0 16px",
+          color: "#ffffff",
+        }}
+      >
+        {title}
+      </h2>
+      {children}
     </div>
   );
 }
@@ -326,11 +467,26 @@ function KpiCard({
   subtitle?: string;
 }) {
   return (
-    <div className="apple-card rounded-2xl p-5">
-      <p className="text-xs font-medium text-text-muted">{label}</p>
-      <p className="mt-1 text-3xl font-semibold text-text-primary">{value}</p>
+    <div
+      style={{
+        background: "rgba(255,255,255,0.06)",
+        backdropFilter: "blur(30px)",
+        WebkitBackdropFilter: "blur(30px)",
+        borderRadius: "16px",
+        padding: "20px",
+        border: "1px solid rgba(255,255,255,0.08)",
+      }}
+    >
+      <p style={{ fontSize: "11px", fontWeight: 600, margin: 0, color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+        {label}
+      </p>
+      <p style={{ fontSize: "32px", fontWeight: 700, margin: "4px 0 0", color: "#ffffff" }}>
+        {value}
+      </p>
       {subtitle && (
-        <p className="mt-1 text-xs text-text-muted">{subtitle}</p>
+        <p style={{ fontSize: "12px", margin: "4px 0 0", color: "rgba(255,255,255,0.4)" }}>
+          {subtitle}
+        </p>
       )}
     </div>
   );
