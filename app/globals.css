@@ -3,9 +3,9 @@
 /* ─── Apple Design System (Default Theme) ─── */
 @theme inline {
   --color-bg-primary: #F5F5F7;
-  --color-bg-surface: #FFFFFF;
-  --color-bg-surface-hover: #EBEBED;
-  --color-bg-sidebar: rgba(255, 255, 255, 0.78);
+  --color-bg-surface: rgba(255, 255, 255, 0.7);
+  --color-bg-surface-hover: rgba(235, 235, 237, 0.8);
+  --color-bg-sidebar: rgba(255, 255, 255, 0.55);
   --color-accent: #007AFF;
   --color-accent-hover: #0066D6;
   --color-accent-muted: rgba(0, 122, 255, 0.12);
@@ -33,6 +33,9 @@ body {
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", Arial, Helvetica, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image:
+    radial-gradient(ellipse 100% 50% at 50% 0%, rgba(0, 122, 255, 0.015) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 40% at 80% 100%, rgba(0, 122, 255, 0.01) 0%, transparent 50%);
 }
 
 /* ─── Scrollbar Styling ─── */
@@ -69,17 +72,19 @@ body {
 
 /* ─── Apple-style glassmorphism utilities ─── */
 .apple-glass {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 0.5px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 0.5px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .apple-glass-strong {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
-  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 /* ─── Apple-style shadows ─── */
@@ -99,12 +104,14 @@ body {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
-/* ─── Apple-style card ─── */
+/* ─── Apple-style card (glass) ─── */
 .apple-card {
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-radius: 24px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03);
-  border: 0.5px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 0.5px solid rgba(255, 255, 255, 0.6);
 }
 
 /* ─── Apple-style pill button ─── */
@@ -123,14 +130,28 @@ body {
   gap: 12px;
   padding: 12px 16px;
   border-radius: 16px;
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition: all 250ms ease;
   cursor: pointer;
+  border: 0.5px solid rgba(255, 255, 255, 0.4);
 }
 
 .apple-cell:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   transform: scale(1.01);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* ─── Cursor Trail Dimple ─── */
+.cursor-dimple {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -138,9 +159,9 @@ body {
    ═══════════════════════════════════════════════════════ */
 [data-theme="galaxy"] {
   --color-bg-primary: #0B0516;
-  --color-bg-surface: #1A0F2E;
-  --color-bg-surface-hover: #24183D;
-  --color-bg-sidebar: rgba(13, 7, 32, 0.85);
+  --color-bg-surface: rgba(26, 15, 46, 0.7);
+  --color-bg-surface-hover: rgba(36, 24, 61, 0.8);
+  --color-bg-sidebar: rgba(13, 7, 32, 0.55);
   --color-accent: #A855F7;
   --color-accent-hover: #9333EA;
   --color-accent-muted: rgba(168, 85, 247, 0.2);
@@ -156,32 +177,45 @@ body {
 
 [data-theme="galaxy"] body {
   background-image:
-    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(168, 85, 247, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(168, 85, 247, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(236, 72, 153, 0.06) 0%, transparent 50%);
 }
 
 [data-theme="galaxy"] .apple-glass {
-  background: rgba(26, 15, 46, 0.78);
-  border: 0.5px solid rgba(168, 85, 247, 0.12);
+  background: rgba(26, 15, 46, 0.55);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 0.5px solid rgba(168, 85, 247, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(168, 85, 247, 0.1);
 }
 
 [data-theme="galaxy"] .apple-glass-strong {
-  background: rgba(26, 15, 46, 0.92);
-  border: 0.5px solid rgba(168, 85, 247, 0.15);
+  background: rgba(26, 15, 46, 0.72);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 0.5px solid rgba(168, 85, 247, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(168, 85, 247, 0.12);
 }
 
 [data-theme="galaxy"] .apple-card {
-  background: #1A0F2E;
-  border: 0.5px solid rgba(168, 85, 247, 0.1);
+  background: rgba(26, 15, 46, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 0.5px solid rgba(168, 85, 247, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(168, 85, 247, 0.08);
 }
 
 [data-theme="galaxy"] .apple-cell {
-  background: #1A0F2E;
+  background: rgba(26, 15, 46, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(168, 85, 247, 0.1);
 }
 
 [data-theme="galaxy"] .apple-cell:hover {
   box-shadow: 0 2px 12px rgba(168, 85, 247, 0.15);
+  background: rgba(26, 15, 46, 0.65);
 }
 
 [data-theme="galaxy"] ::selection {
@@ -193,9 +227,9 @@ body {
    ═══════════════════════════════════════════════════════ */
 [data-theme="apple"] {
   --color-bg-primary: #F5F5F7;
-  --color-bg-surface: #FFFFFF;
-  --color-bg-surface-hover: #EBEBED;
-  --color-bg-sidebar: rgba(255, 255, 255, 0.78);
+  --color-bg-surface: rgba(255, 255, 255, 0.7);
+  --color-bg-surface-hover: rgba(235, 235, 237, 0.8);
+  --color-bg-sidebar: rgba(255, 255, 255, 0.55);
   --color-accent: #007AFF;
   --color-accent-hover: #0066D6;
   --color-accent-muted: rgba(0, 122, 255, 0.12);
@@ -214,9 +248,9 @@ body {
    ═══════════════════════════════════════════════════════ */
 [data-theme="retro"] {
   --color-bg-primary: #F5E6C8;
-  --color-bg-surface: #EDD9B0;
-  --color-bg-surface-hover: #E0C898;
-  --color-bg-sidebar: rgba(240, 222, 188, 0.85);
+  --color-bg-surface: rgba(237, 217, 176, 0.7);
+  --color-bg-surface-hover: rgba(224, 200, 152, 0.8);
+  --color-bg-sidebar: rgba(240, 222, 188, 0.55);
   --color-accent: #D97706;
   --color-accent-hover: #B45309;
   --color-accent-muted: rgba(217, 119, 6, 0.18);
@@ -236,32 +270,46 @@ body {
       0deg,
       transparent,
       transparent 2px,
-      rgba(139, 90, 43, 0.015) 2px,
-      rgba(139, 90, 43, 0.015) 4px
-    );
+      rgba(139, 90, 43, 0.02) 2px,
+      rgba(139, 90, 43, 0.02) 4px
+    ),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(217, 119, 6, 0.03) 0%, transparent 60%);
 }
 
 [data-theme="retro"] .apple-glass {
-  background: rgba(237, 217, 176, 0.78);
+  background: rgba(237, 217, 176, 0.55);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border: 0.5px solid rgba(196, 169, 122, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 [data-theme="retro"] .apple-glass-strong {
-  background: rgba(237, 217, 176, 0.92);
+  background: rgba(237, 217, 176, 0.72);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
   border: 0.5px solid rgba(196, 169, 122, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 [data-theme="retro"] .apple-card {
-  background: #EDD9B0;
+  background: rgba(237, 217, 176, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 0.5px solid rgba(196, 169, 122, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 [data-theme="retro"] .apple-cell {
-  background: #EDD9B0;
+  background: rgba(237, 217, 176, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(196, 169, 122, 0.3);
 }
 
 [data-theme="retro"] .apple-cell:hover {
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.1);
+  box-shadow: 0 2px 12px rgba(217, 119, 6, 0.1);
+  background: rgba(237, 217, 176, 0.65);
 }
 
 [data-theme="retro"] ::selection {

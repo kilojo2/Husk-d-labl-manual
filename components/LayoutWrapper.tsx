@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import FooterCredit from "@/components/FooterCredit";
+import CursorTrail from "@/components/CursorTrail";
 import { type ThemeId } from "@/lib/themes";
 
 export default function LayoutWrapper({
@@ -33,6 +35,7 @@ export default function LayoutWrapper({
 
   return (
     <>
+      <CursorTrail />
       <Header onMenuToggle={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <div className="flex flex-1 px-0 md:px-0">
         <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
@@ -43,6 +46,7 @@ export default function LayoutWrapper({
           {children}
         </main>
       </div>
+      <FooterCredit />
       <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} />
     </>
   );
