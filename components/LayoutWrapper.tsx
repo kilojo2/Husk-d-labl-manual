@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { type ThemeId } from "@/lib/themes";
 
 export default function LayoutWrapper({
   children,
@@ -10,6 +12,21 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [theme, setTheme] = useState<ThemeId>("default");
+
+  // Load theme from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("hl-theme") as ThemeId | null;
+    if (saved && ["default", "galaxy", "apple", "retro"].includes(saved)) {
+      setTheme(saved);
+    }
+  }, []);
+
+  // Persist theme to localStorage and update <html> data-theme attribute
+  useEffect(() => {
+    localStorage.setItem("hl-theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
   const closeSidebar = () => setIsSidebarOpen(false);
@@ -26,6 +43,7 @@ export default function LayoutWrapper({
           {children}
         </main>
       </div>
+      <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} />
     </>
   );
 }

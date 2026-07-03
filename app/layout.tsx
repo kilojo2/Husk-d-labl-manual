@@ -27,10 +27,9 @@ export default function RootLayout({
     <html
       lang="ru"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      data-scroll-behavior="smooth"
     >
       <body
-        className="flex min-h-full flex-col bg-bg-primary text-text-primary"
+        className="flex min-h-full flex-col"
         suppressHydrationWarning
       >
         <LayoutWrapper>{children}</LayoutWrapper>

@@ -75,3 +75,111 @@ body {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(2px);
 }
+
+/* ═══════════════════════════════════════════════════════
+   THEME 1 — Deep Space Galaxy
+   Cosmic purple/blue/pink nebulae, glassmorphism, neon
+   ═══════════════════════════════════════════════════════ */
+[data-theme="galaxy"] {
+  --color-bg-primary: #0B0516;
+  --color-bg-surface: #1A0F2E;
+  --color-bg-surface-hover: #24183D;
+  --color-bg-sidebar: #0D0720;
+  --color-accent: #A855F7;
+  --color-accent-hover: #9333EA;
+  --color-accent-muted: rgba(168, 85, 247, 0.2);
+  --color-text-primary: #EDE9FE;
+  --color-text-secondary: #A78BFA;
+  --color-text-muted: #6D5A9E;
+  --color-border: #2D1B4E;
+  --color-border-light: #3E2A63;
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+  --color-error: #FB7185;
+}
+
+[data-theme="galaxy"] body {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(168, 85, 247, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+}
+
+[data-theme="galaxy"] .sidebar-transition {
+  background-image:
+    radial-gradient(ellipse 100% 80% at 50% 0%, rgba(168, 85, 247, 0.04) 0%, transparent 70%);
+}
+
+/* ═══════════════════════════════════════════════════════
+   THEME 2 — Apple Style
+   Minimalistic iOS/macOS design, white/light grays, Apple Blue
+   ═══════════════════════════════════════════════════════ */
+[data-theme="apple"] {
+  --color-bg-primary: #F5F5F7;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-surface-hover: #EBEBED;
+  --color-bg-sidebar: #FAFAFA;
+  --color-accent: #007AFF;
+  --color-accent-hover: #0066D6;
+  --color-accent-muted: rgba(0, 122, 255, 0.12);
+  --color-text-primary: #1D1D1F;
+  --color-text-secondary: #6E6E73;
+  --color-text-muted: #A1A1A6;
+  --color-border: #D2D2D7;
+  --color-border-light: #E5E5EA;
+  --color-success: #34C759;
+  --color-warning: #FF9500;
+  --color-error: #FF3B30;
+}
+
+[data-theme="apple"] body {
+  background-color: var(--color-bg-primary);
+}
+
+[data-theme="apple"] ::selection {
+  background-color: rgba(0, 122, 255, 0.2);
+}
+
+[data-theme="apple"] *:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   THEME 3 — Retro 80/90
+   Vintage paper textures, beige/orange/brown, VHS aesthetics
+   ═══════════════════════════════════════════════════════ */
+[data-theme="retro"] {
+  --color-bg-primary: #F5E6C8;
+  --color-bg-surface: #EDD9B0;
+  --color-bg-surface-hover: #E0C898;
+  --color-bg-sidebar: #F0DEBC;
+  --color-accent: #D97706;
+  --color-accent-hover: #B45309;
+  --color-accent-muted: rgba(217, 119, 6, 0.18);
+  --color-text-primary: #3B2F1E;
+  --color-text-secondary: #7D6B4A;
+  --color-text-muted: #A6926E;
+  --color-border: #C4A97A;
+  --color-border-light: #D4BC90;
+  --color-success: #65A30D;
+  --color-warning: #D97706;
+  --color-error: #DC2626;
+}
+
+[data-theme="retro"] body {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(139, 90, 43, 0.015) 2px,
+      rgba(139, 90, 43, 0.015) 4px
+    );
+}
+
+[data-theme="retro"] ::selection {
+  background-color: rgba(217, 119, 6, 0.25);
+  color: var(--color-text-primary);
+}
