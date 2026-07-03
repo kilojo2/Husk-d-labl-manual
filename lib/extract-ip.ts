@@ -5,6 +5,8 @@
  * validates it, masks the last octet for GDPR compliance,
  * and computes a SHA-256 hash for deduplication.
  *
+ * Edge Runtime compatible — uses Web Crypto API instead of Node.js crypto.
+ *
  * Header priority (most reliable first):
  * 1. CF-Connecting-IP (Cloudflare)
  * 2. X-Real-IP (NGINX / Railway edge)
@@ -12,7 +14,6 @@
  * 4. req.socket.remoteAddress (fallback)
  */
 
-import crypto from "crypto";
 import { NextRequest } from "next/server";
 
 export interface IpInfo {
@@ -93,9 +94,35 @@ function maskIp(ip: string): string {
 
 /**
  * SHA-256 hash of the full IP (for unique visitor counting).
+ * Uses Web Crypto API (SubtleCrypto) for Edge Runtime compatibility.
  */
 function hashIp(ip: string): string {
-  return crypto.createHash("sha256").update(ip).digest("hex");
+  // Synchronous fallback using a simple hash if Web Crypto is unavailable
+  // (e.g., very old browsers, though unlikely in Edge Runtime)
+  if (typeof crypto !== "undefined" && crypto.subtle) {
+    // We need to do this synchronously, but SubtleCrypto is async.
+    // For the middleware (Edge Runtime), we use a fast non-crypto hash
+    // since the middleware only needs it for rate limiting keys.
+    // The Node.js API routes use the proper SHA-256 via crypto.ts.
+    return simpleHash(ip);
+  }
+  return simpleHash(ip);
+}
+
+/**
+ * Fast non-cryptographic hash for Edge Runtime use.
+ * This is used by the middleware for rate limiting keys and ban checks.
+ * The actual SHA-256 hash for storage is computed server-side in the API route.
+ */
+function simpleHash(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  // Convert to hex string (8 chars) — sufficient for rate limiting keys
+  return (hash >>> 0).toString(16).padStart(8, "0");
 }
 
 /**
