@@ -37,6 +37,13 @@ const section1: ContentBlock[] = [
     text: "Перед установкой плагинов после OBS необходимо ПОЛНОСТЬЮ закрыть OBS — иначе MultiRTMP может установиться некорректно.",
   },
   {
+    type: "link-block",
+    text: "‼️ Все файлы, которые вам могут пригодится — закину СЮДА:",
+    items: [
+      "https://drive.google.com/drive/folders/1nlIYUKxy6wCFiTRCz-5AMopVgWmPm5Jh?usp=drive_link",
+    ],
+  },
+  {
     type: "divider",
   },
   {
