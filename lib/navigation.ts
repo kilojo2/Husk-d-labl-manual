@@ -60,6 +60,13 @@ export const navigationSections: NavSection[] = [
       { title: "Не быть ботом", href: "/general-rules/dont-be-a-bot", slug: "dont-be-a-bot", icon: "robot" },
     ],
   },
+  {
+    title: "OBS Guide",
+    icon: "antenna.radiowaves.left.and.right",
+    items: [
+      { title: "Гайд по настройке OBS", href: "/obs-guide", slug: "obs-guide", icon: "wrench" },
+    ],
+  },
 ];
 
 export function getSectionBySlug(slug: string): NavSection | undefined {
