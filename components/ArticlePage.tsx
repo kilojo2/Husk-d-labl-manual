@@ -6,7 +6,7 @@ interface ArticlePageProps {
 
 export default function ArticlePage({ title, description, children }: ArticlePageProps) {
   return (
-    <article className="mx-auto max-w-4xl">
+    <article className="mx-auto max-w-6xl">
       {/* Title section */}
       <div className="mb-8 text-center md:text-left">
         <h1 className="text-4xl font-bold tracking-tight text-text-primary md:text-5xl md:leading-tight">
@@ -20,7 +20,7 @@ export default function ArticlePage({ title, description, children }: ArticlePag
       </div>
 
       {/* Content card — Apple-style floating card */}
-      <div className="apple-card p-6 md:p-10">
+      <div className="apple-card p-8 md:p-12">
         {children ?? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <svg
