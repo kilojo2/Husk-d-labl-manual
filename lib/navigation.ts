@@ -13,6 +13,13 @@ export interface NavSection {
 
 export const navigationSections: NavSection[] = [
   {
+    title: "OBS Guide",
+    icon: "antenna.radiowaves.left.and.right",
+    items: [
+      { title: "Гайд по настройке OBS", href: "/obs-guide", slug: "obs-guide", icon: "wrench" },
+    ],
+  },
+  {
     title: "Начало работы",
     icon: "house",
     items: [
@@ -58,13 +65,6 @@ export const navigationSections: NavSection[] = [
       { title: "Правила общения", href: "/general-rules/communication-rules", slug: "communication-rules", icon: "message" },
       { title: "Сопровождение после шоу", href: "/general-rules/post-show-support", slug: "post-show-support", icon: "figure.wave" },
       { title: "Не быть ботом", href: "/general-rules/dont-be-a-bot", slug: "dont-be-a-bot", icon: "robot" },
-    ],
-  },
-  {
-    title: "OBS Guide",
-    icon: "antenna.radiowaves.left.and.right",
-    items: [
-      { title: "Гайд по настройке OBS", href: "/obs-guide", slug: "obs-guide", icon: "wrench" },
     ],
   },
 ];
