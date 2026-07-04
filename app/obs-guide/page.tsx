@@ -1,8 +1,9 @@
+import Image from "next/image";
 import ArticlePage from "@/components/ArticlePage";
 import MarkdownContent from "@/components/MarkdownContent";
 import type { ContentBlock } from "@/components/MarkdownContent";
 
-const blocks: ContentBlock[] = [
+const section1: ContentBlock[] = [
   {
     type: "heading",
     text: "Гайд по настройке OBS",
@@ -46,6 +47,9 @@ const blocks: ContentBlock[] = [
     type: "paragraph",
     text: "Первым делом включаем множественный вывод (MultiRTMP). Это панель, через которую транслируется сразу на несколько площадок.",
   },
+];
+
+const section2_1: ContentBlock[] = [
   {
     type: "subheading",
     text: "2.1 Включение множественного вывода",
@@ -54,6 +58,9 @@ const blocks: ContentBlock[] = [
     type: "paragraph",
     text: "Откройте меню Док-панели → отметьте пункт Множественный вывод.",
   },
+];
+
+const section2_2: ContentBlock[] = [
   {
     type: "subheading",
     text: "2.2 Размещение панели",
@@ -62,6 +69,9 @@ const blocks: ContentBlock[] = [
     type: "paragraph",
     text: "Появившееся окошко «Множественный вывод» нужно перетянуть в левую часть экрана — рядом с окном Elecap.",
   },
+];
+
+const section2_3a: ContentBlock[] = [
   {
     type: "subheading",
     text: "2.3 Добавление выводов под каждую площадку",
@@ -70,6 +80,16 @@ const blocks: ContentBlock[] = [
     type: "paragraph",
     text: "Нажмите «Добавить новый вывод» и повторите для каждой площадки (Bonga, Chatur и т.д.), пока не получится список.",
   },
+];
+
+const section2_3b: ContentBlock[] = [
+  {
+    type: "paragraph",
+    text: "Готовый список выводов: Bonga и Chatur.",
+  },
+];
+
+const section2_4a: ContentBlock[] = [
   {
     type: "subheading",
     text: "2.4 Добавление источников",
@@ -78,6 +98,9 @@ const blocks: ContentBlock[] = [
     type: "paragraph",
     text: "Источников всего три. Откройте панель «Источники» и нажмите «+».",
   },
+];
+
+const section2_4b: ContentBlock[] = [
   {
     type: "list",
     items: [
@@ -187,7 +210,73 @@ const blocks: ContentBlock[] = [
 export default function Page() {
   return (
     <ArticlePage title="Гайд по настройке OBS" description="Мультистриминг, Elecap и подключение площадок">
-      <MarkdownContent blocks={blocks} />
+      <MarkdownContent blocks={section1} />
+
+      <MarkdownContent blocks={section2_1} />
+      <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
+        <Image
+          src="/obs-screens/FIRST.png"
+          alt="Меню Док-панели OBS с отмеченным пунктом «Множественный вывод»"
+          width={800}
+          height={450}
+          className="h-auto w-full"
+        />
+      </div>
+
+      <MarkdownContent blocks={section2_2} />
+      <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
+        <Image
+          src="/obs-screens/SECOND.png"
+          alt="Панель множественного вывода, закреплённая слева от окна Elecap"
+          width={800}
+          height={450}
+          className="h-auto w-full"
+        />
+      </div>
+
+      <MarkdownContent blocks={section2_3a} />
+      <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
+        <Image
+          src="/obs-screens/THIRD.png"
+          alt="Добавление нового вывода в панели множественного вывода"
+          width={800}
+          height={450}
+          className="h-auto w-full"
+        />
+      </div>
+
+      <MarkdownContent blocks={section2_3b} />
+      <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
+        <Image
+          src="/obs-screens/FOUR.png"
+          alt="Готовый список выводов: Bonga и Chatur"
+          width={800}
+          height={450}
+          className="h-auto w-full"
+        />
+      </div>
+
+      <MarkdownContent blocks={section2_4a} />
+      <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
+        <Image
+          src="/obs-screens/FIVE.png"
+          alt="Пустая панель источников OBS с открытым меню добавления нового источника"
+          width={800}
+          height={450}
+          className="h-auto w-full"
+        />
+      </div>
+
+      <MarkdownContent blocks={section2_4b} />
+      <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
+        <Image
+          src="/obs-screens/SIX.png"
+          alt="Готовый список из трёх источников: захват звука, захват окна и текст"
+          width={800}
+          height={450}
+          className="h-auto w-full"
+        />
+      </div>
     </ArticlePage>
   );
 }
