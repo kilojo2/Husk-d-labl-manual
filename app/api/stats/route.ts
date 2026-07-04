@@ -111,9 +111,9 @@ export async function GET(request: NextRequest) {
         }
       : { allTimeVisits: 0, allTimePageViews: 0 };
 
-    // 6. Recent visits (last 50) — with masked IPs
+    // 6. Recent visits (last 50) — with masked IPs + encrypted IP for optional decryption
     const recentResult = db.exec(`
-      SELECT page_path, page_title, referrer, visit_date, visit_time, user_agent, ip_hash, is_proxy
+      SELECT page_path, page_title, referrer, visit_date, visit_time, user_agent, ip_hash, is_proxy, ip_address_encrypted
       FROM visits
       ORDER BY id DESC
       LIMIT 50
@@ -130,6 +130,8 @@ export async function GET(request: NextRequest) {
           // Only expose first 16 chars of IP hash (anonymized)
           ipHash: row[6] ? (row[6] as string).slice(0, 16) + "..." : null,
           isProxy: row[7] === 1,
+          // Encrypted IP — only sent if available, for client-side decryption
+          ipAddressEncrypted: row[8] || null,
         }))
       : [];
 

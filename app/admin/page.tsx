@@ -35,6 +35,7 @@ interface RecentVisit {
   userAgent: string;
   ipHash: string | null;
   isProxy: boolean;
+  ipAddressEncrypted: string | null;
 }
 
 interface BlockedIp {
@@ -80,6 +81,10 @@ export default function AdminPage() {
   const [data, setData] = useState<StatsData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [decryptKey, setDecryptKey] = useState("");
+  const [decryptingIndex, setDecryptingIndex] = useState<number | null>(null);
+  const [decryptedIps, setDecryptedIps] = useState<Record<number, string>>({});
+  const [decryptError, setDecryptError] = useState("");
 
   const fetchStats = useCallback(async (authToken: string) => {
     setLoading(true);
@@ -110,6 +115,36 @@ export default function AdminPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     fetchStats(token);
+  };
+
+  const handleDecryptIp = async (index: number, encryptedIp: string) => {
+    if (!decryptKey.trim()) {
+      setDecryptError("Введите ключ расшифровки");
+      return;
+    }
+    setDecryptingIndex(index);
+    setDecryptError("");
+    try {
+      const res = await fetch("/api/stats/decrypt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ encryptedIp, key: decryptKey.trim() }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        setDecryptError(err.error || "Ошибка расшифровки");
+        return;
+      }
+      const result = await res.json();
+      setDecryptedIps((prev) => ({ ...prev, [index]: result.ip }));
+    } catch {
+      setDecryptError("Не удалось расшифровать IP");
+    } finally {
+      setDecryptingIndex(null);
+    }
   };
 
   // Auto-refresh every 30 seconds when authenticated
@@ -434,45 +469,96 @@ export default function AdminPage() {
           {data.recent.length === 0 ? (
             <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Данных пока нет</p>
           ) : (
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", fontSize: "13px", borderCollapse: "collapse" }}>
-                <thead>
-                  <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                    <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Время</th>
-                    <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Страница</th>
-                    <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Referrer</th>
-                    <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>IP Hash</th>
-                    <th style={{ padding: "0 0 8px 0", textAlign: "left", fontWeight: 500 }}>User-Agent</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.recent.map((visit, i) => (
-                    <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                      <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", whiteSpace: "nowrap" }}>
-                        {visit.date} {visit.time}
-                      </td>
-                      <td style={{ padding: "8px 12px 8px 0", color: "#ffffff" }}>
-                        {visit.pageTitle || visit.pagePath}
-                      </td>
-                      <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {visit.referrer || "—"}
-                      </td>
-                      <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", fontFamily: "monospace", fontSize: "11px" }}>
-                        {visit.ipHash || "—"}
-                        {visit.isProxy && (
-                          <span style={{ marginLeft: "6px", fontSize: "10px", color: "#ff9f0a", background: "rgba(255,159,10,0.15)", padding: "1px 5px", borderRadius: "4px" }}>
-                            PROXY
-                          </span>
-                        )}
-                      </td>
-                      <td style={{ padding: "8px 0", color: "rgba(255,255,255,0.5)", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {visit.userAgent || "—"}
-                      </td>
+            <>
+              {/* Decryption key input */}
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px", padding: "10px 14px", borderRadius: "10px", background: "rgba(255,255,255,0.04)" }}>
+                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)", whiteSpace: "nowrap" }}>Ключ расшифровки:</span>
+                <input
+                  type="password"
+                  value={decryptKey}
+                  onChange={(e) => setDecryptKey(e.target.value)}
+                  placeholder="KEY_PART_1+KEY_PART_2+KEY_PART_3 или IP_ENCRYPTION_KEY"
+                  style={{
+                    flex: 1,
+                    padding: "6px 10px",
+                    borderRadius: "8px",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    background: "rgba(0,0,0,0.3)",
+                    color: "#ffffff",
+                    fontSize: "12px",
+                    fontFamily: "monospace",
+                    outline: "none",
+                  }}
+                />
+                {decryptError && (
+                  <span style={{ fontSize: "11px", color: "#ff453a" }}>{decryptError}</span>
+                )}
+              </div>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", fontSize: "13px", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                      <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Время</th>
+                      <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Страница</th>
+                      <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>Referrer</th>
+                      <th style={{ padding: "0 12px 8px 0", textAlign: "left", fontWeight: 500 }}>IP</th>
+                      <th style={{ padding: "0 0 8px 0", textAlign: "left", fontWeight: 500 }}>User-Agent</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {data.recent.map((visit, i) => (
+                      <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                        <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", whiteSpace: "nowrap" }}>
+                          {visit.date} {visit.time}
+                        </td>
+                        <td style={{ padding: "8px 12px 8px 0", color: "#ffffff" }}>
+                          {visit.pageTitle || visit.pagePath}
+                        </td>
+                        <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {visit.referrer || "—"}
+                        </td>
+                        <td style={{ padding: "8px 12px 8px 0", color: "rgba(255,255,255,0.5)", fontFamily: "monospace", fontSize: "11px" }}>
+                          {decryptedIps[i] ? (
+                            <span style={{ color: "#30d158", fontWeight: 600 }}>{decryptedIps[i]}</span>
+                          ) : (
+                            <>
+                              {visit.ipHash || "—"}
+                              {visit.isProxy && (
+                                <span style={{ marginLeft: "6px", fontSize: "10px", color: "#ff9f0a", background: "rgba(255,159,10,0.15)", padding: "1px 5px", borderRadius: "4px" }}>
+                                  PROXY
+                                </span>
+                              )}
+                            </>
+                          )}
+                          {visit.ipAddressEncrypted && !decryptedIps[i] && (
+                            <button
+                              onClick={() => handleDecryptIp(i, visit.ipAddressEncrypted!)}
+                              disabled={decryptingIndex === i || !decryptKey.trim()}
+                              style={{
+                                marginLeft: "8px",
+                                padding: "2px 8px",
+                                borderRadius: "6px",
+                                border: "none",
+                                background: decryptKey.trim() ? "rgba(48,209,88,0.2)" : "rgba(255,255,255,0.05)",
+                                color: decryptKey.trim() ? "#30d158" : "rgba(255,255,255,0.3)",
+                                fontSize: "10px",
+                                cursor: decryptKey.trim() ? "pointer" : "not-allowed",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {decryptingIndex === i ? "..." : "🔓"}
+                            </button>
+                          )}
+                        </td>
+                        <td style={{ padding: "8px 0", color: "rgba(255,255,255,0.5)", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {visit.userAgent || "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </GlassSection>
 
