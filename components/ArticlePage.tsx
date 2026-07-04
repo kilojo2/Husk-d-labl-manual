@@ -6,7 +6,7 @@ interface ArticlePageProps {
 
 export default function ArticlePage({ title, description, children }: ArticlePageProps) {
   return (
-    <article className="mx-auto max-w-6xl">
+    <article className="mx-auto max-w-7xl">
       {/* Title section */}
       <div className="mb-8 text-center md:text-left">
         <h1 className="text-4xl font-bold tracking-tight text-text-primary md:text-5xl md:leading-tight">

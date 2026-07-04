@@ -59,24 +59,6 @@ export default function BackgroundOrbs() {
           }}
         />
       ))}
-
-      {/* Background logo watermark — large, faint, centered */}
-      <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{
-          width: "min(80vw, 600px)",
-          height: "min(80vw, 600px)",
-          opacity: 0.04,
-          pointerEvents: "none",
-        }}
-      >
-        <img
-          src="/logo-purple.svg"
-          alt=""
-          className="h-full w-full"
-          style={{ filter: "grayscale(1) contrast(0.5)" }}
-        />
-      </div>
     </div>
   );
 }
