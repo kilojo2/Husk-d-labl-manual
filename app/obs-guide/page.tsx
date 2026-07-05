@@ -116,6 +116,9 @@ const section2_4b: ContentBlock[] = [
       "Текст (GDI+) — Подменяет картинку текстом, когда модель отходит на 3+ минуты.",
     ],
   },
+];
+
+const section2_4c: ContentBlock[] = [
   {
     type: "paragraph",
     text: "Как переключать «модель / текст»:",
@@ -284,6 +287,8 @@ export default function Page() {
           className="h-auto w-full"
         />
       </div>
+
+      <MarkdownContent blocks={section2_4c} />
     </ArticlePage>
   );
 }
