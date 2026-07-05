@@ -262,3 +262,93 @@ body {
 [data-theme="retro"] ::selection {
   background-color: rgba(217, 119, 6, 0.25);
 }
+
+/* ═══════════════════════════════════════════════════════
+   NAV SECTION — Bronze / Silver / Gold Theme
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── Bronze (#CD7F32) — Начало работы ─── */
+.nav-bronze {
+  --nav-color: #CD7F32;
+  --nav-color-rgb: 205, 127, 50;
+}
+
+.nav-bronze .nav-header {
+  background: rgba(205, 127, 50, 0.12);
+  border-color: rgba(205, 127, 50, 0.25);
+  color: #CD7F32;
+  transition: all 0.3s ease;
+}
+
+.nav-bronze:hover .nav-header {
+  box-shadow: 0 0 20px rgba(205, 127, 50, 0.2), 0 4px 16px rgba(205, 127, 50, 0.15);
+  background: rgba(205, 127, 50, 0.18);
+}
+
+/* ─── Silver (#C0C0C0) — Середина работы ─── */
+.nav-silver {
+  --nav-color: #C0C0C0;
+  --nav-color-rgb: 192, 192, 192;
+}
+
+.nav-silver .nav-header {
+  background: rgba(192, 192, 192, 0.10);
+  border-color: rgba(192, 192, 192, 0.20);
+  color: #C0C0C0;
+  transition: all 0.3s ease;
+}
+
+.nav-silver:hover .nav-header {
+  filter: brightness(1.15);
+  background: rgba(192, 192, 192, 0.16);
+  animation: silver-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes silver-shimmer {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(192, 192, 192, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.05);
+  }
+  25% {
+    box-shadow: 0 0 16px rgba(192, 192, 192, 0.2), inset 0 0 12px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(192, 192, 192, 0.15), inset 0 0 16px rgba(255, 255, 255, 0.08);
+  }
+  75% {
+    box-shadow: 0 0 16px rgba(192, 192, 192, 0.2), inset 0 0 12px rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ─── Gold (#FFD700) — Профессиональный режим ─── */
+.nav-gold {
+  --nav-color: #FFD700;
+  --nav-color-rgb: 255, 215, 0;
+}
+
+.nav-gold .nav-header {
+  background: rgba(255, 215, 0, 0.10);
+  border-color: rgba(255, 215, 0, 0.20);
+  color: #FFD700;
+  transition: all 0.3s ease;
+}
+
+.nav-gold:hover .nav-header {
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.25), 0 0 48px rgba(255, 215, 0, 0.10);
+  background: rgba(255, 215, 0, 0.16);
+  animation: gold-sparkle 1.2s ease-in-out infinite;
+}
+
+@keyframes gold-sparkle {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.15), 0 0 32px rgba(255, 215, 0, 0.05);
+  }
+  30% {
+    box-shadow: 0 0 28px rgba(255, 215, 0, 0.30), 0 0 60px rgba(255, 215, 0, 0.12);
+  }
+  60% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.20), 0 0 40px rgba(255, 215, 0, 0.08);
+  }
+  80% {
+    box-shadow: 0 0 32px rgba(255, 215, 0, 0.25), 0 0 64px rgba(255, 215, 0, 0.10);
+  }
+}

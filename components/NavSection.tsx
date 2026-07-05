@@ -11,40 +11,29 @@ interface NavSectionProps {
   onNavigate?: () => void;
 }
 
-function getSectionStyles(title: string) {
+function getSectionClassName(title: string): string {
   switch (title) {
     case "Начало работы":
-      return {
-        bg: "bg-blue-500/10",
-        hoverBg: "hover:bg-blue-500/15",
-        text: "text-blue-400",
-        iconColor: "text-blue-400",
-        border: "border-blue-400/20",
-      };
+      return "nav-bronze";
     case "Середина работы":
-      return {
-        bg: "bg-purple-500/10",
-        hoverBg: "hover:bg-purple-500/15",
-        text: "text-purple-400",
-        iconColor: "text-purple-400",
-        border: "border-purple-400/20",
-      };
+      return "nav-silver";
     case "Профессиональный режим":
-      return {
-        bg: "bg-orange-500/10",
-        hoverBg: "hover:bg-orange-500/15",
-        text: "text-orange-400",
-        iconColor: "text-orange-400",
-        border: "border-orange-400/20",
-      };
+      return "nav-gold";
     default:
-      return {
-        bg: "bg-bg-surface-hover",
-        hoverBg: "hover:bg-bg-surface-hover",
-        text: "text-text-secondary",
-        iconColor: "text-text-muted",
-        border: "border-border",
-      };
+      return "";
+  }
+}
+
+function getIconColor(title: string): string {
+  switch (title) {
+    case "Начало работы":
+      return "text-[#CD7F32]";
+    case "Середина работы":
+      return "text-[#C0C0C0]";
+    case "Профессиональный режим":
+      return "text-[#FFD700]";
+    default:
+      return "text-text-muted";
   }
 }
 
@@ -54,16 +43,17 @@ export default function NavSection({
   onNavigate,
 }: NavSectionProps) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
-  const styles = getSectionStyles(section.title);
+  const navClass = getSectionClassName(section.title);
+  const iconColor = getIconColor(section.title);
 
   return (
-    <div>
+    <div className={navClass}>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className={`flex w-full items-center gap-2.5 rounded-xl border px-3 py-2.5 text-xs font-semibold uppercase tracking-widest transition-all duration-200 ${styles.bg} ${styles.hoverBg} ${styles.text} ${styles.border}`}
+        className="nav-header flex w-full items-center gap-2.5 rounded-xl border px-3 py-2.5 text-xs font-semibold uppercase tracking-widest transition-all duration-300"
         aria-expanded={isExpanded}
       >
-        <SFSymbol name={section.icon} size={14} className={styles.iconColor} />
+        <SFSymbol name={section.icon} size={14} className={iconColor} />
         <span className="flex-1 text-left">{section.title}</span>
         <svg
           className={`h-3.5 w-3.5 transition-transform duration-300 ${
