@@ -10,6 +10,7 @@ import BackgroundOrbs from "@/components/BackgroundOrbs";
 import VisitTracker from "@/components/VisitTracker";
 import CookieConsent from "@/components/CookieConsent";
 import SearchHighlight from "@/components/SearchHighlight";
+import TelegramContacts from "@/components/TelegramContacts";
 import { type ThemeId } from "@/lib/themes";
 
 export default function LayoutWrapper({
@@ -64,6 +65,7 @@ export default function LayoutWrapper({
         </main>
       </div>
       <FooterCredit />
+      <TelegramContacts />
       <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} />
     </>
   );
