@@ -367,6 +367,11 @@ body {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Override theme label text to be light in dark mode */
+[data-theme="apple-dark"] .text-black {
+  color: #E5E5EA;
+}
+
 /* ═══════════════════════════════════════════════════════
    THEME — Retro 80/90
    ═══════════════════════════════════════════════════════ */
@@ -537,6 +542,11 @@ body {
 
 [data-theme="retro-dark"] .apple-shadow-xl {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Override theme label text to be light in dark mode */
+[data-theme="retro-dark"] .text-black {
+  color: #E8D5B0;
 }
 
 /* ═══════════════════════════════════════════════════════
