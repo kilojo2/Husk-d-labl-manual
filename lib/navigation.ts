@@ -13,23 +13,17 @@ export interface NavSection {
 
 export const navigationSections: NavSection[] = [
   {
-    title: "OBS Guide",
-    icon: "antenna.radiowaves.left.and.right",
-    items: [
-      { title: "Гайд по настройке OBS", href: "/obs-guide", slug: "obs-guide", icon: "wrench" },
-    ],
-  },
-  {
     title: "Начало работы",
     icon: "house",
     items: [
+      { title: "Гайд по настройке OBS", href: "/obs-guide", slug: "obs-guide", icon: "wrench" },
       { title: "Словарь терминов", href: "/getting-started/dictionary", slug: "dictionary", icon: "book.closed" },
       { title: "Правила сайтов", href: "/getting-started/site-rules", slug: "site-rules", icon: "doc.text" },
       { title: "Железные правила переговоров", href: "/getting-started/negotiation-rules", slug: "negotiation-rules", icon: "hand.raised" },
     ],
   },
   {
-    title: "Трансляция",
+    title: "Середина работы",
     icon: "antenna.radiowaves.left.and.right",
     items: [
       { title: "Первые 20 секунд", href: "/broadcasting/first-20-seconds", slug: "first-20-seconds", icon: "timer" },
@@ -37,12 +31,6 @@ export const navigationSections: NavSection[] = [
       { title: "Рулетки", href: "/broadcasting/roulettes", slug: "roulettes", icon: "dice" },
       { title: "Технические фишки", href: "/broadcasting/tech-tips", slug: "tech-tips", icon: "wrench" },
       { title: "Бот на чатуре (Token Counter)", href: "/broadcasting/token-counter", slug: "token-counter", icon: "chart.bar" },
-    ],
-  },
-  {
-    title: "Скрипты и диалоги",
-    icon: "text.bubble",
-    items: [
       { title: "Общий скрипт общения", href: "/scripts-and-dialogues/general-script", slug: "general-script", icon: "doc.plaintext" },
       { title: "Лёгкий скрипт по шагам", href: "/scripts-and-dialogues/light-step-script", slug: "light-step-script", icon: "list.bullet" },
       { title: "Сексинг-вопросы", href: "/scripts-and-dialogues/sexting-questions", slug: "sexting-questions", icon: "heart.text" },
@@ -50,18 +38,12 @@ export const navigationSections: NavSection[] = [
     ],
   },
   {
-    title: "Обработка ситуаций",
-    icon: "exclamationmark.triangle",
+    title: "Профессиональный режим",
+    icon: "shield",
     items: [
       { title: "Возражения", href: "/situation-handling/objections", slug: "objections", icon: "hand.thumbsdown" },
       { title: "Топ-3 обидки", href: "/situation-handling/top-3-grievances", slug: "top-3-grievances", icon: "exclamationmark.circle" },
       { title: "Ошибки в привате", href: "/situation-handling/private-mistakes", slug: "private-mistakes", icon: "eye.slash" },
-    ],
-  },
-  {
-    title: "Общие правила",
-    icon: "shield",
-    items: [
       { title: "Правила общения", href: "/general-rules/communication-rules", slug: "communication-rules", icon: "message" },
       { title: "Сопровождение после шоу", href: "/general-rules/post-show-support", slug: "post-show-support", icon: "figure.wave" },
       { title: "Не быть ботом", href: "/general-rules/dont-be-a-bot", slug: "dont-be-a-bot", icon: "robot" },
