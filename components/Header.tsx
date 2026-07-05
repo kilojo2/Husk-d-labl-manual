@@ -14,7 +14,7 @@ export default function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
       {/* Mobile menu button */}
       <button
         onClick={onMenuToggle}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-bg-surface-hover hover:text-text-primary md:hidden"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-bg-surface-hover hover:text-text-primary md:hidden"
         aria-label={isSidebarOpen ? "Закрыть меню" : "Открыть меню"}
         aria-expanded={isSidebarOpen}
       >

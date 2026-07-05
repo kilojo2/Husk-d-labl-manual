@@ -10,7 +10,7 @@ export default function FooterCredit() {
           className="h-5 w-5"
           style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.3))" }}
         />
-        <span className="text-[11px] font-medium tracking-wide text-text-secondary/70">
+        <span className="text-[11px] font-medium tracking-wide text-text-secondary/90">
           Husk`d Labl Manuals by DJIBUR WORKTEAM
         </span>
       </div>

@@ -89,7 +89,7 @@ export default function MarkdownContent({ blocks }: MarkdownContentProps) {
             return (
               <div
                 key={index}
-                className="rounded-2xl border border-accent/15 bg-accent/5 px-6 py-5"
+                className="rounded-2xl border border-accent/25 bg-accent/10 px-6 py-5"
               >
                 <p className="text-sm font-semibold text-accent">💡 Важно</p>
                 <p className="mt-2 text-[15px] leading-relaxed text-text-primary">

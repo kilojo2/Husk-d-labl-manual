@@ -108,7 +108,7 @@ export default function SearchResultsDropdown({
                 </div>
 
                 {/* Arrow */}
-                <div className="mt-0.5 shrink-0 text-text-muted/40">
+                <div className="mt-0.5 shrink-0 text-text-muted/60">
                   <SFSymbol name="chevron.right" size={14} />
                 </div>
               </Link>
@@ -119,7 +119,7 @@ export default function SearchResultsDropdown({
 
       {/* Footer hint */}
       {results.length > 0 && (
-        <div className="border-t border-border/30 px-4 py-2 text-center text-[10px] text-text-muted/40">
+        <div className="border-t border-border/30 px-4 py-2 text-center text-[10px] text-text-muted/60">
           {results.length}&nbsp;результатов&nbsp;· Enter&nbsp;для&nbsp;перехода
         </div>
       )}
@@ -161,7 +161,7 @@ function highlightMatches(text: string, query: string): React.ReactNode {
     words.some((w) => part.toLowerCase() === w) ? (
       <mark
         key={i}
-        className="rounded-sm bg-accent/30 px-0.5 text-text-primary"
+        className="rounded-sm bg-accent/40 px-0.5 text-text-primary"
       >
         {part}
       </mark>

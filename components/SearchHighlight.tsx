@@ -124,7 +124,7 @@ function highlightInArticle(query: string) {
       } else {
         const mark = document.createElement("mark");
         mark.className =
-          "rounded-sm bg-accent/30 px-0.5 text-text-primary search-highlight";
+          "rounded-sm bg-accent/40 px-0.5 text-text-primary search-highlight";
         mark.textContent = part.match;
         fragment.appendChild(mark);
 

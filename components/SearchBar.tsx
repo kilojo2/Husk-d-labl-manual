@@ -119,7 +119,7 @@ export default function SearchBar() {
       role="search"
     >
       <div className="relative">
-        <div className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted">
+        <div className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary">
           <SFSymbol name="magnifyingglass" size={16} />
         </div>
         <input

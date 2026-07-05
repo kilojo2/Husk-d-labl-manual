@@ -28,7 +28,7 @@ export default function NavItem({ item, onNavigate }: NavItemProps) {
       `}
       aria-current={isActive ? "page" : undefined}
     >
-      <span className={`flex items-center justify-center ${isActive ? "text-white/90" : "text-text-muted group-hover:text-text-secondary"}`}>
+      <span className={`flex items-center justify-center ${isActive ? "text-white/90" : "text-text-secondary group-hover:text-text-primary"}`}>
         <SFSymbol name={item.icon} size={16} />
       </span>
       <span>{item.title}</span>
