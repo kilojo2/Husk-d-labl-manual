@@ -68,7 +68,7 @@ export default function ThemeSwitcher({ currentTheme, onThemeChange }: ThemeSwit
                 className={`group flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-medium apple-shadow-sm backdrop-blur-xl transition-all duration-200 hover:scale-105 ${
                   isActive
                     ? "bg-accent text-white shadow-accent/20"
-                    : "bg-white/90 text-text-secondary ring-1 ring-black/5 hover:bg-white hover:text-text-primary"
+                    : "bg-[var(--color-surface,#fff)]/90 text-text-secondary ring-1 ring-[var(--color-border,rgba(0,0,0,0.1))] hover:bg-[var(--color-surface,#fff)] hover:text-text-primary"
                 }`}
               >
                 {/* iOS-style rounded square icon */}

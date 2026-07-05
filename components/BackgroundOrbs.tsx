@@ -9,15 +9,20 @@ import { useEffect, useRef } from "react";
  * Each orb is a fixed-position div with a radial-gradient, animated
  * via CSS keyframes with randomised duration, delay, and offset to
  * ensure they never move in lockstep.
+ *
+ * Orb colors are read from CSS custom properties (--orb-1 through --orb-4)
+ * defined per-theme in globals.css, so they adapt automatically to the
+ * active theme.
  */
 const ORB_COUNT = 4;
 
-const ORB_COLORS = [
-  "rgba(0, 122, 255, 0.08)",
-  "rgba(88, 86, 214, 0.06)",
-  "rgba(90, 200, 250, 0.07)",
-  "rgba(52, 199, 89, 0.05)",
-];
+function getOrbColor(index: number): string {
+  if (typeof document === "undefined") return "rgba(0,122,255,0.08)";
+  const val = getComputedStyle(document.documentElement)
+    .getPropertyValue(`--orb-${index + 1}`)
+    .trim();
+  return val || "rgba(0,122,255,0.08)";
+}
 
 export default function BackgroundOrbs() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,7 +32,7 @@ export default function BackgroundOrbs() {
     if (!container) return;
 
     const orbs = container.querySelectorAll<HTMLDivElement>(".bg-orb");
-    orbs.forEach((orb) => {
+    orbs.forEach((orb, i) => {
       // Randomise starting position so orbs are spread across the viewport
       const x = Math.random() * 100;
       const y = Math.random() * 100;
@@ -41,6 +46,10 @@ export default function BackgroundOrbs() {
       orb.style.height = `${size}px`;
       orb.style.animationDuration = `${duration}s`;
       orb.style.animationDelay = `${delay}s`;
+
+      // Read color from CSS variable for theme awareness
+      const color = getOrbColor(i);
+      orb.style.background = `radial-gradient(circle at 30% 30%, ${color} 0%, transparent 70%)`;
     });
   }, []);
 
@@ -55,7 +64,7 @@ export default function BackgroundOrbs() {
           key={i}
           className="bg-orb"
           style={{
-            background: `radial-gradient(circle at 30% 30%, ${ORB_COLORS[i]} 0%, transparent 70%)`,
+            background: `radial-gradient(circle at 30% 30%, var(--orb-${i + 1}, rgba(0,122,255,0.08)) 0%, transparent 70%)`,
           }}
         />
       ))}

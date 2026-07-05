@@ -36,6 +36,7 @@ body {
   background-image:
     radial-gradient(ellipse 100% 50% at 50% 0%, rgba(0, 122, 255, 0.015) 0%, transparent 60%),
     radial-gradient(ellipse 80% 40% at 80% 100%, rgba(0, 122, 255, 0.01) 0%, transparent 50%);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ─── Scrollbar Styling ─── */
@@ -77,6 +78,7 @@ body {
   -webkit-backdrop-filter: blur(30px);
   border: 0.5px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .apple-glass-strong {
@@ -85,6 +87,7 @@ body {
   -webkit-backdrop-filter: blur(40px);
   border: 0.5px solid rgba(255, 255, 255, 0.7);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* ─── Apple-style shadows ─── */
@@ -112,6 +115,7 @@ body {
   border-radius: 24px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.9);
   border: 0.5px solid rgba(255, 255, 255, 0.6);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* ─── Apple-style pill button ─── */
@@ -133,7 +137,7 @@ body {
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition: all 250ms ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 250ms ease;
   cursor: pointer;
   border: 0.5px solid rgba(255, 255, 255, 0.4);
 }
@@ -188,6 +192,157 @@ body {
   will-change: transform, opacity;
   animation: float-orb linear infinite;
   filter: blur(60px);
+}
+
+/* ═══════════════════════════════════════════════════════
+   THEME — Orb Colors
+   ═══════════════════════════════════════════════════════ */
+:root,
+[data-theme="apple"] {
+  --orb-1: rgba(0, 122, 255, 0.08);
+  --orb-2: rgba(88, 86, 214, 0.06);
+  --orb-3: rgba(90, 200, 250, 0.07);
+  --orb-4: rgba(52, 199, 89, 0.05);
+  --cursor-dimple-color: rgba(0, 0, 0, 0.045);
+  --nav-bronze: #965A38;
+  --nav-bronze-rgb: 150, 90, 56;
+  --nav-silver: #5B6770;
+  --nav-silver-rgb: 91, 103, 112;
+  --nav-gold: #B8860B;
+  --nav-gold-rgb: 184, 134, 11;
+}
+
+[data-theme="apple-dark"] {
+  --orb-1: rgba(10, 132, 255, 0.12);
+  --orb-2: rgba(94, 92, 230, 0.10);
+  --orb-3: rgba(100, 210, 255, 0.10);
+  --orb-4: rgba(48, 209, 88, 0.08);
+  --cursor-dimple-color: rgba(255, 255, 255, 0.08);
+  --nav-bronze: #C28B6E;
+  --nav-bronze-rgb: 194, 139, 110;
+  --nav-silver: #8A9BA8;
+  --nav-silver-rgb: 138, 155, 168;
+  --nav-gold: #E8B84B;
+  --nav-gold-rgb: 232, 184, 75;
+}
+
+[data-theme="retro"] {
+  --orb-1: rgba(217, 119, 6, 0.08);
+  --orb-2: rgba(180, 83, 9, 0.06);
+  --orb-3: rgba(245, 158, 11, 0.07);
+  --orb-4: rgba(101, 163, 13, 0.05);
+  --cursor-dimple-color: rgba(0, 0, 0, 0.045);
+  --nav-bronze: #965A38;
+  --nav-bronze-rgb: 150, 90, 56;
+  --nav-silver: #5B6770;
+  --nav-silver-rgb: 91, 103, 112;
+  --nav-gold: #B8860B;
+  --nav-gold-rgb: 184, 134, 11;
+}
+
+[data-theme="retro-dark"] {
+  --orb-1: rgba(245, 158, 11, 0.12);
+  --orb-2: rgba(217, 119, 6, 0.10);
+  --orb-3: rgba(251, 191, 36, 0.10);
+  --orb-4: rgba(101, 163, 13, 0.08);
+  --cursor-dimple-color: rgba(255, 255, 255, 0.08);
+  --nav-bronze: #C28B6E;
+  --nav-bronze-rgb: 194, 139, 110;
+  --nav-silver: #8A9BA8;
+  --nav-silver-rgb: 138, 155, 168;
+  --nav-gold: #E8B84B;
+  --nav-gold-rgb: 232, 184, 75;
+}
+
+/* ═══════════════════════════════════════════════════════
+   THEME — Apple Dark
+   ═══════════════════════════════════════════════════════ */
+[data-theme="apple-dark"] {
+  --color-bg-primary: #1C1C1E;
+  --color-bg-surface: rgba(44, 44, 46, 0.85);
+  --color-bg-surface-hover: rgba(58, 58, 60, 0.9);
+  --color-bg-sidebar: rgba(28, 28, 30, 0.85);
+  --color-accent: #0A84FF;
+  --color-accent-hover: #409CFF;
+  --color-accent-muted: rgba(10, 132, 255, 0.15);
+  --color-text-primary: #F5F5F7;
+  --color-text-secondary: #98989D;
+  --color-text-muted: #636366;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-light: rgba(255, 255, 255, 0.04);
+  --color-success: #30D158;
+  --color-warning: #FF9F0A;
+  --color-error: #FF453A;
+}
+
+[data-theme="apple-dark"] body {
+  background-image:
+    radial-gradient(ellipse 100% 50% at 50% 0%, rgba(10, 132, 255, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 40% at 80% 100%, rgba(10, 132, 255, 0.02) 0%, transparent 50%);
+}
+
+[data-theme="apple-dark"] ::selection {
+  background-color: rgba(10, 132, 255, 0.25);
+}
+
+[data-theme="apple-dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="apple-dark"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="apple-dark"] .apple-glass {
+  background: rgba(44, 44, 46, 0.65);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="apple-dark"] .apple-glass-strong {
+  background: rgba(44, 44, 46, 0.78);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="apple-dark"] .apple-card {
+  background: rgba(44, 44, 46, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="apple-dark"] .apple-cell {
+  background: rgba(58, 58, 60, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="apple-dark"] .apple-cell:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  background: rgba(58, 58, 60, 0.65);
+}
+
+[data-theme="apple-dark"] .apple-shadow-sm {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="apple-dark"] .apple-shadow-md {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="apple-dark"] .apple-shadow-lg {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="apple-dark"] .apple-shadow-xl {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -264,95 +419,192 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════
+   THEME — Retro Dark
+   ═══════════════════════════════════════════════════════ */
+[data-theme="retro-dark"] {
+  --color-bg-primary: #1A1510;
+  --color-bg-surface: rgba(30, 25, 18, 0.85);
+  --color-bg-surface-hover: rgba(40, 33, 24, 0.9);
+  --color-bg-sidebar: rgba(20, 16, 10, 0.85);
+  --color-accent: #F59E0B;
+  --color-accent-hover: #FBBF24;
+  --color-accent-muted: rgba(245, 158, 11, 0.15);
+  --color-text-primary: #F5E6C8;
+  --color-text-secondary: #A6926E;
+  --color-text-muted: #7D6B4A;
+  --color-border: rgba(245, 230, 200, 0.08);
+  --color-border-light: rgba(245, 230, 200, 0.04);
+  --color-success: #65A30D;
+  --color-warning: #D97706;
+  --color-error: #DC2626;
+}
+
+[data-theme="retro-dark"] body {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(245, 230, 200, 0.015) 2px,
+      rgba(245, 230, 200, 0.015) 4px
+    ),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(245, 158, 11, 0.03) 0%, transparent 60%);
+}
+
+[data-theme="retro-dark"] ::selection {
+  background-color: rgba(245, 158, 11, 0.25);
+}
+
+[data-theme="retro-dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(245, 230, 200, 0.12);
+}
+
+[data-theme="retro-dark"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 230, 200, 0.18);
+}
+
+[data-theme="retro-dark"] .apple-glass {
+  background: rgba(30, 25, 18, 0.65);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 0.5px solid rgba(245, 230, 200, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(245, 230, 200, 0.04);
+}
+
+[data-theme="retro-dark"] .apple-glass-strong {
+  background: rgba(30, 25, 18, 0.78);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 0.5px solid rgba(245, 230, 200, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(245, 230, 200, 0.05);
+}
+
+[data-theme="retro-dark"] .apple-card {
+  background: rgba(30, 25, 18, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 0.5px solid rgba(245, 230, 200, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(245, 230, 200, 0.04);
+}
+
+[data-theme="retro-dark"] .apple-cell {
+  background: rgba(40, 33, 24, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(245, 230, 200, 0.06);
+}
+
+[data-theme="retro-dark"] .apple-cell:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  background: rgba(40, 33, 24, 0.65);
+}
+
+[data-theme="retro-dark"] .apple-shadow-sm {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="retro-dark"] .apple-shadow-md {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="retro-dark"] .apple-shadow-lg {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="retro-dark"] .apple-shadow-xl {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════
    NAV SECTION — Bronze / Silver / Gold Theme
    ═══════════════════════════════════════════════════════ */
 
-/* ─── Bronze (#965A38) — Начало работы ─── */
+/* ─── Bronze — Начало работы ─── */
 .nav-bronze {
-  --nav-color: #965A38;
-  --nav-color-rgb: 150, 90, 56;
+  --nav-color: var(--nav-bronze, #965A38);
+  --nav-color-rgb: var(--nav-bronze-rgb, 150, 90, 56);
 }
 
 .nav-bronze .nav-header {
-  background: rgba(150, 90, 56, 0.10);
-  border-color: rgba(150, 90, 56, 0.22);
-  color: #965A38;
+  background: rgba(var(--nav-color-rgb), 0.10);
+  border-color: rgba(var(--nav-color-rgb), 0.22);
+  color: var(--nav-color);
   transition: all 0.3s ease;
 }
 
 .nav-bronze:hover .nav-header {
-  box-shadow: 0 0 20px rgba(150, 90, 56, 0.18), 0 4px 16px rgba(150, 90, 56, 0.12);
-  background: rgba(150, 90, 56, 0.16);
+  box-shadow: 0 0 20px rgba(var(--nav-color-rgb), 0.18), 0 4px 16px rgba(var(--nav-color-rgb), 0.12);
+  background: rgba(var(--nav-color-rgb), 0.16);
 }
 
-/* ─── Silver (#5B6770) — Середина работы ─── */
+/* ─── Silver — Середина работы ─── */
 .nav-silver {
-  --nav-color: #5B6770;
-  --nav-color-rgb: 91, 103, 112;
+  --nav-color: var(--nav-silver, #5B6770);
+  --nav-color-rgb: var(--nav-silver-rgb, 91, 103, 112);
 }
 
 .nav-silver .nav-header {
-  background: rgba(91, 103, 112, 0.10);
-  border-color: rgba(91, 103, 112, 0.22);
-  color: #5B6770;
+  background: rgba(var(--nav-color-rgb), 0.10);
+  border-color: rgba(var(--nav-color-rgb), 0.22);
+  color: var(--nav-color);
   transition: all 0.3s ease;
 }
 
 .nav-silver:hover .nav-header {
-  background: rgba(80, 92, 102, 0.18);
-  border-color: rgba(80, 92, 102, 0.30);
+  background: rgba(calc(var(--nav-color-rgb) - 10), 0.18);
+  border-color: rgba(var(--nav-color-rgb), 0.30);
   animation: silver-shimmer 1.2s ease-in-out infinite;
 }
 
 @keyframes silver-shimmer {
   0%, 100% {
-    box-shadow: 0 0 12px rgba(91, 103, 112, 0.12), inset 0 0 10px rgba(255, 255, 255, 0.04);
+    box-shadow: 0 0 12px rgba(var(--nav-color-rgb), 0.12), inset 0 0 10px rgba(255, 255, 255, 0.04);
   }
   20% {
-    box-shadow: 0 0 28px rgba(91, 103, 112, 0.25), inset 0 0 20px rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 28px rgba(var(--nav-color-rgb), 0.25), inset 0 0 20px rgba(255, 255, 255, 0.08);
   }
   40% {
-    box-shadow: 0 0 36px rgba(91, 103, 112, 0.18), inset 0 0 24px rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 36px rgba(var(--nav-color-rgb), 0.18), inset 0 0 24px rgba(255, 255, 255, 0.06);
   }
   60% {
-    box-shadow: 0 0 44px rgba(91, 103, 112, 0.22), inset 0 0 28px rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 44px rgba(var(--nav-color-rgb), 0.22), inset 0 0 28px rgba(255, 255, 255, 0.08);
   }
   80% {
-    box-shadow: 0 0 24px rgba(91, 103, 112, 0.16), inset 0 0 16px rgba(255, 255, 255, 0.04);
+    box-shadow: 0 0 24px rgba(var(--nav-color-rgb), 0.16), inset 0 0 16px rgba(255, 255, 255, 0.04);
   }
 }
 
-/* ─── Gold (#B8860B) — Профессиональный режим ─── */
+/* ─── Gold — Профессиональный режим ─── */
 .nav-gold {
-  --nav-color: #B8860B;
-  --nav-color-rgb: 184, 134, 11;
+  --nav-color: var(--nav-gold, #B8860B);
+  --nav-color-rgb: var(--nav-gold-rgb, 184, 134, 11);
 }
 
 .nav-gold .nav-header {
-  background: rgba(184, 134, 11, 0.10);
-  border-color: rgba(184, 134, 11, 0.22);
-  color: #B8860B;
+  background: rgba(var(--nav-color-rgb), 0.10);
+  border-color: rgba(var(--nav-color-rgb), 0.22);
+  color: var(--nav-color);
   transition: all 0.3s ease;
 }
 
 .nav-gold:hover .nav-header {
-  box-shadow: 0 0 24px rgba(184, 134, 11, 0.22), 0 0 48px rgba(184, 134, 11, 0.08);
-  background: rgba(184, 134, 11, 0.16);
+  box-shadow: 0 0 24px rgba(var(--nav-color-rgb), 0.22), 0 0 48px rgba(var(--nav-color-rgb), 0.08);
+  background: rgba(var(--nav-color-rgb), 0.16);
   animation: gold-sparkle 1.2s ease-in-out infinite;
 }
 
 @keyframes gold-sparkle {
   0%, 100% {
-    box-shadow: 0 0 16px rgba(184, 134, 11, 0.12), 0 0 32px rgba(184, 134, 11, 0.04);
+    box-shadow: 0 0 16px rgba(var(--nav-color-rgb), 0.12), 0 0 32px rgba(var(--nav-color-rgb), 0.04);
   }
   30% {
-    box-shadow: 0 0 28px rgba(184, 134, 11, 0.28), 0 0 60px rgba(184, 134, 11, 0.10);
+    box-shadow: 0 0 28px rgba(var(--nav-color-rgb), 0.28), 0 0 60px rgba(var(--nav-color-rgb), 0.10);
   }
   60% {
-    box-shadow: 0 0 20px rgba(184, 134, 11, 0.18), 0 0 40px rgba(184, 134, 11, 0.06);
+    box-shadow: 0 0 20px rgba(var(--nav-color-rgb), 0.18), 0 0 40px rgba(var(--nav-color-rgb), 0.06);
   }
   80% {
-    box-shadow: 0 0 32px rgba(184, 134, 11, 0.22), 0 0 64px rgba(184, 134, 11, 0.08);
+    box-shadow: 0 0 32px rgba(var(--nav-color-rgb), 0.22), 0 0 64px rgba(var(--nav-color-rgb), 0.08);
   }
 }
 

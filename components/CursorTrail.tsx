@@ -33,7 +33,7 @@ export default function CursorTrail() {
       el.style.height = `${size}px`;
       el.style.transition = `opacity 0.3s ease`;
       el.style.opacity = "0";
-      el.style.background = `radial-gradient(circle at 50% 50%, rgba(0,0,0,0.045) 0%, rgba(0,0,0,0.02) 30%, transparent 70%)`;
+      el.style.background = `radial-gradient(circle at 50% 50%, var(--cursor-dimple-color, rgba(0,0,0,0.045)) 0%, var(--cursor-dimple-color, rgba(0,0,0,0.02)) 30%, transparent 70%)`;
       container.appendChild(el);
       elements.push(el);
     }
