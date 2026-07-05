@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
@@ -9,6 +9,7 @@ import CursorTrail from "@/components/CursorTrail";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
 import VisitTracker from "@/components/VisitTracker";
 import CookieConsent from "@/components/CookieConsent";
+import SearchHighlight from "@/components/SearchHighlight";
 import { type ThemeId } from "@/lib/themes";
 
 export default function LayoutWrapper({
@@ -42,6 +43,9 @@ export default function LayoutWrapper({
       <CursorTrail />
       <VisitTracker />
       <CookieConsent />
+      <Suspense fallback={null}>
+        <SearchHighlight />
+      </Suspense>
       <Header onMenuToggle={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <div className="flex flex-1 px-0 md:px-0">
         <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />

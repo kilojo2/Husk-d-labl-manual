@@ -16,6 +16,16 @@ export default function SearchBar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  /** Navigate to a page with the search query as a URL parameter */
+  const navigateWithQuery = useCallback(
+    (href: string) => {
+      const q = encodeURIComponent(query.trim());
+      const separator = href.includes("?") ? "&" : "?";
+      router.push(`${href}${separator}q=${q}`);
+    },
+    [query, router],
+  );
+
   const performSearch = useCallback((q: string) => {
     const trimmed = q.trim();
     if (trimmed.length === 0) {
@@ -46,18 +56,18 @@ export default function SearchBar() {
     const safeQuery = sanitizeSearchQuery(query);
     if (!safeQuery) return;
 
-    // If there's a selected result, navigate to it
+    // If there's a selected result, navigate to it with query
     if (selectedIndex >= 0 && selectedIndex < results.length) {
       const selected = results[selectedIndex];
       closeDropdown();
-      router.push(selected.href);
+      navigateWithQuery(selected.href);
       return;
     }
 
     // Otherwise navigate to the first result if available
     if (results.length > 0) {
       closeDropdown();
-      router.push(results[0].href);
+      navigateWithQuery(results[0].href);
     }
   };
 

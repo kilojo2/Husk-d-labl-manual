@@ -13,6 +13,13 @@ interface SearchResultsDropdownProps {
   onSelect: () => void;
 }
 
+/** Append the search query as a URL parameter so the target page can highlight matches */
+function hrefWithQuery(href: string, query: string): string {
+  const q = encodeURIComponent(query.trim());
+  const separator = href.includes("?") ? "&" : "?";
+  return `${href}${separator}q=${q}`;
+}
+
 export default function SearchResultsDropdown({
   results,
   query,
@@ -76,7 +83,7 @@ export default function SearchResultsDropdown({
           {results.map((result, i) => (
             <li key={result.href}>
               <Link
-                href={result.href}
+                href={hrefWithQuery(result.href, query)}
                 onClick={onSelect}
                 className="flex items-start gap-3 px-4 py-3 transition-colors duration-150 hover:bg-accent/10 focus:bg-accent/10 focus:outline-none"
                 role="option"
