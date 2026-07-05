@@ -322,36 +322,36 @@ body {
   }
 }
 
-/* ─── Gold (#8B6F0A) — Профессиональный режим ─── */
+/* ─── Gold (#B8860B) — Профессиональный режим ─── */
 .nav-gold {
-  --nav-color: #8B6F0A;
-  --nav-color-rgb: 139, 111, 10;
+  --nav-color: #B8860B;
+  --nav-color-rgb: 184, 134, 11;
 }
 
 .nav-gold .nav-header {
-  background: rgba(139, 111, 10, 0.10);
-  border-color: rgba(139, 111, 10, 0.22);
-  color: #8B6F0A;
+  background: rgba(184, 134, 11, 0.10);
+  border-color: rgba(184, 134, 11, 0.22);
+  color: #B8860B;
   transition: all 0.3s ease;
 }
 
 .nav-gold:hover .nav-header {
-  box-shadow: 0 0 24px rgba(139, 111, 10, 0.22), 0 0 48px rgba(139, 111, 10, 0.08);
-  background: rgba(139, 111, 10, 0.16);
+  box-shadow: 0 0 24px rgba(184, 134, 11, 0.22), 0 0 48px rgba(184, 134, 11, 0.08);
+  background: rgba(184, 134, 11, 0.16);
   animation: gold-sparkle 1.2s ease-in-out infinite;
 }
 
 @keyframes gold-sparkle {
   0%, 100% {
-    box-shadow: 0 0 16px rgba(139, 111, 10, 0.12), 0 0 32px rgba(139, 111, 10, 0.04);
+    box-shadow: 0 0 16px rgba(184, 134, 11, 0.12), 0 0 32px rgba(184, 134, 11, 0.04);
   }
   30% {
-    box-shadow: 0 0 28px rgba(139, 111, 10, 0.28), 0 0 60px rgba(139, 111, 10, 0.10);
+    box-shadow: 0 0 28px rgba(184, 134, 11, 0.28), 0 0 60px rgba(184, 134, 11, 0.10);
   }
   60% {
-    box-shadow: 0 0 20px rgba(139, 111, 10, 0.18), 0 0 40px rgba(139, 111, 10, 0.06);
+    box-shadow: 0 0 20px rgba(184, 134, 11, 0.18), 0 0 40px rgba(184, 134, 11, 0.06);
   }
   80% {
-    box-shadow: 0 0 32px rgba(139, 111, 10, 0.22), 0 0 64px rgba(139, 111, 10, 0.08);
+    box-shadow: 0 0 32px rgba(184, 134, 11, 0.22), 0 0 64px rgba(184, 134, 11, 0.08);
   }
 }

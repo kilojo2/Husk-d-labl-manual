@@ -31,7 +31,7 @@ function getIconColor(title: string): string {
     case "Середина работы":
       return "text-[#5B6770]";
     case "Профессиональный режим":
-      return "text-[#8B6F0A]";
+      return "text-[#B8860B]";
     default:
       return "text-text-muted";
   }
