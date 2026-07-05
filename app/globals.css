@@ -2,6 +2,28 @@
 
 /* ─── Apple Design System (Default Theme) ─── */
 @theme inline {
+  --color-bg-primary: var(--color-bg-primary);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-bg-surface-hover: var(--color-bg-surface-hover);
+  --color-bg-sidebar: var(--color-bg-sidebar);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-muted: var(--color-accent-muted);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-border: var(--color-border);
+  --color-border-light: var(--color-border-light);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-error);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ─── Default Theme CSS Custom Properties (Light) ─── */
+:root {
   --color-bg-primary: #F5F5F7;
   --color-bg-surface: rgba(255, 255, 255, 0.7);
   --color-bg-surface-hover: rgba(235, 235, 237, 0.8);
@@ -17,9 +39,6 @@
   --color-success: #34C759;
   --color-warning: #FF9500;
   --color-error: #FF3B30;
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 /* ─── Base Styles ─── */
