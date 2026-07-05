@@ -48,6 +48,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Theme label text — black in light themes, overridden in dark themes */
+.theme-label-text {
+  color: #000000;
+}
+
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
@@ -368,7 +373,7 @@ body {
 }
 
 /* Override theme label text to be light in dark mode */
-[data-theme="apple-dark"] .text-black {
+[data-theme="apple-dark"] .theme-label-text {
   color: #E5E5EA;
 }
 
@@ -545,7 +550,7 @@ body {
 }
 
 /* Override theme label text to be light in dark mode */
-[data-theme="retro-dark"] .text-black {
+[data-theme="retro-dark"] .theme-label-text {
   color: #E8D5B0;
 }
 

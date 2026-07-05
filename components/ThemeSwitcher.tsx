@@ -68,7 +68,7 @@ export default function ThemeSwitcher({ currentTheme, onThemeChange }: ThemeSwit
                 className={`group flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-medium apple-shadow-sm backdrop-blur-xl transition-all duration-200 hover:scale-105 ${
                   isActive
                     ? "bg-accent text-white shadow-accent/20"
-                    : "bg-[var(--color-surface,#fff)]/90 text-black ring-1 ring-[var(--color-border,rgba(0,0,0,0.1))] hover:bg-[var(--color-surface,#fff)] hover:text-text-primary"
+                    : "bg-[var(--color-surface,#fff)]/90 ring-1 ring-[var(--color-border,rgba(0,0,0,0.1))] hover:bg-[var(--color-surface,#fff)]"
                 }`}
               >
                 {/* iOS-style rounded square icon */}
@@ -78,7 +78,7 @@ export default function ThemeSwitcher({ currentTheme, onThemeChange }: ThemeSwit
                 >
                   <SFSymbol name={theme.icon} size={14} className="text-white" />
                 </span>
-                <span className="whitespace-nowrap">{theme.label}</span>
+                <span className={`whitespace-nowrap ${isActive ? "" : "theme-label-text"}`}>{theme.label}</span>
                 {isActive && (
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
