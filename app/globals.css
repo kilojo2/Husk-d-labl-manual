@@ -287,8 +287,8 @@ body {
 
 /* ─── Silver (#C0C0C0) — Середина работы ─── */
 .nav-silver {
-  --nav-color: #E8E8E8;
-  --nav-color-rgb: 232, 232, 232;
+  --nav-color: #C0C0C0;
+  --nav-color-rgb: 192, 192, 192;
 }
 
 .nav-silver .nav-header {
@@ -299,26 +299,26 @@ body {
 }
 
 .nav-silver:hover .nav-header {
-  filter: brightness(1.25);
-  background: rgba(192, 192, 192, 0.22);
+  background: rgba(160, 160, 160, 0.22);
+  border-color: rgba(160, 160, 160, 0.35);
   animation: silver-shimmer 1.2s ease-in-out infinite;
 }
 
 @keyframes silver-shimmer {
   0%, 100% {
-    box-shadow: 0 0 12px rgba(192, 192, 192, 0.15), inset 0 0 10px rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 12px rgba(192, 192, 192, 0.15), inset 0 0 10px rgba(255, 255, 255, 0.06);
   }
   20% {
-    box-shadow: 0 0 28px rgba(192, 192, 192, 0.30), inset 0 0 20px rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 28px rgba(192, 192, 192, 0.30), inset 0 0 20px rgba(255, 255, 255, 0.12);
   }
   40% {
-    box-shadow: 0 0 36px rgba(192, 192, 192, 0.22), inset 0 0 24px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 36px rgba(192, 192, 192, 0.22), inset 0 0 24px rgba(255, 255, 255, 0.08);
   }
   60% {
-    box-shadow: 0 0 44px rgba(192, 192, 192, 0.28), inset 0 0 28px rgba(255, 255, 255, 0.16);
+    box-shadow: 0 0 44px rgba(192, 192, 192, 0.28), inset 0 0 28px rgba(255, 255, 255, 0.10);
   }
   80% {
-    box-shadow: 0 0 24px rgba(192, 192, 192, 0.20), inset 0 0 16px rgba(255, 255, 255, 0.10);
+    box-shadow: 0 0 24px rgba(192, 192, 192, 0.20), inset 0 0 16px rgba(255, 255, 255, 0.06);
   }
 }
 
