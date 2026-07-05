@@ -27,11 +27,11 @@ function getSectionClassName(title: string): string {
 function getIconColor(title: string): string {
   switch (title) {
     case "Начало работы":
-      return "text-[#CD7F32]";
+      return "text-[#965A38]";
     case "Середина работы":
-      return "text-[#C0C0C0]";
+      return "text-[#5B6770]";
     case "Профессиональный режим":
-      return "text-[#FFD700]";
+      return "text-[#8B6F0A]";
     default:
       return "text-text-muted";
   }
