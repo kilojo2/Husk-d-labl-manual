@@ -230,6 +230,10 @@ body {
   --orb-3: rgba(90, 200, 250, 0.07);
   --orb-4: rgba(52, 199, 89, 0.05);
   --cursor-dimple-color: rgba(0, 0, 0, 0.045);
+  --cursor-gradient-start: rgba(0, 122, 255, 0.35);
+  --cursor-gradient-mid: rgba(90, 200, 250, 0.18);
+  --cursor-gradient-end: rgba(0, 0, 0, 0);
+  --cursor-glow-color: rgba(0, 122, 255, 0.25);
   --nav-bronze: #965A38;
   --nav-bronze-rgb: 150, 90, 56;
   --nav-silver: #5B6770;
@@ -244,6 +248,10 @@ body {
   --orb-3: rgba(100, 210, 255, 0.10);
   --orb-4: rgba(48, 209, 88, 0.08);
   --cursor-dimple-color: rgba(255, 255, 255, 0.08);
+  --cursor-gradient-start: rgba(10, 132, 255, 0.5);
+  --cursor-gradient-mid: rgba(100, 210, 255, 0.28);
+  --cursor-gradient-end: rgba(0, 0, 0, 0);
+  --cursor-glow-color: rgba(10, 132, 255, 0.4);
   --nav-bronze: #C28B6E;
   --nav-bronze-rgb: 194, 139, 110;
   --nav-silver: #8A9BA8;
@@ -258,6 +266,10 @@ body {
   --orb-3: rgba(245, 158, 11, 0.07);
   --orb-4: rgba(101, 163, 13, 0.05);
   --cursor-dimple-color: rgba(0, 0, 0, 0.045);
+  --cursor-gradient-start: rgba(217, 119, 6, 0.35);
+  --cursor-gradient-mid: rgba(245, 158, 11, 0.18);
+  --cursor-gradient-end: rgba(0, 0, 0, 0);
+  --cursor-glow-color: rgba(217, 119, 6, 0.25);
   --nav-bronze: #965A38;
   --nav-bronze-rgb: 150, 90, 56;
   --nav-silver: #5B6770;
@@ -272,6 +284,10 @@ body {
   --orb-3: rgba(251, 191, 36, 0.10);
   --orb-4: rgba(101, 163, 13, 0.08);
   --cursor-dimple-color: rgba(255, 255, 255, 0.08);
+  --cursor-gradient-start: rgba(245, 158, 11, 0.5);
+  --cursor-gradient-mid: rgba(251, 191, 36, 0.28);
+  --cursor-gradient-end: rgba(0, 0, 0, 0);
+  --cursor-glow-color: rgba(245, 158, 11, 0.4);
   --nav-bronze: #C28B6E;
   --nav-bronze-rgb: 194, 139, 110;
   --nav-silver: #8A9BA8;

@@ -7,9 +7,9 @@ interface Point {
   y: number;
 }
 
-const TRAIL_COUNT = 8;
-const LERP_ALPHA = 0.15;
-const DIMPLE_SIZE = 40;
+const TRAIL_COUNT = 6;
+const LERP_ALPHA = 0.18;
+const DIMPLE_SIZE = 32;
 
 export default function CursorTrail() {
   const pointsRef = useRef<Point[]>([]);
@@ -27,13 +27,17 @@ export default function CursorTrail() {
     for (let i = 0; i < TRAIL_COUNT; i++) {
       const el = document.createElement("div");
       el.className = "cursor-dimple";
-      const delay = (i / (TRAIL_COUNT - 1)) * 0.6;
-      const size = DIMPLE_SIZE * (1 - i * 0.06);
+      const progress = i / (TRAIL_COUNT - 1);
+      const size = DIMPLE_SIZE * (1 - progress * 0.35); // Smoother size decrease
+      const baseOpacity = 0.6 - progress * 0.5; // Start at 0.6, end at 0.1
+      
       el.style.width = `${size}px`;
       el.style.height = `${size}px`;
-      el.style.transition = `opacity 0.3s ease`;
+      el.style.transition = `opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)`;
       el.style.opacity = "0";
-      el.style.background = `radial-gradient(circle at 50% 50%, var(--cursor-dimple-color, rgba(0,0,0,0.045)) 0%, var(--cursor-dimple-color, rgba(0,0,0,0.02)) 30%, transparent 70%)`;
+      el.style.filter = `blur(${2 + progress * 3}px)`; // Progressive blur 2-5px
+      el.style.background = `radial-gradient(circle at 50% 50%, var(--cursor-gradient-start, rgba(0, 122, 255, 0.4)) 0%, var(--cursor-gradient-mid, rgba(90, 200, 250, 0.2)) 40%, var(--cursor-gradient-end, rgba(0, 0, 0, 0)) 80%)`;
+      el.style.boxShadow = `0 0 ${8 + i * 2}px var(--cursor-glow-color, rgba(0, 122, 255, 0.3))`;
       container.appendChild(el);
       elements.push(el);
     }
@@ -66,10 +70,14 @@ export default function CursorTrail() {
           const el = elements[i];
           if (!el) break;
           const p = points[i];
+          const progress = i / (TRAIL_COUNT - 1);
+          const opacity = 0.6 - progress * 0.5; // 0.6 → 0.1
+          const scale = 1 - progress * 0.3; // 1.0 → 0.7
+          
           el.style.left = `${p.x}px`;
           el.style.top = `${p.y}px`;
-          el.style.transform = `translate(-50%, -50%)`;
-          el.style.opacity = String(1 - i * 0.1);
+          el.style.transform = `translate(-50%, -50%) scale(${scale})`;
+          el.style.opacity = String(opacity);
         }
       }
 
