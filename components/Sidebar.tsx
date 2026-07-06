@@ -71,7 +71,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         className="hidden md:block md:w-[240px] md:ml-6 md:mr-4 md:shrink-0"
         aria-label="Sidebar navigation"
       >
-        <div className="mt-14 h-[calc(100vh-11rem)] overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg">
+        <div className="mt-4 h-[calc(100vh-11rem)] overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg">
           <TreeNavigation onNavigate={handleNavigate} />
         </div>
       </aside>
