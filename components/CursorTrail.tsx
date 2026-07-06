@@ -32,7 +32,6 @@ export default function CursorTrail() {
       el.className = "cursor-dimple";
       const progress = i / (TRAIL_COUNT - 1);
       const size = DIMPLE_SIZE * (1 - progress * 0.35); // Smoother size decrease
-      const baseOpacity = 0.6 - progress * 0.5; // Start at 0.6, end at 0.1
       
       el.style.width = `${size}px`;
       el.style.height = `${size}px`;
