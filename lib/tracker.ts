@@ -11,7 +11,6 @@
  */
 
 import { getDb, saveDb } from "./db";
-import { encryptIp } from "./crypto";
 
 export interface VisitEvent {
   pagePath: string;

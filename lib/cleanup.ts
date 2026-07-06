@@ -41,7 +41,7 @@ export async function cleanupOldRecords(): Promise<void> {
     const anomalyCutoffStr = anomalyCutoff.toISOString().slice(0, 10);
 
     // Delete old visit records (including encrypted IPs)
-    const visitsDeleted = db.run(
+    db.run(
       `DELETE FROM visits WHERE visit_date < ?`,
       [visitsCutoffStr]
     );

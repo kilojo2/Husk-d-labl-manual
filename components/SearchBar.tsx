@@ -133,6 +133,7 @@ export default function SearchBar() {
           }}
           placeholder="Поиск по справочнику..."
           className="w-full rounded-full border border-border bg-bg-surface/80 py-2 pl-10 pr-4 text-sm text-text-primary placeholder-text-muted transition-all duration-200 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 apple-shadow-sm"
+          role="combobox"
           aria-label="Поиск по справочнику"
           aria-expanded={isOpen}
           aria-haspopup="listbox"

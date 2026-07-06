@@ -24,7 +24,7 @@ const CHECK_INTERVAL_MS = 3600000; // Check every hour
  * Get the database file path (same logic as db.ts).
  */
 function getDbPath(): string {
-  return process.env.DATABASE_PATH || path.join(process.cwd(), "data", "visits.db");
+  return process.env.DATABASE_PATH || path.join(/*turbopackIgnore: true*/ process.cwd(), "data", "visits.db");
 }
 
 /**

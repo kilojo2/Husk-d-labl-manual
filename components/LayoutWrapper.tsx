@@ -19,22 +19,22 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [theme, setTheme] = useState<ThemeId>("apple");
-
-  // Load theme from localStorage on mount, fallback to prefers-color-scheme
-  useEffect(() => {
+  
+  // Initialize theme from localStorage or system preference (avoiding setState in useEffect)
+  const [theme, setTheme] = useState<ThemeId>(() => {
+    if (typeof window === "undefined") return "apple";
+    
     const saved = localStorage.getItem("hl-theme") as ThemeId | null;
     const validThemes: ThemeId[] = ["apple", "apple-dark", "retro", "retro-dark"];
+    
     if (saved && validThemes.includes(saved)) {
-      setTheme(saved);
-      return;
+      return saved;
     }
+    
     // No saved preference — check system dark mode
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    if (prefersDark) {
-      setTheme("apple-dark");
-    }
-  }, []);
+    return prefersDark ? "apple-dark" : "apple";
+  });
 
   // Persist theme to localStorage and update <html> data-theme attribute
   useEffect(() => {

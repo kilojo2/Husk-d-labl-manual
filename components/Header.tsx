@@ -37,7 +37,7 @@ export default function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-xs font-bold text-white apple-shadow-sm">
           HL
         </span>
-        <span className="hidden sm:inline">Husk'd Labl Manuals</span>
+        <span className="hidden sm:inline">Husk&apos;d Labl Manuals</span>
       </Link>
 
       {/* Search bar */}

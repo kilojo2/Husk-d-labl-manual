@@ -17,7 +17,6 @@ interface BanRecord {
 const violationMap = new Map<string, BanRecord>();
 
 const VIOLATION_THRESHOLD = 10; // 10 violations → ban
-const VIOLATION_WINDOW_MS = 60000; // within 1 minute
 const BAN_DURATION_MS = 3600000; // ban for 1 hour
 
 /**
