@@ -33,9 +33,9 @@ export default function ThemeSwitcher({ currentTheme, onThemeChange }: ThemeSwit
     <div ref={menuRef} className="fixed bottom-6 right-6 z-50">
       {/* Tooltip for hovered theme */}
       {hoveredTheme && !isOpen && (
-        <div className="absolute bottom-full right-0 mb-3 whitespace-nowrap rounded-xl bg-[var(--color-surface,#fff)] px-3.5 py-2 text-sm font-medium text-[var(--color-text-primary,#1D1D1F)] apple-shadow-md ring-1 ring-[var(--color-border,rgba(0,0,0,0.05))]">
+        <div className="absolute bottom-full right-0 mb-3 whitespace-nowrap rounded-xl bg-white px-3.5 py-2 text-sm font-medium text-[#1D1D1F] apple-shadow-md ring-1 ring-[var(--color-border,rgba(0,0,0,0.05))]">
           {themes.find((t) => t.id === hoveredTheme)?.label}
-          <div className="absolute right-4 top-full h-2 w-2 rotate-45 bg-[var(--color-surface,#fff)]" />
+          <div className="absolute right-4 top-full h-2 w-2 rotate-45 bg-white" />
         </div>
       )}
 
