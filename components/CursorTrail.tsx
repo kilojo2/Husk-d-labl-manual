@@ -8,7 +8,9 @@ interface Point {
 }
 
 const TRAIL_COUNT = 6;
-const LERP_ALPHA = 0.18;
+const LERP_ALPHA_MIN = 0.18; // Normal speed
+const LERP_ALPHA_MAX = 0.5; // High speed
+const VELOCITY_THRESHOLD = 2; // Pixels per frame to trigger faster lerp
 const DIMPLE_SIZE = 32;
 
 export default function CursorTrail() {
@@ -16,6 +18,7 @@ export default function CursorTrail() {
   const rafRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<Point>({ x: 0, y: 0 });
+  const prevTargetRef = useRef<Point>({ x: 0, y: 0 });
   const hasMovedRef = useRef(false);
 
   useEffect(() => {
@@ -50,20 +53,36 @@ export default function CursorTrail() {
     const animate = () => {
       const points = pointsRef.current;
       const target = targetRef.current;
+      const prevTarget = prevTargetRef.current;
 
       if (hasMovedRef.current) {
-        // Each point follows the one before it with lerp
+        // Calculate velocity-adaptive LERP alpha
+        const dx = target.x - prevTarget.x;
+        const dy = target.y - prevTarget.y;
+        const velocity = Math.sqrt(dx * dx + dy * dy);
+        
+        // Adaptive alpha: faster lerp during rapid movements
+        const velocityFactor = Math.min(velocity / VELOCITY_THRESHOLD, 3);
+        const adaptiveLerp = Math.min(
+          LERP_ALPHA_MIN + (LERP_ALPHA_MAX - LERP_ALPHA_MIN) * velocityFactor,
+          LERP_ALPHA_MAX
+        );
+
+        // Each point follows the one before it with adaptive lerp
         points[0] = {
-          x: points[0].x + (target.x - points[0].x) * LERP_ALPHA,
-          y: points[0].y + (target.y - points[0].y) * LERP_ALPHA,
+          x: points[0].x + (target.x - points[0].x) * adaptiveLerp,
+          y: points[0].y + (target.y - points[0].y) * adaptiveLerp,
         };
 
         for (let i = 1; i < TRAIL_COUNT; i++) {
           points[i] = {
-            x: points[i].x + (points[i - 1].x - points[i].x) * LERP_ALPHA,
-            y: points[i].y + (points[i - 1].y - points[i].y) * LERP_ALPHA,
+            x: points[i].x + (points[i - 1].x - points[i].x) * adaptiveLerp,
+            y: points[i].y + (points[i - 1].y - points[i].y) * adaptiveLerp,
           };
         }
+        
+        // Update previous target for next frame
+        prevTargetRef.current = { x: target.x, y: target.y };
 
         // Update DOM
         for (let i = 0; i < TRAIL_COUNT; i++) {
@@ -88,6 +107,8 @@ export default function CursorTrail() {
       targetRef.current = { x: e.clientX, y: e.clientY };
       if (!hasMovedRef.current) {
         hasMovedRef.current = true;
+        // Initialize previous target on first move
+        prevTargetRef.current = { x: e.clientX, y: e.clientY };
         // Snap first point immediately
         for (let i = 0; i < TRAIL_COUNT; i++) {
           pointsRef.current[i] = { x: e.clientX, y: e.clientY };
