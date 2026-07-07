@@ -16,6 +16,7 @@ export const navigationSections: NavSection[] = [
     title: "Начало работы",
     icon: "house",
     items: [
+      { title: "Вход в аккаунты", href: "/account-login", slug: "account-login", icon: "person.badge.key" },
       { title: "Гайд по настройке OBS", href: "/obs-guide", slug: "obs-guide", icon: "wrench" },
       { title: "Мануал по Lovense / Lush", href: "/lovense-guide", slug: "lovense-guide", icon: "link" },
       { title: "Словарь терминов", href: "/getting-started/dictionary", slug: "dictionary", icon: "book.closed" },
