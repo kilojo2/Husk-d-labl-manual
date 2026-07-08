@@ -31,7 +31,12 @@ const searchIndex: SearchRecord[] = [
   {
     title: "Гайд по Stripchat",
     href: "/stripchat-guide",
-    slug: "stripchat-guide",
+    section: "Начало работы",
+    keywords: [
+      "stripchat", "рассылка", "newsletter", "нюд", "nude",
+      "фото", "подписчики", "токены", "платная рассылка",
+      "бесплатная рассылка", "фанклуб", "друзья",
+    ],
     content: `
 Гайд по Stripchat. Как делать рассылку (Newsletter) после начала стрима.
 
