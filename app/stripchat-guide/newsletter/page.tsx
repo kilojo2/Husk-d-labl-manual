@@ -46,7 +46,7 @@ const section3: ContentBlock[] = [
   },
 ];
 
-const section4: ContentBlock[] = [
+const section3b: ContentBlock[] = [
   {
     type: "paragraph",
     text: "После чего по середине экрана у вас появляется окошко 'Рассылка'.",
@@ -54,6 +54,9 @@ const section4: ContentBlock[] = [
   {
     type: "divider",
   },
+];
+
+const section4: ContentBlock[] = [
   {
     type: "subheading",
     text: "Настройка параметров рассылки",
@@ -84,7 +87,6 @@ const section4: ContentBlock[] = [
   {
     type: "list",
     items: [
-      "Всех",
       "Друзей",
       "Подписчиков фанклуба",
     ],
@@ -135,7 +137,7 @@ export default function Page() {
         />
       </div>
 
-      <MarkdownContent blocks={section4} />
+      <MarkdownContent blocks={section3b} />
 
       <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
         <Image
@@ -146,6 +148,8 @@ export default function Page() {
           className="h-auto w-full"
         />
       </div>
+
+      <MarkdownContent blocks={section4} />
     </ArticlePage>
   );
 }
