@@ -6,11 +6,11 @@ import type { ContentBlock } from "@/components/MarkdownContent";
 const section1: ContentBlock[] = [
   {
     type: "heading",
-    text: "Гайд по Stripchat",
+    text: "Рассылка (Newsletter)",
   },
   {
     type: "paragraph",
-    text: "Как делать рассылку (Newsletter) после начала стрима",
+    text: "Как делать рассылку после начала стрима",
   },
   {
     type: "divider",
@@ -21,7 +21,7 @@ const section1: ContentBlock[] = [
   },
   {
     type: "paragraph",
-    text: "После того как вы начали стрим, вам необходимо сделать рассылку. Для чего она нужна? Если у вас уже раскрученная модель, к примеру у нее 2000 подписчиков, то какая-то часть из них получит уведомление о том что модель стримит, и зайдет, и ваш онлайн сразу в гору, соответственно и донаты. По этому рассылка после начала стрима необходимое действие.",
+    text: "После того как вы начали стрим, вам необходимо сделать рассылку. Для чего она нужна? Если у вас уже раскрученная модель, к примеру у нее 2000 подписчиков, то какая-то часть из них получит уведомление о том что модель стримит, и зайдет, и ваш онлайн сразу в гору, соответственно и донаты. По этому рассылка после стрима необходимое действие.",
   },
   {
     type: "divider",
@@ -109,7 +109,7 @@ const section4: ContentBlock[] = [
 
 export default function Page() {
   return (
-    <ArticlePage title="Гайд по Stripchat" description="Как делать рассылку после начала стрима">
+    <ArticlePage title="Рассылка (Newsletter)" description="Как делать рассылку после начала стрима">
       <MarkdownContent blocks={section1} />
       <MarkdownContent blocks={section2} />
 

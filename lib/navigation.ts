@@ -3,6 +3,7 @@ export interface NavItem {
   href: string;
   slug: string;
   icon: string;
+  children?: NavItem[];
 }
 
 export interface NavSection {
@@ -19,7 +20,19 @@ export const navigationSections: NavSection[] = [
       { title: "Вход в аккаунты", href: "/account-login", slug: "account-login", icon: "person.badge.key" },
       { title: "Гайд по настройке OBS", href: "/obs-guide", slug: "obs-guide", icon: "wrench" },
       { title: "Мануал по Lovense / Lush", href: "/lovense-guide", slug: "lovense-guide", icon: "link" },
-      { title: "Гайд по Stripchat", href: "/stripchat-guide", slug: "stripchat-guide", icon: "square.grid.2x2" },
+      {
+        title: "Гайд по Stripchat",
+        href: "/stripchat-guide",
+        slug: "stripchat-guide",
+        icon: "square.grid.2x2",
+        children: [
+          { title: "Рассылка", href: "/stripchat-guide/newsletter", slug: "stripchat-newsletter", icon: "envelope" },
+          { title: "Мои данные", href: "/stripchat-guide/my-data", slug: "stripchat-my-data", icon: "person.circle" },
+          { title: "Настройки шоу", href: "/stripchat-guide/show-settings", slug: "stripchat-show-settings", icon: "slider.horizontal.3" },
+          { title: "Лента", href: "/stripchat-guide/feed", slug: "stripchat-feed", icon: "square.stack" },
+          { title: "Расширения", href: "/stripchat-guide/extensions", slug: "stripchat-extensions", icon: "puzzlepiece" },
+        ],
+      },
       { title: "Словарь терминов", href: "/getting-started/dictionary", slug: "dictionary", icon: "book.closed" },
       { title: "Правила сайтов", href: "/getting-started/site-rules", slug: "site-rules", icon: "doc.text" },
       { title: "Железные правила переговоров", href: "/getting-started/negotiation-rules", slug: "negotiation-rules", icon: "hand.raised" },
