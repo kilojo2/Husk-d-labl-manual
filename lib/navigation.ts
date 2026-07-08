@@ -19,6 +19,7 @@ export const navigationSections: NavSection[] = [
       { title: "Вход в аккаунты", href: "/account-login", slug: "account-login", icon: "person.badge.key" },
       { title: "Гайд по настройке OBS", href: "/obs-guide", slug: "obs-guide", icon: "wrench" },
       { title: "Мануал по Lovense / Lush", href: "/lovense-guide", slug: "lovense-guide", icon: "link" },
+      { title: "Гайд по Stripchat", href: "/stripchat-guide", slug: "stripchat-guide", icon: "square.grid.2x2" },
       { title: "Словарь терминов", href: "/getting-started/dictionary", slug: "dictionary", icon: "book.closed" },
       { title: "Правила сайтов", href: "/getting-started/site-rules", slug: "site-rules", icon: "doc.text" },
       { title: "Железные правила переговоров", href: "/getting-started/negotiation-rules", slug: "negotiation-rules", icon: "hand.raised" },
