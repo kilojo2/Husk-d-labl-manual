@@ -26,28 +26,37 @@ const section1: ContentBlock[] = [
   {
     type: "divider",
   },
-  {
-    type: "subheading",
-    text: "Как сделать рассылку: пошаговая инструкция",
-  },
-  {
-    type: "ordered-list",
-    items: [
-      "В правом верхнем углу есть кнопка как газета — нажимаем на нее.",
-      "У нас появляется окошко 'Сообщения' справа от этого текста есть зеленая кнопочка с карандашем — нажимаем на нее.",
-      "После чего по середине экрана у вас появляется окошко 'Рассылка'.",
-    ],
-  },
 ];
 
 const section2: ContentBlock[] = [
   {
     type: "subheading",
-    text: "Настройка параметров рассылки",
+    text: "Как сделать рассылку: пошаговая инструкция",
   },
   {
     type: "paragraph",
-    text: "В окне рассылки настройте следующие параметры:",
+    text: "В правом верхнем углу есть кнопка как газета — нажимаем на нее.",
+  },
+];
+
+const section3: ContentBlock[] = [
+  {
+    type: "paragraph",
+    text: "У нас появляется окошко 'Сообщения' справа от этого текста есть зеленая кнопочка с карандашем — нажимаем на нее.",
+  },
+];
+
+const section4: ContentBlock[] = [
+  {
+    type: "paragraph",
+    text: "После чего по середине экрана у вас появляется окошко 'Рассылка'.",
+  },
+  {
+    type: "divider",
+  },
+  {
+    type: "subheading",
+    text: "Настройка параметров рассылки",
   },
   {
     type: "subheading",
@@ -96,40 +105,42 @@ const section2: ContentBlock[] = [
     type: "paragraph",
     text: "И все, нажимаем 'Отправить рассылку'. Поздравляю, вы сделали рассылку!",
   },
-  {
-    type: "divider",
-  },
-  {
-    type: "subheading",
-    text: "Дополнительная информация",
-  },
-  {
-    type: "paragraph",
-    text: "Ниже представлены скриншоты интерфейса Stripchat для справки:",
-  },
 ];
 
 export default function Page() {
   return (
     <ArticlePage title="Гайд по Stripchat" description="Как делать рассылку после начала стрима">
       <MarkdownContent blocks={section1} />
+      <MarkdownContent blocks={section2} />
 
       <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
         <Image
-          src="/stripchat-screens/Accnopass.png"
-          alt="Интерфейс входа в Stripchat без пароля"
+          src="/stripchat-screens/Newsletter.png"
+          alt="Кнопка Newsletter в правом верхнем углу Stripchat"
           width={800}
           height={450}
           className="h-auto w-full"
         />
       </div>
 
-      <MarkdownContent blocks={section2} />
+      <MarkdownContent blocks={section3} />
 
       <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
         <Image
-          src="/stripchat-screens/StripBrowser.png"
-          alt="Браузер Stripchat с настройками трансляции"
+          src="/stripchat-screens/Newsletter2.png"
+          alt="Зеленая кнопочка с карандашем для создания рассылки"
+          width={800}
+          height={450}
+          className="h-auto w-full"
+        />
+      </div>
+
+      <MarkdownContent blocks={section4} />
+
+      <div className="my-6 overflow-hidden rounded-2xl border border-border/50">
+        <Image
+          src="/stripchat-screens/Newsletter3.png"
+          alt="Окно рассылки с настройками"
           width={800}
           height={450}
           className="h-auto w-full"
