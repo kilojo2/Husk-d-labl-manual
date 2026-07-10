@@ -250,4 +250,50 @@ const iconMap: Record<string, React.ReactNode> = {
       <path d="M9 18l6-6-6-6" />
     </>
   ),
+  "key.fill": (
+    <>
+      <circle cx="6" cy="9" r="3" fill="currentColor" />
+      <path d="M8.5 10.5L19 21M15 17h2M17 15v2" />
+    </>
+  ),
+  "building.2": (
+    <>
+      <rect x="3" y="3" width="7" height="18" />
+      <rect x="14" y="8" width="7" height="13" />
+      <path d="M6 7h1M6 11h1M6 15h1M17 12h1M17 16h1" />
+    </>
+  ),
+  "envelope.fill": (
+    <>
+      <rect x="2" y="5" width="20" height="14" rx="2" fill="currentColor" stroke="none" />
+      <path d="M2 7l10 7 10-7" stroke="currentColor" fill="none" />
+    </>
+  ),
+  "person.crop.circle": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <circle cx="12" cy="10" r="3" />
+      <path d="M6.5 18.5a6 6 0 0111 0" />
+    </>
+  ),
+  "gearshape.fill": (
+    <>
+      <circle cx="12" cy="12" r="10" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="3" stroke="currentColor" fill="none" />
+      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" fill="none" />
+    </>
+  ),
+  "square.stack.3d.up": (
+    <>
+      <rect x="4" y="10" width="16" height="10" rx="1" />
+      <path d="M6 10V8a1 1 0 011-1h10a1 1 0 011 1v2" />
+      <path d="M8 7V5a1 1 0 011-1h6a1 1 0 011 1v2" />
+    </>
+  ),
+  "puzzlepiece.extension": (
+    <>
+      <path d="M3 8h3a2 2 0 012 2v0a2 2 0 002 2h0a2 2 0 002-2v0a2 2 0 012-2h3v5h-3a2 2 0 00-2 2v0a2 2 0 01-2 2h0a2 2 0 01-2-2v0a2 2 0 00-2-2H3V8z" />
+      <path d="M8 3v2a2 2 0 01-2 2H3v3h3a2 2 0 002 2h0" />
+    </>
+  ),
 };
