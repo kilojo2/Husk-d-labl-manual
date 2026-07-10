@@ -296,4 +296,11 @@ const iconMap: Record<string, React.ReactNode> = {
       <path d="M8 3v2a2 2 0 01-2 2H3v3h3a2 2 0 002 2h0" />
     </>
   ),
+  "desktopcomputer": (
+    <>
+      <rect x="2" y="3" width="20" height="14" rx="2" />
+      <path d="M8 21h8" />
+      <path d="M12 17v4" />
+    </>
+  ),
 };

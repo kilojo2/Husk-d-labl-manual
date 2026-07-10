@@ -33,6 +33,7 @@ export const navigationSections: NavSection[] = [
           { title: "Расширения", href: "/stripchat-guide/extensions", slug: "stripchat-extensions", icon: "puzzlepiece.extension" },
         ],
       },
+      { title: "Симулятор BongaCams", href: "/bongacams-simulator", slug: "bongacams-simulator", icon: "desktopcomputer" },
       { title: "Словарь терминов", href: "/getting-started/dictionary", slug: "dictionary", icon: "book.closed" },
       { title: "Правила сайтов", href: "/getting-started/site-rules", slug: "site-rules", icon: "doc.text" },
       { title: "Железные правила переговоров", href: "/getting-started/negotiation-rules", slug: "negotiation-rules", icon: "hand.raised" },
