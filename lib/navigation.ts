@@ -35,6 +35,7 @@ export const navigationSections: NavSection[] = [
       },
       { title: "Гайд по Flirt4Free", href: "/flirt4free-guide", slug: "flirt4free-guide", icon: "star" },
       { title: "Мануал по LiveJasmin", href: "/livejasmin-guide", slug: "livejasmin-guide", icon: "play.circle" },
+      { title: "Гайд по BongaCams", href: "/bongacams-guide", slug: "bongacams-guide", icon: "desktopcomputer" },
       { title: "Словарь терминов", href: "/getting-started/dictionary", slug: "dictionary", icon: "book.closed" },
       { title: "Правила сайтов", href: "/getting-started/site-rules", slug: "site-rules", icon: "doc.text" },
       { title: "Железные правила переговоров", href: "/getting-started/negotiation-rules", slug: "negotiation-rules", icon: "hand.raised" },
