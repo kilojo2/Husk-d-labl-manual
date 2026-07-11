@@ -17,6 +17,35 @@ export interface SearchResult {
 const searchIndex: SearchRecord[] = [
   // ─── Начало работы ───
   {
+    title: "Гайд по Flirt4Free",
+    href: "/flirt4free-guide",
+    section: "Начало работы",
+    keywords: [
+      "flirt4free", "f4f", "performer app", "obs", "стрим",
+      "free chat", "group show", "private", "party show",
+      "кредиты", "credits", "tips", "чаевые", "юзеры",
+      "guest", "member", "levels", "уровни", "вещание"
+    ],
+    content: `
+Мануал оператора Flirt4Free. Интерфейс Performer App, подключение OBS, типы шоу и юзеров.
+
+1. Интерфейс Performer App
+Рабочий экран разделён на пять зон: панель кнопок (верх), превью видео (лево), чат (центр), зрители (право), статистика (низ-лево). Статусы: Offline (не в эфире), Online (эфир идёт). При первом входе нажми Start Chat для выхода в эфир.
+
+2. Подключение OBS
+В Performer App: Setup → Broadcast Info. Скопируй Server URL и Stream Key. В OBS: Настройки → Вещание, Service: Custom, вставь данные. Настройки видео: 1920×1080, 30 FPS, 10000 kbps bitrate. Порядок запуска: Start Streaming в OBS → подожди 5-10 сек → Start Chat в Performer App.
+
+3. Кнопки управления
+Start Chat (запуск сессии), Start Break (перерыв), Start Fake (видео вместо живого потока), Change Rate (смена цены Private), Start Group (групповое шоу), Start Party (платный вход), Show Offers (спецпредложения), Alert Monitor (уведомления VIP), Games (интерактивные игры).
+
+4. Типы шоу
+Free Chat — основной режим, все смотрят бесплатно, доход от Tips. Group Show — юзеры скидываются на Goal, шоу стартует при достижении цели. Private/VIP — один на один, юзер платит за минуту, другие могут подглядывать (Voyeur), максимальный доход. Party Show — платный вход (билет), контент объявляется заранее.
+
+5. Типы юзеров
+Guest (незарег) — только смотрит, не может писать и тратить кредиты. Member (базовый) — может писать, покупать кредиты, участвовать в шоу. Levels (уровни) — чем выше уровень, тем больше юзер потратил, активно взаимодействуй с высокими уровнями.
+    `,
+  },
+  {
     title: "Симулятор BongaCams",
     href: "/bongacams-simulator",
     section: "Инструменты",
