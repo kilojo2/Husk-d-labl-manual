@@ -35,16 +35,16 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
         }}
         className={`
           group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-          ${depth > 0 ? 'ml-4' : ''}
+          ${depth > 0 ? 'ml-7' : ''}
           ${
             isActive
               ? "bg-gradient-to-r from-accent to-[#5AC8FA] text-white apple-shadow-sm"
-              : "text-text-secondary hover:bg-bg-surface-hover hover:text-text-primary"
+              : "text-text-muted hover:bg-bg-surface-hover hover:text-text-primary"
           }
         `}
         aria-current={isActive ? "page" : undefined}
       >
-        <span className={`flex items-center justify-center ${isActive ? "text-white/90" : "text-text-secondary group-hover:text-text-primary"}`}>
+        <span className={`flex items-center justify-center ${isActive ? "text-white/90" : "text-text-muted group-hover:text-text-primary"}`}>
           <SFSymbol name={item.icon} size={16} />
         </span>
         <span className="flex-1">{item.title}</span>
