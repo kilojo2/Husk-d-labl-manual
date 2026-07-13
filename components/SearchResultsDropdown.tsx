@@ -85,7 +85,7 @@ export default function SearchResultsDropdown({
               <Link
                 href={hrefWithQuery(result.href, query)}
                 onClick={onSelect}
-                className="flex items-start gap-3 px-4 py-3 transition-colors duration-150 hover:bg-accent/10 focus:bg-accent/10 focus:outline-none"
+                className="flex items-start gap-3 px-4 py-4 transition-colors duration-150 hover:bg-accent/10 focus:bg-accent/10 focus:outline-none"
                 role="option"
                 aria-selected={i === 0}
                 tabIndex={0}
@@ -97,12 +97,12 @@ export default function SearchResultsDropdown({
 
                 <div className="min-w-0 flex-1">
                   {/* Title */}
-                  <p className="truncate text-sm font-medium text-text-primary">
+                  <p className="truncate text-base font-semibold text-text-primary">
                     {highlightMatches(result.title, query)}
                   </p>
 
                   {/* Snippet */}
-                  <p className="mt-0.5 truncate text-xs text-text-muted">
+                  <p className="mt-1 truncate text-[11px] text-text-muted/70">
                     {highlightMatches(result.snippet, query)}
                   </p>
                 </div>
