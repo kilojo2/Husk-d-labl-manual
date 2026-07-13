@@ -146,13 +146,6 @@ export default function Page() {
 
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0 w-32">
-            <p className="text-lg font-semibold text-cyan-500">Голубой</p>
-            <p className="text-base">Ниже среднего.</p>
-          </div>
-        </div>
-
-        <div className="flex items-start gap-4">
-          <div className="flex-shrink-0 w-32">
             <Image
               src="/stripchat-screens/Silver user.png"
               alt="Серебряный пользователь"
