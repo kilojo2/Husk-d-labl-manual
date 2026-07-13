@@ -26,6 +26,7 @@ export const navigationSections: NavSection[] = [
         slug: "stripchat-guide",
         icon: "building.2",
         children: [
+          { title: "Основы", href: "/stripchat-guide/basics", slug: "stripchat-basics", icon: "book.closed" },
           { title: "Рассылка", href: "/stripchat-guide/newsletter", slug: "stripchat-newsletter", icon: "envelope.fill" },
           { title: "Мои данные", href: "/stripchat-guide/my-data", slug: "stripchat-my-data", icon: "person.crop.circle" },
           { title: "Настройки шоу", href: "/stripchat-guide/show-settings", slug: "stripchat-show-settings", icon: "gearshape.fill" },
