@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import Link from "next/link";
-import SFSymbol from "./SFSymbol";
+import { Icon } from "./Icon";
 import type { SearchResult } from "@/lib/search-index";
 
 interface SearchResultsDropdownProps {
@@ -62,14 +62,14 @@ export default function SearchResultsDropdown({
   return (
     <div
       ref={dropdownRef}
-      className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-border/50 bg-bg-surface/90 backdrop-blur-2xl apple-shadow-lg"
+      className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-border/50 bg-bg-surface/90 backdrop-blur-2xl"
       role="listbox"
       aria-label="Результаты поиска"
     >
       {results.length === 0 ? (
         <div className="flex flex-col items-center gap-2 px-4 py-8 text-center">
           <div className="text-text-muted">
-            <SFSymbol name="magnifyingglass" size={24} />
+            <Icon name="search" size={24} />
           </div>
           <p className="text-sm text-text-muted">
             Ничего не найдено по запросу &laquo;{query}&raquo;
@@ -109,7 +109,7 @@ export default function SearchResultsDropdown({
 
                 {/* Arrow */}
                 <div className="mt-0.5 shrink-0 text-text-muted/60">
-                  <SFSymbol name="chevron.right" size={14} />
+                  <Icon name="chevron-right" size={14} />
                 </div>
               </Link>
             </li>

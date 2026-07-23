@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import SearchBar from "./SearchBar";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -10,11 +11,11 @@ interface HeaderProps {
 
 export default function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
   return (
-    <header className="sticky top-3 z-30 mx-4 flex h-12 items-center gap-4 rounded-2xl apple-glass-strong apple-shadow-md px-4 md:mx-6 md:px-5">
+    <header className="sticky top-0 z-30 flex h-[52px] items-center border-b border-border bg-bg-primary px-4 gap-4 md:px-6">
       {/* Mobile menu button */}
       <button
         onClick={onMenuToggle}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-bg-surface-hover hover:text-text-primary md:hidden"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-surface-hover hover:text-text-primary md:hidden"
         aria-label={isSidebarOpen ? "Закрыть меню" : "Открыть меню"}
         aria-expanded={isSidebarOpen}
       >
@@ -32,18 +33,21 @@ export default function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
       {/* Logo */}
       <Link
         href="/"
-        className="flex shrink-0 items-center gap-2.5 text-base font-semibold text-text-primary"
+        className="flex shrink-0 items-center gap-2.5 text-sm font-semibold text-text-primary"
       >
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-xs font-bold text-white apple-shadow-sm">
+        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">
           HL
         </span>
-        <span className="hidden sm:inline">Husk&apos;d Labl Manuals</span>
+        <span className="hidden sm:inline">Husk'd Lab Manuals</span>
       </Link>
 
       {/* Search bar */}
       <div className="flex flex-1 justify-end md:justify-center">
         <SearchBar />
       </div>
+
+      {/* Theme switcher */}
+      <ThemeSwitcher />
     </header>
   );
 }

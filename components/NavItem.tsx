@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NavItem as NavItemType } from "@/lib/navigation";
-import SFSymbol from "./SFSymbol";
+import { Icon } from "./Icon";
 
 interface NavItemProps {
   item: NavItemType;
@@ -34,23 +34,24 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
           if (!hasChildren && onNavigate) onNavigate();
         }}
         className={`
-          group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-          ${depth > 0 ? 'ml-7' : ''}
-          ${
-            isActive
-              ? "bg-gradient-to-r from-accent to-[#5AC8FA] text-white apple-shadow-sm"
-              : "text-text-muted hover:bg-bg-surface-hover hover:text-text-primary"
+          group flex items-center gap-2 rounded-md px-3 text-sm transition-all duration-150
+          ${depth > 0 ? "ml-6" : ""}
+          ${isActive
+            ? "bg-accent-subtle text-accent font-medium border-l-2 border-accent -ml-px pl-[11px]"
+            : "text-text-muted hover:bg-surface-hover hover:text-text-secondary border-l-2 border-transparent pl-3"
           }
+          ${hasChildren ? "" : ""}
+          h-8
         `}
         aria-current={isActive ? "page" : undefined}
       >
-        <span className={`flex items-center justify-center ${isActive ? "text-white/90" : "text-text-muted group-hover:text-text-primary"}`}>
-          <SFSymbol name={item.icon} size={16} />
+        <span className="flex items-center justify-center shrink-0">
+          <Icon name={item.icon} size={14} />
         </span>
-        <span className="flex-1">{item.title}</span>
+        <span className="flex-1 truncate">{item.title}</span>
         {hasChildren && (
           <svg
-            className={`h-3.5 w-3.5 transition-transform duration-300 ${
+            className={`h-3 w-3 shrink-0 transition-transform duration-200 ${
               isExpanded ? "rotate-180" : ""
             }`}
             fill="none"
@@ -65,11 +66,11 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
 
       {hasChildren && (
         <div
-          className={`overflow-hidden transition-all duration-300 ease-out ${
+          className={`overflow-hidden transition-all duration-200 ease-out ${
             isExpanded ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
-          <div className="mt-0.5 space-y-0.5">
+          <div className="space-y-0.5">
             {item.children!.map((child) => (
               <NavItem key={child.href} item={child} onNavigate={onNavigate} depth={depth + 1} />
             ))}

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import SFSymbol from "./SFSymbol";
+import { Icon } from "./Icon";
 import SearchResultsDropdown from "./SearchResultsDropdown";
 import { sanitizeSearchQuery } from "@/lib/sanitize";
 import { search, type SearchResult } from "@/lib/search-index";
@@ -120,7 +120,7 @@ export default function SearchBar() {
     >
       <div className="relative">
         <div className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary">
-          <SFSymbol name="magnifyingglass" size={16} />
+          <Icon name="search" size={16} />
         </div>
         <input
           ref={inputRef}
@@ -132,7 +132,7 @@ export default function SearchBar() {
             if (results.length > 0) setIsOpen(true);
           }}
           placeholder="Поиск по справочнику..."
-          className="w-full rounded-full border border-border bg-bg-surface/80 py-2 pl-10 pr-4 text-sm text-text-primary placeholder-text-muted transition-all duration-200 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 apple-shadow-sm"
+          className="w-full rounded-full border border-border bg-bg-surface/80 py-2 pl-10 pr-4 text-sm text-text-primary placeholder-text-muted transition-all duration-200 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
           role="combobox"
           aria-label="Поиск по справочнику"
           aria-expanded={isOpen}

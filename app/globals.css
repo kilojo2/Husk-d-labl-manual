@@ -1,46 +1,108 @@
 @import "tailwindcss";
 
-/* ─── Apple Design System (Default Theme) ─── */
+/* ─── Theme CSS Variable Mapping ─── */
 @theme inline {
-  --color-bg-primary: var(--color-bg-primary);
-  --color-bg-surface: var(--color-bg-surface);
-  --color-bg-surface-hover: var(--color-bg-surface-hover);
-  --color-bg-sidebar: var(--color-bg-sidebar);
-  --color-accent: var(--color-accent);
-  --color-accent-hover: var(--color-accent-hover);
-  --color-accent-muted: var(--color-accent-muted);
-  --color-text-primary: var(--color-text-primary);
-  --color-text-secondary: var(--color-text-secondary);
-  --color-text-muted: var(--color-text-muted);
-  --color-theme-label: var(--color-theme-label);
-  --color-border: var(--color-border);
-  --color-border-light: var(--color-border-light);
-  --color-success: var(--color-success);
-  --color-warning: var(--color-warning);
-  --color-error: var(--color-error);
+  --color-bg-primary: var(--background);
+  --color-bg-secondary: var(--background-secondary);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-code-bg: var(--code-bg);
+  --color-muted: var(--text-muted);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-/* ─── Default Theme CSS Custom Properties (Light) ─── */
-:root {
-  --color-bg-primary: #F5F5F7;
-  --color-bg-surface: rgba(255, 255, 255, 0.7);
-  --color-bg-surface-hover: rgba(235, 235, 237, 0.8);
-  --color-bg-sidebar: rgba(255, 255, 255, 0.55);
-  --color-accent: #007AFF;
-  --color-accent-hover: #0066D6;
-  --color-accent-muted: rgba(0, 122, 255, 0.12);
-  --color-text-primary: #1D1D1F;
-  --color-text-secondary: #6E6E73;
-  --color-text-muted: #A1A1A6;
-  --color-theme-label: #000000;
-  --color-border: rgba(0, 0, 0, 0.06);
-  --color-border-light: rgba(0, 0, 0, 0.04);
-  --color-success: #34C759;
-  --color-warning: #FF9500;
-  --color-error: #FF3B30;
+/* ─── Theme: Dark (default) ─── */
+:root,
+[data-theme="dark"] {
+  --background: #0b0c0e;
+  --background-secondary: #101114;
+  --surface: #15171a;
+  --surface-hover: #1c1e23;
+  --border: rgba(255, 255, 255, 0.08);
+  --text-primary: #f5f5f5;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --sidebar-bg: #0e0f11;
+  --code-bg: #15171a;
+}
+
+/* ─── Theme: Light ─── */
+[data-theme="light"] {
+  --background: #ffffff;
+  --background-secondary: #f7f7f8;
+  --surface: #ffffff;
+  --surface-hover: #f4f4f5;
+  --border: rgba(0, 0, 0, 0.1);
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #a1a1aa;
+  --sidebar-bg: #f7f7f8;
+  --code-bg: #f4f4f5;
+}
+
+/* ─── Theme: Midnight ─── */
+[data-theme="midnight"] {
+  --background: #0f1117;
+  --background-secondary: #12141c;
+  --surface: #181b26;
+  --surface-hover: #1e2130;
+  --border: rgba(255, 255, 255, 0.06);
+  --text-primary: #e8eaed;
+  --text-secondary: #9aa0a6;
+  --text-muted: #6b7280;
+  --sidebar-bg: #0d0f15;
+  --code-bg: #181b26;
+}
+
+/* ─── Theme: Graphite ─── */
+[data-theme="graphite"] {
+  --background: #1a1b1e;
+  --background-secondary: #1e1f22;
+  --surface: #232427;
+  --surface-hover: #2a2b2f;
+  --border: rgba(255, 255, 255, 0.07);
+  --text-primary: #e4e4e7;
+  --text-secondary: #8f9098;
+  --text-muted: #63646b;
+  --sidebar-bg: #161719;
+  --code-bg: #232427;
+}
+
+/* ─── Accent Colors ─── */
+[data-accent="purple"] {
+  --accent: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --accent-subtle: rgba(139, 92, 246, 0.1);
+}
+[data-accent="blue"] {
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-subtle: rgba(59, 130, 246, 0.1);
+}
+[data-accent="green"] {
+  --accent: #22c55e;
+  --accent-hover: #16a34a;
+  --accent-subtle: rgba(34, 197, 94, 0.1);
+}
+[data-accent="orange"] {
+  --accent: #f97316;
+  --accent-hover: #ea580c;
+  --accent-subtle: rgba(249, 115, 22, 0.1);
+}
+[data-accent="red"] {
+  --accent: #ef4444;
+  --accent-hover: #dc2626;
+  --accent-subtle: rgba(239, 68, 68, 0.1);
 }
 
 /* ─── Base Styles ─── */
@@ -48,21 +110,13 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Theme label text — black in light themes, overridden in dark themes */
-.theme-label-text {
-  color: #000000;
-}
-
 body {
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
-  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", Arial, Helvetica, sans-serif);
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Inter", Arial, Helvetica, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image:
-    radial-gradient(ellipse 100% 50% at 50% 0%, rgba(0, 122, 255, 0.015) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 40% at 80% 100%, rgba(0, 122, 255, 0.01) 0%, transparent 50%);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
 /* ─── Scrollbar Styling ─── */
@@ -76,599 +130,132 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--border);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.15);
+  background: var(--text-muted);
 }
 
 /* ─── Selection ─── */
 ::selection {
-  background-color: rgba(0, 122, 255, 0.15);
-  color: var(--color-text-primary);
+  background-color: var(--accent-subtle);
+  color: var(--text-primary);
 }
 
 /* ─── Focus Ring ─── */
 *:focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ─── Design System Card ─── */
+.ds-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 
-/* ─── Apple-style glassmorphism utilities ─── */
-.apple-glass {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 0.5px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+.ds-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.apple-glass-strong {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 0.5px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+/* ─── Link Styles ─── */
+a {
+  color: var(--accent);
+  text-decoration: none;
 }
 
-/* ─── Apple-style shadows ─── */
-.apple-shadow-sm {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+a:hover {
+  color: var(--accent-hover);
 }
 
-.apple-shadow-md {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+/* ─── Code Blocks ─── */
+code {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.875em;
+  font-family: var(--font-mono, monospace);
 }
 
-.apple-shadow-lg {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03);
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
 }
 
-.apple-shadow-xl {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
 }
 
-/* ─── Apple-style card (glass) ─── */
-.apple-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border: 0.5px solid rgba(255, 255, 255, 0.6);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+/* ─── Heading Styles ─── */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
 
-/* ─── Apple-style pill button ─── */
-.apple-pill {
-  border-radius: 9999px;
-  padding: 4px 16px;
-  font-size: 13px;
+h1 {
+  font-size: 1.875rem;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ─── Table Styles ─── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: var(--background-secondary);
   font-weight: 500;
-  transition: all 200ms ease;
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
 }
 
-/* ─── Apple-style row cell ─── */
-.apple-cell {
-  display: flex;
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ─── Keyboard Shortcut ─── */
+kbd {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 250ms ease;
-  cursor: pointer;
-  border: 0.5px solid rgba(255, 255, 255, 0.4);
-}
-
-.apple-cell:hover {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  transform: scale(1.01);
-  background: rgba(255, 255, 255, 0.65);
-}
-
-/* ─── Cursor Trail Dimple ─── */
-.cursor-dimple {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  will-change: transform, opacity;
-}
-
-/* ─── Background Floating Orbs ─── */
-@keyframes float-orb {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0;
-  }
-  5% {
-    opacity: 1;
-  }
-  25% {
-    transform: translate(8vw, -6vh) scale(1.05);
-  }
-  50% {
-    transform: translate(-5vw, 4vh) scale(0.95);
-  }
-  75% {
-    transform: translate(6vw, -3vh) scale(1.02);
-  }
-  95% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-4vw, 8vh) scale(0.98);
-    opacity: 0;
-  }
-}
-
-.bg-orb {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  will-change: transform, opacity;
-  animation: float-orb linear infinite;
-  filter: blur(60px);
-}
-
-/* ═══════════════════════════════════════════════════════
-   THEME — Orb Colors
-   ═══════════════════════════════════════════════════════ */
-:root,
-[data-theme="apple"] {
-  --orb-1: rgba(0, 122, 255, 0.08);
-  --orb-2: rgba(88, 86, 214, 0.06);
-  --orb-3: rgba(90, 200, 250, 0.07);
-  --orb-4: rgba(52, 199, 89, 0.05);
-  --cursor-dimple-color: rgba(0, 0, 0, 0.045);
-  --cursor-gradient-start: rgba(0, 122, 255, 0.35);
-  --cursor-gradient-mid: rgba(90, 200, 250, 0.18);
-  --cursor-gradient-end: rgba(0, 0, 0, 0);
-  --cursor-glow-color: rgba(0, 122, 255, 0.25);
-  --nav-bronze: #965A38;
-  --nav-bronze-rgb: 150, 90, 56;
-  --nav-silver: #5B6770;
-  --nav-silver-rgb: 91, 103, 112;
-  --nav-gold: #B8860B;
-  --nav-gold-rgb: 184, 134, 11;
-}
-
-[data-theme="apple-dark"] {
-  --orb-1: rgba(10, 132, 255, 0.12);
-  --orb-2: rgba(94, 92, 230, 0.10);
-  --orb-3: rgba(100, 210, 255, 0.10);
-  --orb-4: rgba(48, 209, 88, 0.08);
-  --cursor-dimple-color: rgba(255, 255, 255, 0.08);
-  --cursor-gradient-start: rgba(10, 132, 255, 0.5);
-  --cursor-gradient-mid: rgba(100, 210, 255, 0.28);
-  --cursor-gradient-end: rgba(0, 0, 0, 0);
-  --cursor-glow-color: rgba(10, 132, 255, 0.4);
-  --nav-bronze: #C28B6E;
-  --nav-bronze-rgb: 194, 139, 110;
-  --nav-silver: #8A9BA8;
-  --nav-silver-rgb: 138, 155, 168;
-  --nav-gold: #E8B84B;
-  --nav-gold-rgb: 232, 184, 75;
-}
-
-[data-theme="retro"] {
-  --orb-1: rgba(217, 119, 6, 0.08);
-  --orb-2: rgba(180, 83, 9, 0.06);
-  --orb-3: rgba(245, 158, 11, 0.07);
-  --orb-4: rgba(101, 163, 13, 0.05);
-  --cursor-dimple-color: rgba(0, 0, 0, 0.045);
-  --cursor-gradient-start: rgba(217, 119, 6, 0.35);
-  --cursor-gradient-mid: rgba(245, 158, 11, 0.18);
-  --cursor-gradient-end: rgba(0, 0, 0, 0);
-  --cursor-glow-color: rgba(217, 119, 6, 0.25);
-  --nav-bronze: #965A38;
-  --nav-bronze-rgb: 150, 90, 56;
-  --nav-silver: #5B6770;
-  --nav-silver-rgb: 91, 103, 112;
-  --nav-gold: #B8860B;
-  --nav-gold-rgb: 184, 134, 11;
-}
-
-[data-theme="retro-dark"] {
-  --orb-1: rgba(245, 158, 11, 0.12);
-  --orb-2: rgba(217, 119, 6, 0.10);
-  --orb-3: rgba(251, 191, 36, 0.10);
-  --orb-4: rgba(101, 163, 13, 0.08);
-  --cursor-dimple-color: rgba(255, 255, 255, 0.08);
-  --cursor-gradient-start: rgba(245, 158, 11, 0.5);
-  --cursor-gradient-mid: rgba(251, 191, 36, 0.28);
-  --cursor-gradient-end: rgba(0, 0, 0, 0);
-  --cursor-glow-color: rgba(245, 158, 11, 0.4);
-  --nav-bronze: #C28B6E;
-  --nav-bronze-rgb: 194, 139, 110;
-  --nav-silver: #8A9BA8;
-  --nav-silver-rgb: 138, 155, 168;
-  --nav-gold: #E8B84B;
-  --nav-gold-rgb: 232, 184, 75;
-}
-
-/* ═══════════════════════════════════════════════════════
-   THEME — Apple Dark
-   ═══════════════════════════════════════════════════════ */
-[data-theme="apple-dark"] {
-  --color-bg-primary: #1C1C1E;
-  --color-bg-surface: rgba(44, 44, 46, 0.85);
-  --color-bg-surface-hover: rgba(58, 58, 60, 0.9);
-  --color-bg-sidebar: rgba(28, 28, 30, 0.85);
-  --color-accent: #0A84FF;
-  --color-accent-hover: #409CFF;
-  --color-accent-muted: rgba(10, 132, 255, 0.15);
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #E5E5EA;
-  --color-text-muted: #C7C7CC;
-  --color-theme-label: #E5E5EA;
-  --color-border: rgba(255, 255, 255, 0.12);
-  --color-border-light: rgba(255, 255, 255, 0.06);
-  --color-success: #30D158;
-  --color-warning: #FF9F0A;
-  --color-error: #FF453A;
-}
-
-[data-theme="apple-dark"] body {
-  background-image:
-    radial-gradient(ellipse 100% 50% at 50% 0%, rgba(10, 132, 255, 0.03) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 40% at 80% 100%, rgba(10, 132, 255, 0.02) 0%, transparent 50%);
-}
-
-[data-theme="apple-dark"] ::selection {
-  background-color: rgba(10, 132, 255, 0.25);
-}
-
-[data-theme="apple-dark"] ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-[data-theme="apple-dark"] ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.18);
-}
-
-[data-theme="apple-dark"] .apple-glass {
-  background: rgba(44, 44, 46, 0.72);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="apple-dark"] .apple-glass-strong {
-  background: rgba(44, 44, 46, 0.82);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 0.5px solid rgba(255, 255, 255, 0.10);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-
-[data-theme="apple-dark"] .apple-card {
-  background: rgba(44, 44, 46, 0.80);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="apple-dark"] .apple-cell {
-  background: rgba(58, 58, 60, 0.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="apple-dark"] .apple-cell:hover {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-  background: rgba(58, 58, 60, 0.7);
-}
-
-[data-theme="apple-dark"] .apple-shadow-sm {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="apple-dark"] .apple-shadow-md {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="apple-dark"] .apple-shadow-lg {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="apple-dark"] .apple-shadow-xl {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* ═══════════════════════════════════════════════════════
-   THEME — Retro 80/90
-   ═══════════════════════════════════════════════════════ */
-[data-theme="retro"] {
-  --color-bg-primary: #F5E6C8;
-  --color-bg-surface: rgba(237, 217, 176, 0.7);
-  --color-bg-surface-hover: rgba(224, 200, 152, 0.8);
-  --color-bg-sidebar: rgba(240, 222, 188, 0.75);
-  --color-accent: #D97706;
-  --color-accent-hover: #B45309;
-  --color-accent-muted: rgba(217, 119, 6, 0.18);
-  --color-text-primary: #2A1F10;
-  --color-text-secondary: #5A4730;
-  --color-text-muted: #7D6343;
-  --color-theme-label: #000000;
-  --color-border: rgba(196, 169, 122, 0.4);
-  --color-border-light: rgba(212, 188, 144, 0.3);
-  --color-success: #65A30D;
-  --color-warning: #D97706;
-  --color-error: #DC2626;
-}
-
-[data-theme="retro"] body {
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(139, 90, 43, 0.02) 2px,
-      rgba(139, 90, 43, 0.02) 4px
-    ),
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(217, 119, 6, 0.03) 0%, transparent 60%);
-}
-
-[data-theme="retro"] .apple-glass {
-  background: rgba(237, 217, 176, 0.55);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 0.5px solid rgba(196, 169, 122, 0.4);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-[data-theme="retro"] .apple-glass-strong {
-  background: rgba(237, 217, 176, 0.72);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 0.5px solid rgba(196, 169, 122, 0.5);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-[data-theme="retro"] .apple-card {
-  background: rgba(237, 217, 176, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 0.5px solid rgba(196, 169, 122, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-[data-theme="retro"] .apple-cell {
-  background: rgba(237, 217, 176, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 0.5px solid rgba(196, 169, 122, 0.3);
-}
-
-[data-theme="retro"] .apple-cell:hover {
-  box-shadow: 0 2px 12px rgba(217, 119, 6, 0.1);
-  background: rgba(237, 217, 176, 0.65);
-}
-
-[data-theme="retro"] ::selection {
-  background-color: rgba(217, 119, 6, 0.25);
-}
-
-/* ═══════════════════════════════════════════════════════
-   THEME — Retro Dark
-   ═══════════════════════════════════════════════════════ */
-[data-theme="retro-dark"] {
-  --color-bg-primary: #1A1510;
-  --color-bg-surface: rgba(30, 25, 18, 0.85);
-  --color-bg-surface-hover: rgba(40, 33, 24, 0.9);
-  --color-bg-sidebar: rgba(20, 16, 10, 0.85);
-  --color-accent: #F59E0B;
-  --color-accent-hover: #FBBF24;
-  --color-accent-muted: rgba(245, 158, 11, 0.15);
-  --color-text-primary: #FFF8EE;
-  --color-text-secondary: #E8D5B0;
-  --color-text-muted: #D4BC8C;
-  --color-theme-label: #E8D5B0;
-  --color-border: rgba(245, 230, 200, 0.12);
-  --color-border-light: rgba(245, 230, 200, 0.06);
-  --color-success: #65A30D;
-  --color-warning: #D97706;
-  --color-error: #DC2626;
-}
-
-[data-theme="retro-dark"] body {
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(245, 230, 200, 0.015) 2px,
-      rgba(245, 230, 200, 0.015) 4px
-    ),
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(245, 158, 11, 0.03) 0%, transparent 60%);
-}
-
-[data-theme="retro-dark"] ::selection {
-  background-color: rgba(245, 158, 11, 0.25);
-}
-
-[data-theme="retro-dark"] ::-webkit-scrollbar-thumb {
-  background: rgba(245, 230, 200, 0.12);
-}
-
-[data-theme="retro-dark"] ::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 230, 200, 0.18);
-}
-
-[data-theme="retro-dark"] .apple-glass {
-  background: rgba(30, 25, 18, 0.72);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 0.5px solid rgba(245, 230, 200, 0.08);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(245, 230, 200, 0.04);
-}
-
-[data-theme="retro-dark"] .apple-glass-strong {
-  background: rgba(30, 25, 18, 0.82);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 0.5px solid rgba(245, 230, 200, 0.10);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(245, 230, 200, 0.05);
-}
-
-[data-theme="retro-dark"] .apple-card {
-  background: rgba(30, 25, 18, 0.80);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 0.5px solid rgba(245, 230, 200, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(245, 230, 200, 0.04);
-}
-
-[data-theme="retro-dark"] .apple-cell {
-  background: rgba(40, 33, 24, 0.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 0.5px solid rgba(245, 230, 200, 0.08);
-}
-
-[data-theme="retro-dark"] .apple-cell:hover {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
-  background: rgba(40, 33, 24, 0.7);
-}
-
-[data-theme="retro-dark"] .apple-shadow-sm {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="retro-dark"] .apple-shadow-md {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="retro-dark"] .apple-shadow-lg {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="retro-dark"] .apple-shadow-xl {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* ═══════════════════════════════════════════════════════
-   NAV SECTION — Bronze / Silver / Gold Theme
-   ═══════════════════════════════════════════════════════ */
-
-/* ─── Bronze — Начало работы ─── */
-.nav-bronze {
-  --nav-color: var(--nav-bronze, #965A38);
-  --nav-color-rgb: var(--nav-bronze-rgb, 150, 90, 56);
-}
-
-.nav-bronze .nav-header {
-  background: rgba(var(--nav-color-rgb), 0.10);
-  border-color: rgba(var(--nav-color-rgb), 0.22);
-  color: var(--nav-color);
-  transition: all 0.3s ease;
-}
-
-.nav-bronze:hover .nav-header {
-  box-shadow: 0 0 20px rgba(var(--nav-color-rgb), 0.18), 0 4px 16px rgba(var(--nav-color-rgb), 0.12);
-  background: rgba(var(--nav-color-rgb), 0.16);
-}
-
-/* ─── Silver — Середина работы ─── */
-.nav-silver {
-  --nav-color: var(--nav-silver, #5B6770);
-  --nav-color-rgb: var(--nav-silver-rgb, 91, 103, 112);
-}
-
-.nav-silver .nav-header {
-  background: rgba(var(--nav-color-rgb), 0.10);
-  border-color: rgba(var(--nav-color-rgb), 0.22);
-  color: var(--nav-color);
-  transition: all 0.3s ease;
-}
-
-.nav-silver:hover .nav-header {
-  background: rgba(calc(var(--nav-color-rgb) - 10), 0.18);
-  border-color: rgba(var(--nav-color-rgb), 0.30);
-  animation: silver-shimmer 1.2s ease-in-out infinite;
-}
-
-@keyframes silver-shimmer {
-  0%, 100% {
-    box-shadow: 0 0 12px rgba(var(--nav-color-rgb), 0.12), inset 0 0 10px rgba(255, 255, 255, 0.04);
-  }
-  20% {
-    box-shadow: 0 0 28px rgba(var(--nav-color-rgb), 0.25), inset 0 0 20px rgba(255, 255, 255, 0.08);
-  }
-  40% {
-    box-shadow: 0 0 36px rgba(var(--nav-color-rgb), 0.18), inset 0 0 24px rgba(255, 255, 255, 0.06);
-  }
-  60% {
-    box-shadow: 0 0 44px rgba(var(--nav-color-rgb), 0.22), inset 0 0 28px rgba(255, 255, 255, 0.08);
-  }
-  80% {
-    box-shadow: 0 0 24px rgba(var(--nav-color-rgb), 0.16), inset 0 0 16px rgba(255, 255, 255, 0.04);
-  }
-}
-
-/* ─── Gold — Профессиональный режим ─── */
-.nav-gold {
-  --nav-color: var(--nav-gold, #B8860B);
-  --nav-color-rgb: var(--nav-gold-rgb, 184, 134, 11);
-}
-
-.nav-gold .nav-header {
-  background: rgba(var(--nav-color-rgb), 0.10);
-  border-color: rgba(var(--nav-color-rgb), 0.22);
-  color: var(--nav-color);
-  transition: all 0.3s ease;
-}
-
-.nav-gold:hover .nav-header {
-  box-shadow: 0 0 24px rgba(var(--nav-color-rgb), 0.22), 0 0 48px rgba(var(--nav-color-rgb), 0.08);
-  background: rgba(var(--nav-color-rgb), 0.16);
-  animation: gold-sparkle 1.2s ease-in-out infinite;
-}
-
-@keyframes gold-sparkle {
-  0%, 100% {
-    box-shadow: 0 0 16px rgba(var(--nav-color-rgb), 0.12), 0 0 32px rgba(var(--nav-color-rgb), 0.04);
-  }
-  30% {
-    box-shadow: 0 0 28px rgba(var(--nav-color-rgb), 0.28), 0 0 60px rgba(var(--nav-color-rgb), 0.10);
-  }
-  60% {
-    box-shadow: 0 0 20px rgba(var(--nav-color-rgb), 0.18), 0 0 40px rgba(var(--nav-color-rgb), 0.06);
-  }
-  80% {
-    box-shadow: 0 0 32px rgba(var(--nav-color-rgb), 0.22), 0 0 64px rgba(var(--nav-color-rgb), 0.08);
-  }
-}
-
-/* ─── Search highlight pulse animation ─── */
-@keyframes pulse-once {
-  0% {
-    background-color: rgba(var(--accent-rgb, 59, 130, 246), 0.3);
-    box-shadow: 0 0 0 0 rgba(var(--accent-rgb, 59, 130, 246), 0.4);
-  }
-  50% {
-    background-color: rgba(var(--accent-rgb, 59, 130, 246), 0.5);
-    box-shadow: 0 0 0 6px rgba(var(--accent-rgb, 59, 130, 246), 0);
-  }
-  100% {
-    background-color: rgba(var(--accent-rgb, 59, 130, 246), 0.3);
-    box-shadow: 0 0 0 0 rgba(var(--accent-rgb, 59, 130, 246), 0);
-  }
-}
-
-.animate-pulse-once {
-  animation: pulse-once 0.8s ease-in-out;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
 }

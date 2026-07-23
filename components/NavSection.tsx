@@ -3,38 +3,12 @@
 import { useState } from "react";
 import type { NavSection as NavSectionType } from "@/lib/navigation";
 import NavItem from "./NavItem";
-import SFSymbol from "./SFSymbol";
+import { Icon } from "./Icon";
 
 interface NavSectionProps {
   section: NavSectionType;
   defaultExpanded?: boolean;
   onNavigate?: () => void;
-}
-
-function getSectionClassName(title: string): string {
-  switch (title) {
-    case "Начало работы":
-      return "nav-bronze";
-    case "Середина работы":
-      return "nav-silver";
-    case "Профессиональный режим":
-      return "nav-gold";
-    default:
-      return "";
-  }
-}
-
-function getIconColor(title: string): string {
-  switch (title) {
-    case "Начало работы":
-      return "text-[var(--nav-bronze,#965A38)]";
-    case "Середина работы":
-      return "text-[var(--nav-silver,#5B6770)]";
-    case "Профессиональный режим":
-      return "text-[var(--nav-gold,#B8860B)]";
-    default:
-      return "text-text-muted";
-  }
 }
 
 export default function NavSection({
@@ -43,20 +17,18 @@ export default function NavSection({
   onNavigate,
 }: NavSectionProps) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
-  const navClass = getSectionClassName(section.title);
-  const iconColor = getIconColor(section.title);
 
   return (
-    <div className={navClass}>
+    <div>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="nav-header flex w-full items-center gap-2.5 rounded-xl border px-3 py-2.5 text-xs font-semibold uppercase tracking-widest transition-all duration-300"
+        className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-text-muted transition-colors hover:text-text-secondary"
         aria-expanded={isExpanded}
       >
-        <SFSymbol name={section.icon} size={14} className={iconColor} />
+        <Icon name={section.icon} size={12} className="shrink-0" />
         <span className="flex-1 text-left">{section.title}</span>
         <svg
-          className={`h-3.5 w-3.5 transition-transform duration-300 ${
+          className={`h-3 w-3 transition-transform duration-200 ${
             isExpanded ? "rotate-180" : ""
           }`}
           fill="none"
@@ -69,11 +41,11 @@ export default function NavSection({
       </button>
 
       <div
-        className={`overflow-hidden transition-all duration-300 ease-out ${
+        className={`overflow-hidden transition-all duration-200 ease-out ${
           isExpanded ? "max-h-[1200px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="mt-1 space-y-0.5 px-1">
+        <div className="space-y-0.5 px-2 pb-2">
           {section.items.map((item) => (
             <NavItem key={item.href} item={item} onNavigate={onNavigate} />
           ))}
