@@ -279,6 +279,38 @@ Guest (незарег) — только смотрит, не может писа
       "Правила площадок BongaCams, Chaturbate и Stripchat. Что запрещено, как избежать бана, правила модерации контента и общения с пользователями.",
   },
   {
+    title: "Гайд по Chaturbate",
+    href: "/chaturbate-guide",
+    section: "Начало работы",
+    keywords: [
+      "chaturbate", "чатрубейт", "shinebrowser", "broadcast",
+      "рассылка", "announce you're online", "token stats",
+      "статистика токенов", "dream goals", "the menu",
+      "baboon's hidden show", "подглядки", "spy",
+      "settings", "privacy", "геоблок", "geo block",
+      "fan club", "приват", "apps"
+    ],
+    content: `
+Гайд по Chaturbate. Как начать трансляцию через ShineBrowser, настройка и управление стримом.
+
+1. Как начать трансляцию
+Используйте ShineBrowser для входа на Chaturbate. Нажмите кнопку Broadcast в правом верхнем углу.
+
+2. Панель управления трансляцией
+Доступны: Рассылка, Статистика токенов, RTMP-адрес и ключ, Цели, Apps, Games, Bio, Settings & Privacy, Content Stats, Token Stats, Share, Memberships, количество зрителей, PM, лайки/дизлайки.
+
+3. Рассылка (Announce you're online)
+Уведомление подписчикам о начале трансляции. Важно: фото без обнажённых половых органов. Нажмите Announce you're online, загрузите фото, отправьте.
+
+4. Статистика токенов (Token Stats)
+Нажмите на иконку монетки, затем Token Stats для просмотра заработка.
+
+5. Блок APPS - Dream Goals (цели), The Menu (тип меню), Baboon's Hidden Show (подглядки). Настройка целей, платных действий и цены подглядок.
+
+6. SETTINGS & PRIVACY - настройка приватных шоу, геоблока, цены приватов и Fan Club.
+    `,
+  },
+  {
     title: "Железные правила переговоров",
     href: "/getting-started/negotiation-rules",
     section: "Начало работы",
