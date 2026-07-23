@@ -9,7 +9,7 @@ interface TreeNavigationProps {
 
 export default function TreeNavigation({ onNavigate }: TreeNavigationProps) {
   return (
-    <nav className="flex flex-col gap-1 py-4" aria-label="Sidebar navigation">
+    <nav className="flex flex-col gap-2 px-3 py-5" aria-label="Sidebar navigation">
       {navigationSections.map((section) => (
         <NavSection
           key={section.title}

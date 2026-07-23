@@ -45,33 +45,33 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Mobile overlay backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-20 bg-black/50 md:hidden"
+          className="fixed inset-0 z-20 bg-black/20 backdrop-blur-sm md:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
       )}
 
-      {/* Mobile sidebar — drawer overlay */}
+      {/* Mobile sidebar — fixed overlay */}
       <aside
         ref={sidebarRef}
         className={`
-          fixed left-0 top-[52px] z-20 h-[calc(100vh-52px)] w-[280px] shrink-0
-          overflow-y-auto bg-sidebar-bg border-r border-border
+          fixed left-4 top-[4.25rem] z-20 h-[calc(100vh-6rem)] w-[280px] shrink-0
+          overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg
           md:hidden
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
-          transition-transform duration-300 ease-out
+          ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"}
+          transition-all duration-300 ease-out
         `}
         aria-label="Mobile sidebar navigation"
       >
         <TreeNavigation onNavigate={handleNavigate} />
       </aside>
 
-      {/* Desktop sidebar — fixed left panel */}
+      {/* Desktop sidebar — static in flex flow */}
       <aside
-        className="hidden md:block w-[240px] shrink-0 border-r border-border bg-sidebar-bg"
+        className="hidden md:block md:w-[240px] md:ml-6 md:mr-4 md:shrink-0"
         aria-label="Sidebar navigation"
       >
-        <div className="h-[calc(100vh-52px)] overflow-y-auto sticky top-[52px]">
+        <div className="mt-4 h-[calc(100vh-11rem)] overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg">
           <TreeNavigation onNavigate={handleNavigate} />
         </div>
       </aside>
