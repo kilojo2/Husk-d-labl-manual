@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { NavSection as NavSectionType } from "@/lib/navigation";
 import NavItem from "./NavItem";
 import { Icon } from "./Icon";
@@ -11,12 +11,44 @@ interface NavSectionProps {
   onNavigate?: () => void;
 }
 
+const STORAGE_KEY = "hl-nav-expanded";
+
+function loadExpandedState(sectionTitle: string): boolean {
+  if (typeof window === "undefined") return true;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Default to expanded if not explicitly set to false
+      return parsed[sectionTitle] !== false;
+    }
+  } catch {}
+  return true;
+}
+
+function saveExpandedState(sectionTitle: string, expanded: boolean) {
+  if (typeof window === "undefined") return;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const parsed = stored ? JSON.parse(stored) : {};
+    parsed[sectionTitle] = expanded;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+  } catch {}
+}
+
 export default function NavSection({
   section,
   defaultExpanded = true,
   onNavigate,
 }: NavSectionProps) {
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+  const [isExpanded, setIsExpanded] = useState(() => {
+    return loadExpandedState(section.title);
+  });
+
+  // Persist state changes
+  useEffect(() => {
+    saveExpandedState(section.title, isExpanded);
+  }, [section.title, isExpanded]);
 
   return (
     <div>

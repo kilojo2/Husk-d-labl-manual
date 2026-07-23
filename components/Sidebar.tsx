@@ -68,7 +68,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       {/* Desktop sidebar — fixed left panel */}
       <aside
-        className="hidden md:block w-[240px] shrink-0 border-r border-border bg-sidebar-bg"
+        className="hidden md:block w-[260px] shrink-0 border-r border-border bg-sidebar-bg"
         aria-label="Sidebar navigation"
       >
         <div className="h-[calc(100vh-52px)] overflow-y-auto sticky top-[52px]">
