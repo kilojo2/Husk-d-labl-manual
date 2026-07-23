@@ -48,7 +48,7 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
         <span className="flex items-center justify-center shrink-0">
           <Icon name={item.icon} size={14} />
         </span>
-        <span className="flex-1 text-wrap break-word" title={item.title}>{item.title}</span>
+        <span className="flex-1 truncate">{item.title}</span>
         {hasChildren && (
           <svg
             className={`h-3 w-3 shrink-0 transition-transform duration-200 ${
