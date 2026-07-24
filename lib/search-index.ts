@@ -256,6 +256,88 @@ Guest (незарег) — только смотрит, не может писа
     `,
   },
   {
+    title: "Гайд по BongaCams",
+    href: "/bongacams-guide",
+    section: "Начало работы",
+    keywords: [
+      "bongacams", "bonga", "bonga cams", "dashboard", "camscore",
+      "broadcast yourself", "чат-боты", "chatbots", "tip menu",
+      "countdown", "цели", "dmca", "геоблок", "geo block",
+      "settings", "безопасность", "защита контента"
+    ],
+    content: `
+Гайд по BongaCams — полное руководство по платформе. Содержит 5 разделов:
+
+1. Запуск трансляции — Dashboard, CamScore, кнопка Broadcast Yourself, получение RTMP-данных.
+2. Приложения и чат-боты — обзор APPS & CHATBOTS: Tip Menu, Countdown, Wheel of Fortune, Fan Boost Bot.
+3. Платные действия (Tip Menu) — создание прайс-листа услуг, согласование с моделью.
+4. Работа с целями (Countdown) — правила постановки целей от дешёвой к дорогой.
+5. Настройки безопасности — DMCA-защита и GEO Block (Россия, Беларусь, Украина).
+    `,
+  },
+  {
+    title: "Запуск трансляции — BongaCams",
+    href: "/bongacams-guide/broadcast",
+    section: "Начало работы",
+    keywords: [
+      "bongacams", "запуск", "трансляция", "dashboard", "camscore",
+      "broadcast yourself", "rtmp", "стрим", "камера", "микрофон"
+    ],
+    content: `
+Запуск трансляции на BongaCams. Dashboard с CamScore, позициями в рейтингах и заработком. Зелёная кнопка Broadcast Yourself для получения RTMP-токена и ссылки для стрима, установки цены привата, выбора камеры и микрофона, управления чат-ботами.
+    `,
+  },
+  {
+    title: "Приложения и чат-боты — BongaCams",
+    href: "/bongacams-guide/apps-chatbots",
+    section: "Начало работы",
+    keywords: [
+      "bongacams", "apps", "chatbots", "приложения", "боты",
+      "tip menu", "countdown", "wheel of fortune", "fan boost",
+      "колесо фортуны"
+    ],
+    content: `
+Приложения и чат-боты BongaCams. Переход: APPS & CHATBOTS → ChatBots. Доступные боты: Tip Menu (прайс-лист), Countdown (отслеживание целей), Wheel of Fortune (колесо фортуны), Fan Boost Bot (повышение рейтинга).
+    `,
+  },
+  {
+    title: "Платные действия (Tip Menu) — BongaCams",
+    href: "/bongacams-guide/tip-menu",
+    section: "Начало работы",
+    keywords: [
+      "bongacams", "tip menu", "прайс-лист", "услуги", "цены",
+      "service", "price", "токены", "согласование с моделью"
+    ],
+    content: `
+Настройка платных действий Tip Menu на BongaCams. Включить ползунок Tip Menu Bot в ON. Заполнить Tip Menu Settings: Service (название услуги), Price (стоимость). Нажать Save Changes. Критическое правило: все действия согласовывать с моделью заранее. Рекомендованные цены: простые действия 10-15 токенов, средний сегмент 50-150, дорогие шоу 300+.
+    `,
+  },
+  {
+    title: "Работа с целями (Countdown) — BongaCams",
+    href: "/bongacams-guide/countdown",
+    section: "Начало работы",
+    keywords: [
+      "bongacams", "countdown", "цели", "goal", "progress",
+      "чаевые", "стрипскор", "рейтинг", "стартовые цели"
+    ],
+    content: `
+Работа с целями (Countdown) на BongaCams. Бот отслеживает чаевые и показывает прогресс. Правила: цели от дешёвой к дорогой, стартовая цель 10-15 токенов, сразу переключать после выполнения. Примеры: Lick my lips, Show feet, Blow a kiss. Чем больше целей за стрим — тем выше стрипскор.
+    `,
+  },
+  {
+    title: "Настройки безопасности — BongaCams",
+    href: "/bongacams-guide/settings-security",
+    section: "Начало работы",
+    keywords: [
+      "bongacams", "безопасность", "dmca", "защита контента",
+      "geo block", "геоблокировка", "россия", "беларусь", "украина",
+      "settings", "update settings"
+    ],
+    content: `
+Обязательные настройки безопасности на BongaCams. DMCA: включить ползунок в ON, выбрать иконку №4, нажать Update Settings. GEO Block: заблокировать Россию, Беларусь, Украину, нажать Update Settings, включить ползунок Geo-blocking в ON. Проверять перед каждым стримом.
+    `,
+  },
+  {
     title: "Словарь терминов",
     href: "/getting-started/dictionary",
     section: "Начало работы",
