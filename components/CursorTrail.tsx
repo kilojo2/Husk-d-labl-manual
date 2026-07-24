@@ -1,101 +1,128 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
-interface Point {
+interface Sparkle {
+  el: HTMLDivElement;
   x: number;
   y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  maxLife: number;
+  size: number;
 }
 
-const TRAIL_COUNT = 6;
-const LERP_ALPHA_MIN = 0.18; // Normal speed
-const LERP_ALPHA_MAX = 0.5; // High speed
-const VELOCITY_THRESHOLD = 2; // Pixels per frame to trigger faster lerp
-const DIMPLE_SIZE = 32;
+const SPAWN_INTERVAL = 28; // ms between spawn batches
+const SPARKLES_PER_SPAWN = 2; // particles per batch
+const MAX_SPARKLES = 40;
+const MIN_LIFE = 350; // ms
+const MAX_LIFE = 700; // ms
+const MIN_SPEED = 0.4; // px/frame
+const MAX_SPEED = 2.2; // px/frame
+const MIN_SIZE = 2; // px
+const MAX_SIZE = 5; // px
 
 export default function CursorTrail() {
-  const pointsRef = useRef<Point[]>([]);
-  const rafRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const targetRef = useRef<Point>({ x: 0, y: 0 });
-  const prevTargetRef = useRef<Point>({ x: 0, y: 0 });
-  const hasMovedRef = useRef(false);
+  const sparklesRef = useRef<Sparkle[]>([]);
+  const rafRef = useRef<number | null>(null);
+  const spawnTimerRef = useRef<number>(0);
+  const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const hasMouseRef = useRef(false);
+  const lastSpawnRef = useRef<number>(0);
+
+  const spawnSparkle = useCallback(() => {
+    const container = containerRef.current;
+    if (!container || !hasMouseRef.current) return;
+
+    const { x, y } = mouseRef.current;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED);
+    const life = MIN_LIFE + Math.random() * (MAX_LIFE - MIN_LIFE);
+    const size = MIN_SIZE + Math.random() * (MAX_SIZE - MIN_SIZE);
+
+    const el = document.createElement("div");
+    el.className = "sparkle-particle";
+    el.style.cssText = `
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      left: ${x}px;
+      top: ${y}px;
+      width: ${size}px;
+      height: ${size}px;
+      border-radius: 50%;
+      background: var(--color-accent, #007AFF);
+      box-shadow: 0 0 ${size * 2}px var(--color-accent, #007AFF);
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      will-change: transform, opacity;
+    `;
+
+    container.appendChild(el);
+
+    const sparkle: Sparkle = {
+      el,
+      x,
+      y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life,
+      maxLife: life,
+      size,
+    };
+
+    sparklesRef.current.push(sparkle);
+
+    // Cleanup if too many
+    while (sparklesRef.current.length > MAX_SPARKLES) {
+      const old = sparklesRef.current.shift();
+      if (old) {
+        old.el.remove();
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Create dimple elements once
-    const elements: HTMLDivElement[] = [];
-    for (let i = 0; i < TRAIL_COUNT; i++) {
-      const el = document.createElement("div");
-      el.className = "cursor-dimple";
-      const progress = i / (TRAIL_COUNT - 1);
-      const size = DIMPLE_SIZE * (1 - progress * 0.35); // Smoother size decrease
-      
-      el.style.width = `${size}px`;
-      el.style.height = `${size}px`;
-      el.style.transition = `opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)`;
-      el.style.opacity = "0";
-      el.style.filter = `blur(${2 + progress * 3}px)`; // Progressive blur 2-5px
-      el.style.background = `radial-gradient(circle at 50% 50%, var(--cursor-gradient-start, rgba(0, 122, 255, 0.4)) 0%, var(--cursor-gradient-mid, rgba(90, 200, 250, 0.2)) 40%, var(--cursor-gradient-end, rgba(0, 0, 0, 0)) 80%)`;
-      el.style.boxShadow = `0 0 ${8 + i * 2}px var(--cursor-glow-color, rgba(0, 122, 255, 0.3))`;
-      container.appendChild(el);
-      elements.push(el);
-    }
+    let prevTime = performance.now();
 
-    // Initialize points at center
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
-    pointsRef.current = Array(TRAIL_COUNT).fill(null).map(() => ({ x: cx, y: cy }));
+    const animate = (now: number) => {
+      const dt = now - prevTime;
+      prevTime = now;
 
-    const animate = () => {
-      const points = pointsRef.current;
-      const target = targetRef.current;
-      const prevTarget = prevTargetRef.current;
-
-      if (hasMovedRef.current) {
-        // Calculate velocity-adaptive LERP alpha
-        const dx = target.x - prevTarget.x;
-        const dy = target.y - prevTarget.y;
-        const velocity = Math.sqrt(dx * dx + dy * dy);
-        
-        // Adaptive alpha: faster lerp during rapid movements
-        const velocityFactor = Math.min(velocity / VELOCITY_THRESHOLD, 3);
-        const adaptiveLerp = Math.min(
-          LERP_ALPHA_MIN + (LERP_ALPHA_MAX - LERP_ALPHA_MIN) * velocityFactor,
-          LERP_ALPHA_MAX
-        );
-
-        // Each point follows the one before it with adaptive lerp
-        points[0] = {
-          x: points[0].x + (target.x - points[0].x) * adaptiveLerp,
-          y: points[0].y + (target.y - points[0].y) * adaptiveLerp,
-        };
-
-        for (let i = 1; i < TRAIL_COUNT; i++) {
-          points[i] = {
-            x: points[i].x + (points[i - 1].x - points[i].x) * adaptiveLerp,
-            y: points[i].y + (points[i - 1].y - points[i].y) * adaptiveLerp,
-          };
+      // Spawn sparkles
+      spawnTimerRef.current += dt;
+      while (spawnTimerRef.current >= SPAWN_INTERVAL && hasMouseRef.current) {
+        spawnTimerRef.current -= SPAWN_INTERVAL;
+        for (let i = 0; i < SPARKLES_PER_SPAWN; i++) {
+          spawnSparkle();
         }
-        
-        // Update previous target for next frame
-        prevTargetRef.current = { x: target.x, y: target.y };
+      }
 
-        // Update DOM
-        for (let i = 0; i < TRAIL_COUNT; i++) {
-          const el = elements[i];
-          if (!el) break;
-          const p = points[i];
-          const progress = i / (TRAIL_COUNT - 1);
-          const opacity = 0.6 - progress * 0.5; // 0.6 → 0.1
-          const scale = 1 - progress * 0.3; // 1.0 → 0.7
-          
-          el.style.left = `${p.x}px`;
-          el.style.top = `${p.y}px`;
-          el.style.transform = `translate(-50%, -50%) scale(${scale})`;
-          el.style.opacity = String(opacity);
+      // Update existing sparkles
+      const sparkles = sparklesRef.current;
+      for (let i = sparkles.length - 1; i >= 0; i--) {
+        const s = sparkles[i];
+        s.life -= dt;
+        s.x += s.vx;
+        s.y += s.vy;
+
+        const progress = 1 - Math.max(0, s.life / s.maxLife); // 0→1
+        const opacity = 1 - progress; // 1→0
+        const scale = 1 + progress * 0.5; // 1→1.5
+
+        s.el.style.left = `${s.x}px`;
+        s.el.style.top = `${s.y}px`;
+        s.el.style.opacity = String(Math.max(0, opacity));
+        s.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
+
+        if (s.life <= 0) {
+          s.el.remove();
+          sparkles.splice(i, 1);
         }
       }
 
@@ -103,43 +130,28 @@ export default function CursorTrail() {
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      targetRef.current = { x: e.clientX, y: e.clientY };
-      if (!hasMovedRef.current) {
-        hasMovedRef.current = true;
-        // Initialize previous target on first move
-        prevTargetRef.current = { x: e.clientX, y: e.clientY };
-        // Snap first point immediately
-        for (let i = 0; i < TRAIL_COUNT; i++) {
-          pointsRef.current[i] = { x: e.clientX, y: e.clientY };
-        }
-      }
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+      hasMouseRef.current = true;
     };
 
     const handleMouseLeave = () => {
-      hasMovedRef.current = false;
-      for (const el of elements) {
-        el.style.opacity = "0";
-      }
-    };
-
-    const handleMouseEnter = () => {
-      hasMovedRef.current = true;
+      hasMouseRef.current = false;
     };
 
     document.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
-    document.addEventListener("mouseenter", handleMouseEnter);
 
     rafRef.current = requestAnimationFrame(animate);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
-      document.removeEventListener("mouseenter", handleMouseEnter);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      for (const el of elements) el.remove();
+      for (const s of sparklesRef.current) {
+        s.el.remove();
+      }
     };
-  }, []);
+  }, [spawnSparkle]);
 
   return <div ref={containerRef} className="fixed inset-0 pointer-events-none z-[9999]" />;
 }
