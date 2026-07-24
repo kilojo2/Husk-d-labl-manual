@@ -291,23 +291,90 @@ Guest (незарег) — только смотрит, не может писа
       "fan club", "приват", "apps"
     ],
     content: `
-Гайд по Chaturbate. Как начать трансляцию через ShineBrowser, настройка и управление стримом.
+Гайд по Chaturbate — разбор функционала платформы. Содержит 6 разделов:
 
-1. Как начать трансляцию
-Используйте ShineBrowser для входа на Chaturbate. Нажмите кнопку Broadcast в правом верхнем углу.
-
-2. Панель управления трансляцией
-Доступны: Рассылка, Статистика токенов, RTMP-адрес и ключ, Цели, Apps, Games, Bio, Settings & Privacy, Content Stats, Token Stats, Share, Memberships, количество зрителей, PM, лайки/дизлайки.
-
-3. Рассылка (Announce you're online)
-Уведомление подписчикам о начале трансляции. Важно: фото без обнажённых половых органов. Нажмите Announce you're online, загрузите фото, отправьте.
-
-4. Статистика токенов (Token Stats)
-Нажмите на иконку монетки, затем Token Stats для просмотра заработка.
-
-5. Блок APPS - Dream Goals (цели), The Menu (тип меню), Baboon's Hidden Show (подглядки). Настройка целей, платных действий и цены подглядок.
-
-6. SETTINGS & PRIVACY - настройка приватных шоу, геоблока, цены приватов и Fan Club.
+1. Запуск и подготовка — использование ShineBrowser, кнопка Broadcast, вход в панель управления.
+2. Панель управления — обзор всех инструментов: Broadcast yourself, Goals, Apps, Games, Bio, Share, Memberships, PM.
+3. Рассылка (Announce you're online) — уведомление подписчикам, правила модерации фото, алгоритм отправки.
+4. Статистика токенов (Token Stats) — общий баланс, последние донаты, топ-донатеры, история платежей.
+5. Приложения (APPS) — Dream Goals (цели), The Menu (прайс-лист), Baboon's Hidden Show (подглядки).
+6. Settings & Privacy — геоблокировка, Fan Club, настройки приватных шоу и Spy.
+    `,
+  },
+  {
+    title: "Запуск и подготовка — Chaturbate",
+    href: "/chaturbate-guide/broadcast",
+    section: "Начало работы",
+    keywords: [
+      "chaturbate", "запуск", "подготовка", "shinebrowser", "broadcast",
+      "начало стрима", "старт трансляции"
+    ],
+    content: `
+Запуск и подготовка к трансляции на Chaturbate. Используйте ShineBrowser для входа на Chaturbate. В правом верхнем углу нажмите кнопку Broadcast для входа в панель управления.
+    `,
+  },
+  {
+    title: "Панель управления — Chaturbate",
+    href: "/chaturbate-guide/panel",
+    section: "Начало работы",
+    keywords: [
+      "chaturbate", "панель управления", "broadcast yourself", "rtmp",
+      "goals", "apps", "games", "bio", "share", "memberships",
+      "pm", "лайки", "дизлайки", "зрители"
+    ],
+    content: `
+Обзор панели управления Chaturbate. Основные элементы: Broadcast yourself (RTMP адрес и ключ), Announce you're online, Token Stats, Goals, Apps, Games, Bio, Settings & Privacy, Content Stats, Share, Memberships, PM, количество зрителей, лайки и дизлайки.
+    `,
+  },
+  {
+    title: "Рассылка — Chaturbate",
+    href: "/chaturbate-guide/announcements",
+    section: "Начало работы",
+    keywords: [
+      "chaturbate", "рассылка", "announce", "уведомления",
+      "подписчики", "фото", "нюд", "модерация"
+    ],
+    content: `
+Рассылка уведомлений подписчикам на Chaturbate. Важное правило: только фото без обнажённых половых органов. Алгоритм: нажать Announce you're online, загрузить подходящее фото, отправить Send notifications.
+    `,
+  },
+  {
+    title: "Статистика токенов — Chaturbate",
+    href: "/chaturbate-guide/token-stats",
+    section: "Начало работы",
+    keywords: [
+      "chaturbate", "статистика", "токены", "tokens", "донаты",
+      "баланс", "топ-донатеры", "история", "монетка"
+    ],
+    content: `
+Статистика токенов на Chaturbate. Отображение общего баланса, последних донатов, топ-донатеров, истории платежей. Доступ: иконка монетки в верхнем меню → Token Stats.
+    `,
+  },
+  {
+    title: "Приложения (APPS) — Chaturbate",
+    href: "/chaturbate-guide/apps",
+    section: "Начало работы",
+    keywords: [
+      "chaturbate", "apps", "приложения", "dream goals", "цели",
+      "the menu", "прайс-лист", "menu item", "item price",
+      "baboon's hidden show", "подглядки", "spy", "spy-price",
+      "start", "stop"
+    ],
+    content: `
+Настройка приложений на Chaturbate. Dream Goals — удалить дефолтные цели, прописать свои с указанием стоимости. The Menu — заполнить Menu Item (название действия) и Item Price (цена в токенах). Baboon's Hidden Show — изменить Spy-Price с 50 на 12 токенов, управление командами *start и *stop.
+    `,
+  },
+  {
+    title: "Settings & Privacy — Chaturbate",
+    href: "/chaturbate-guide/settings-privacy",
+    section: "Начало работы",
+    keywords: [
+      "chaturbate", "settings", "privacy", "геоблок", "геоблокировка",
+      "geo block", "fan club", "фан-клуб", "приват", "private show",
+      "spy", "подглядки", "цена привата", "tokens per minute"
+    ],
+    content: `
+Настройки приватности на Chaturbate. Геоблокировка: Block Access to Users in These Countries/Regions. Fan Club: установка ежемесячной стоимости. Private Show Settings: разрешение/запрет приватов, цена за минуту (12-18 токенов), Spy on Private Show, Premium Private Shows.
     `,
   },
   {

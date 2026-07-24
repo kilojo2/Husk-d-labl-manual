@@ -18,7 +18,20 @@ export const navigationSections: NavSection[] = [
     icon: "house",
     items: [
       { title: "Вход в аккаунты", href: "/account-login", slug: "account-login", icon: "key.fill" },
-      { title: "Гайд по Chaturbate", href: "/chaturbate-guide", slug: "chaturbate-guide", icon: "sparkles" },
+      {
+        title: "Гайд по Chaturbate",
+        href: "/chaturbate-guide",
+        slug: "chaturbate-guide",
+        icon: "sparkles",
+        children: [
+          { title: "Запуск и подготовка", href: "/chaturbate-guide/broadcast", slug: "chaturbate-broadcast", icon: "play.circle" },
+          { title: "Панель управления", href: "/chaturbate-guide/panel", slug: "chaturbate-panel", icon: "square.grid.2x2" },
+          { title: "Рассылка", href: "/chaturbate-guide/announcements", slug: "chaturbate-announcements", icon: "envelope.fill" },
+          { title: "Статистика токенов", href: "/chaturbate-guide/token-stats", slug: "chaturbate-token-stats", icon: "chart.bar" },
+          { title: "Приложения (APPS)", href: "/chaturbate-guide/apps", slug: "chaturbate-apps", icon: "puzzlepiece.extension" },
+          { title: "Settings & Privacy", href: "/chaturbate-guide/settings-privacy", slug: "chaturbate-settings-privacy", icon: "gearshape.fill" },
+        ],
+      },
       {
         title: "Гайд по Stripchat",
         href: "/stripchat-guide",

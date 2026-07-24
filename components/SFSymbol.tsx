@@ -250,6 +250,14 @@ const iconMap: Record<string, React.ReactNode> = {
       <path d="M9 18l6-6-6-6" />
     </>
   ),
+  "square.grid.2x2": (
+    <>
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+      <rect x="14" y="14" width="7" height="7" rx="1" />
+    </>
+  ),
   "key.fill": (
     <>
       <circle cx="6" cy="9" r="3" fill="none" />
