@@ -68,7 +68,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       {/* Desktop sidebar — static in flex flow */}
       <aside
-        className="hidden md:block md:w-[230px] md:ml-10 md:mr-8 md:shrink-0"
+        className="hidden md:block md:w-[230px] md:ml-6 md:mr-6 md:shrink-0"
         aria-label="Sidebar navigation"
       >
         <div className="mt-4 h-[calc(100vh-11rem)] overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg">
