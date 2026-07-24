@@ -23,17 +23,8 @@ export default function LayoutWrapper({
   const pathname = usePathname();
   const isHome = pathname === "/";
 
-  // Block body scroll on home page
-  useEffect(() => {
-    if (isHome) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isHome]);
+  // NOTE: Removed body overflow hidden for home page — it blocked scroll on mobile
+  // when content (category cards) exceeded viewport height.
 
   // Initialize theme from localStorage or system preference (avoiding setState in useEffect)
   const [theme, setTheme] = useState<ThemeId>(() => {

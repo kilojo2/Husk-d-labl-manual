@@ -25,7 +25,7 @@ const sectionColorMap: Record<number, { gradient: string; border: string; glow: 
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] overflow-hidden px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] max-md:overflow-y-auto overflow-hidden px-4 py-12 sm:px-6 lg:px-8">
       {/* ─── Hero Section ─── */}
       <div className="text-center mb-16 sm:mb-20 animate-fade-in-up">
         <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight bg-gradient-to-b from-text-primary via-text-primary to-text-secondary bg-clip-text text-transparent select-none">
