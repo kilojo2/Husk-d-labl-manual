@@ -1,4 +1,4 @@
-# Husk'd Labl Manuals — robots.txt
+# DJIBUR Manuals — robots.txt
 # Production environment — restrict crawlers
 
 User-agent: *
@@ -36,4 +36,4 @@ Allow: /general-rules/
 Allow: /situation-handling/
 
 # Sitemap
-Sitemap: https://huskd-labl-manuals.vercel.app/sitemap.xml
+Sitemap: https://djibur-workteam.up.railway.app/sitemap.xml

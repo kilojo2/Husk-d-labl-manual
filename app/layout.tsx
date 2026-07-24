@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Husk'd Labl Manuals — Справочник оператора",
-  description: "База знаний для операторов вебкам-моделей",
+  title: "DJIBUR Manuals — Справочник оператора",
+  description: "База знаний DJIBUR WORKTEAM для операторов вебкам-моделей",
 };
 
 export default function RootLayout({

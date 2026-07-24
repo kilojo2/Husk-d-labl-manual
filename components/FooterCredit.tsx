@@ -8,14 +8,14 @@ export default function FooterCredit() {
       <div className="flex items-center gap-2 rounded-full apple-glass px-4 py-1.5">
         <Image
           src="/logo-purple.svg"
-          alt="Husk'd Labl"
+          alt="DJIBUR Manuals"
           width={20}
           height={20}
           className="h-5 w-5"
           style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.3))" }}
         />
         <span className="text-[11px] font-medium tracking-wide text-text-secondary/90">
-          Husk`d Labl Manuals by DJIBUR WORKTEAM
+          DJIBUR Manuals • by DJIBUR WORKTEAM
         </span>
       </div>
     </div>
