@@ -59,7 +59,7 @@ export default function LayoutWrapper({
         <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
         <main
           id="main-content"
-          className="flex-1 overflow-y-auto px-4 py-6 md:pl-10 md:pr-6 md:py-10"
+          className="flex-1 overflow-y-auto px-4 py-6 md:pl-0 md:pr-6 md:py-10"
         >
           {children}
         </main>
