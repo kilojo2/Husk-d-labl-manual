@@ -8,7 +8,7 @@ export default function ArticlePage({ title, description, children }: ArticlePag
   return (
     <article className="mx-auto max-w-5xl">
       {/* Title section */}
-      <div className="mb-8 text-center md:text-left">
+      <div className="mb-8 text-center md:text-left animate-fade-in-up">
         <h1 className="text-4xl font-bold tracking-tight text-text-primary md:text-5xl md:leading-tight">
           {title}
         </h1>
@@ -20,7 +20,7 @@ export default function ArticlePage({ title, description, children }: ArticlePag
       </div>
 
       {/* Content card — Apple-style floating card */}
-      <div className="apple-card p-6 md:p-10">
+      <div className="apple-card p-6 md:p-10 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
         {children ?? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <svg

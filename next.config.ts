@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Configure for Vercel deployment
   reactStrictMode: true,
+  // Enable View Transitions API for smooth page transitions
+  experimental: {
+    viewTransition: true,
+  },
   // Allow sql.js (native module) to be bundled on the server
   serverExternalPackages: ["sql.js"],
   // Security headers applied to all routes

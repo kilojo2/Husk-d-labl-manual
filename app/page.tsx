@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 py-12 sm:px-6 lg:px-8">
       {/* ─── Hero Section ─── */}
-      <div className="text-center mb-16 sm:mb-20">
+      <div className="text-center mb-16 sm:mb-20 animate-fade-in-up">
         <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight bg-gradient-to-b from-text-primary via-text-primary to-text-secondary bg-clip-text text-transparent select-none">
           DJIBUR WORKTEAM
         </h1>
@@ -53,7 +53,8 @@ export default function Home() {
           return (
             <div
               key={section.title}
-              className={`${colors.class} relative group apple-card rounded-2xl p-6 flex flex-col transition-all duration-300 hover:scale-[1.02]`}
+              className={`${colors.class} relative group apple-card rounded-2xl p-6 flex flex-col transition-all duration-300 hover:scale-[1.02] animate-fade-in-up stagger-item`}
+              style={{ animationDelay: `${idx * 120}ms` }}
             >
               {/* Header */}
               <div className="flex items-center gap-3 mb-4">
@@ -95,7 +96,7 @@ export default function Home() {
       </div>
 
       {/* ─── Footer hint ─── */}
-      <p className="mt-12 text-sm text-text-muted text-center">
+      <p className="mt-12 text-sm text-text-muted text-center animate-fade-in-up" style={{ animationDelay: "400ms" }}>
         Выберите раздел для быстрого перехода к документации
       </p>
     </div>
