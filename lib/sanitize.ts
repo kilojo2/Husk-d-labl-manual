@@ -5,6 +5,12 @@
  * Cross-Site Scripting (XSS) attacks via user-supplied input.
  */
 
+const AMP = "&" + "amp;";
+const LT = "&" + "lt;";
+const GT = "&" + "gt;";
+const QUOT = "&" + "quot;";
+const APOS = "&#x27;";
+
 /**
  * HTML-encode special characters: < > " ' &
  *
@@ -12,11 +18,11 @@
  */
 export function escapeHtml(str: string): string {
   return str
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"')
-    .replace(/'/g, '&#x27;');
+    .replace(/&/g, AMP)
+    .replace(/</g, LT)
+    .replace(/>/g, GT)
+    .replace(/"/g, QUOT)
+    .replace(/'/g, APOS);
 }
 
 /**
@@ -25,9 +31,9 @@ export function escapeHtml(str: string): string {
  */
 export function stripHtmlTags(str: string): string {
   return str
-    .replace(/<[^>]*>/g, '')
-    .replace(/[\\]?on\w+\s*=\s*["'][^"']*["']/gi, '')
-    .replace(/[\\]?on\w+\s*=\s*\S+/gi, '');
+    .replace(/<[^>]*>/g, "")
+    .replace(/[\\]?on\w+\s*=\s*["'][^"']*["']/gi, "")
+    .replace(/[\\]?on\w+\s*=\s*\S+/gi, "");
 }
 
 /**

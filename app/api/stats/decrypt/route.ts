@@ -1,7 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+import { isAdminSessionValid } from "@/app/api/admin/login/route";
 
 const ALGORITHM = "aes-256-gcm";
+
+/**
+ * F8 fix: Timing-safe string comparison using crypto.timingSafeEqual.
+ */
+function safeCompare(a: string, b: string): boolean {
+  const bufA = Buffer.from(a, "utf8");
+  const bufB = Buffer.from(b.slice(0, bufA.length).padEnd(bufA.length, "\0"), "utf8");
+  try {
+    return crypto.timingSafeEqual(bufA, bufB);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Unified authentication check.
+ * Accepts admin_session cookie (F7) or Bearer token (legacy).
+ */
+function isAuthenticated(request: NextRequest): boolean {
+  // F7: Check httpOnly cookie session first
+  const sessionId = request.cookies.get("admin_session")?.value;
+  if (sessionId && isAdminSessionValid(sessionId)) {
+    return true;
+  }
+
+  // Fallback: Bearer token
+  const adminToken = process.env.ADMIN_TOKEN;
+  if (!adminToken) return false;
+
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) return false;
+
+  const token = authHeader.slice(7);
+  return safeCompare(token, adminToken);
+}
 
 /**
  * Derive AES key from user-provided key parts (same logic as lib/crypto.ts).
@@ -33,23 +69,9 @@ function deriveKey(part1: string, part2: string, part3: string): Buffer {
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. Authenticate with ADMIN_TOKEN
-    const adminToken = process.env.ADMIN_TOKEN;
-    if (!adminToken) {
-      return NextResponse.json(
-        { error: "ADMIN_TOKEN not configured on server" },
-        { status: 500 }
-      );
-    }
-
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    // 1. Authenticate with admin_session cookie (F7) or Bearer token
+    if (!isAuthenticated(request)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const token = authHeader.slice(7);
-    if (token !== adminToken) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // 2. Parse body

@@ -27,20 +27,25 @@ function deriveKey(): Buffer {
   const part3 = process.env.KEY_PART_3 || "";
   const combined = part1 + part2 + part3;
 
-  if (combined.length < 32) {
-    // Fallback to single env var for backward compatibility
-    const singleKey = process.env.IP_ENCRYPTION_KEY;
-    if (singleKey && singleKey.length === 64) {
-      return Buffer.from(singleKey, "hex");
-    }
-    // Development fallback — WARNING: not secure for production
-    console.warn(
-      "[CRYPTO] No encryption key found. Using derived fallback. Set KEY_PART_1/2/3 or IP_ENCRYPTION_KEY in production."
-    );
-    return crypto.createHash("sha256").update("dev-fallback-key-do-not-use-in-production").digest();
+  if (combined.length >= 32) {
+    return crypto.createHash("sha256").update(combined).digest();
   }
 
-  return crypto.createHash("sha256").update(combined).digest();
+  // Try single env var for backward compatibility
+  const singleKey = process.env.IP_ENCRYPTION_KEY;
+  if (singleKey && singleKey.length === 64 && /^[0-9a-fA-F]+$/.test(singleKey)) {
+    return Buffer.from(singleKey, "hex");
+  }
+
+  // F3 fix: FAIL FAST — no fallback, no hardcoded keys.
+  // Without a proper key, encryption is impossible; better to crash
+  // than to silently use a publicly known key.
+  throw new Error(
+    "[CRYPTO] ENCRYPTION KEY NOT CONFIGURED.\n" +
+    "Set KEY_PART_1+KEY_PART_2+KEY_PART_3 or IP_ENCRYPTION_KEY " +
+    "environment variables before starting the server.\n" +
+    "To generate a key: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\""
+  );
 }
 
 /**

@@ -13,6 +13,9 @@ import { getDb } from "@/lib/db";
  *   identifier: string (visitorId from cookie)
  * }
  *
+ * Ownership is verified by matching the hl_visitor cookie against the
+ * requested identifier, preventing IDOR (CWE-639).
+ *
  * In production, this should be augmented with email verification.
  */
 export async function POST(request: NextRequest) {
@@ -28,10 +31,25 @@ export async function POST(request: NextRequest) {
 
     const sanitizedId = identifier.trim().slice(0, 64);
 
+    // F2 fix: Verify ownership — the hl_visitor cookie MUST match the requested identifier
+    const visitorCookie = request.cookies.get("hl_visitor");
+    if (!visitorCookie || visitorCookie.value !== sanitizedId) {
+      console.warn(
+        `[PRIVACY] Ownership verification failed: cookie=${visitorCookie?.value?.slice(0, 8)}... requested=${sanitizedId.slice(0, 8)}...`
+      );
+      return NextResponse.json(
+        { error: "Cannot access another user's data" },
+        { status: 403 }
+      );
+    }
+
     if (action === "delete") {
       const db = await getDb();
 
-      db.run(`DELETE FROM visits WHERE visitor_id = '${sanitizedId.replace(/'/g, "''")}'`);
+      // F1 fix: Parameterized query — impossible to inject
+      const stmt = db.prepare(`DELETE FROM visits WHERE visitor_id = ?`);
+      stmt.run([sanitizedId]);
+      stmt.free();
 
       return NextResponse.json({
         ok: true,
@@ -42,23 +60,32 @@ export async function POST(request: NextRequest) {
     if (action === "access") {
       const db = await getDb();
 
-      const result = db.exec(
-        `SELECT page_path, page_title, visit_date, visit_time
-         FROM visits
-         WHERE visitor_id = '${sanitizedId.replace(/'/g, "''")}'
-         ORDER BY id DESC
-         LIMIT 100`
-      );
+      // F1 fix: Parameterized query — impossible to inject
+      const stmt = db.prepare(`
+        SELECT page_path, page_title, visit_date, visit_time
+        FROM visits
+        WHERE visitor_id = ?
+        ORDER BY id DESC
+        LIMIT 100
+      `);
+      stmt.bind([sanitizedId]);
 
-      const visits =
-        result.length > 0
-          ? result[0].values.map((row: any[]) => ({
-              pagePath: row[0],
-              pageTitle: row[1],
-              date: row[2],
-              time: row[3],
-            }))
-          : [];
+      const visits: Array<{
+        pagePath: string;
+        pageTitle: string;
+        date: string;
+        time: string;
+      }> = [];
+      while (stmt.step()) {
+        const row = stmt.getAsObject();
+        visits.push({
+          pagePath: String(row.page_path || ""),
+          pageTitle: String(row.page_title || ""),
+          date: String(row.visit_date || ""),
+          time: String(row.visit_time || ""),
+        });
+      }
+      stmt.free();
 
       return NextResponse.json({
         ok: true,

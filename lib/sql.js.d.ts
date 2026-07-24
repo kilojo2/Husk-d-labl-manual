@@ -14,6 +14,7 @@ declare module "sql.js" {
     getAsObject(params?: object): Record<string, any>;
     free(): boolean;
     reset(): void;
+    run(params?: any[]): void;
   }
 
   interface Database {
