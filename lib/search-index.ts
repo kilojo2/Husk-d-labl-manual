@@ -27,22 +27,78 @@ const searchIndex: SearchRecord[] = [
       "guest", "member", "levels", "уровни", "вещание"
     ],
     content: `
-Мануал оператора Flirt4Free. Интерфейс Performer App, подключение OBS, типы шоу и юзеров.
+Мануал оператора Flirt4Free. Содержит 5 разделов:
 
-1. Интерфейс Performer App
-Рабочий экран разделён на пять зон: панель кнопок (верх), превью видео (лево), чат (центр), зрители (право), статистика (низ-лево). Статусы: Offline (не в эфире), Online (эфир идёт). При первом входе нажми Start Chat для выхода в эфир.
-
-2. Подключение OBS
-В Performer App: Setup → Broadcast Info. Скопируй Server URL и Stream Key. В OBS: Настройки → Вещание, Service: Custom, вставь данные. Настройки видео: 1920×1080, 30 FPS, 10000 kbps bitrate. Порядок запуска: Start Streaming в OBS → подожди 5-10 сек → Start Chat в Performer App.
-
-3. Кнопки управления
-Start Chat (запуск сессии), Start Break (перерыв), Start Fake (видео вместо живого потока), Change Rate (смена цены Private), Start Group (групповое шоу), Start Party (платный вход), Show Offers (спецпредложения), Alert Monitor (уведомления VIP), Games (интерактивные игры).
-
-4. Типы шоу
-Free Chat — основной режим, все смотрят бесплатно, доход от Tips. Group Show — юзеры скидываются на Goal, шоу стартует при достижении цели. Private/VIP — один на один, юзер платит за минуту, другие могут подглядывать (Voyeur), максимальный доход. Party Show — платный вход (билет), контент объявляется заранее.
-
-5. Типы юзеров
-Guest (незарег) — только смотрит, не может писать и тратить кредиты. Member (базовый) — может писать, покупать кредиты, участвовать в шоу. Levels (уровни) — чем выше уровень, тем больше юзер потратил, активно взаимодействуй с высокими уровнями.
+1. Интерфейс Performer App — пять зон экрана, статусы Offline/Online, первый вход Start Chat.
+2. Подключение OBS — Setup → Broadcast Info, Server URL + Stream Key, видео 1920×1080 30fps 10000kbps, порядок запуска.
+3. Кнопки управления — Start Chat, Break, Fake, Change Rate, Start Group, Start Party, Show Offers, Alert Monitor, Games.
+4. Типы шоу — Free Chat, Private/VIP (Voyeur), Group Show, Party Show.
+5. Типы юзеров — Guest (без регистрации), Member (базовый), Levels (уровни по тратам).
+    `,
+  },
+  {
+    title: "Интерфейс Performer App — Flirt4Free",
+    href: "/flirt4free-guide/interface",
+    section: "Начало работы",
+    keywords: [
+      "flirt4free", "f4f", "performer app", "интерфейс",
+      "зоны", "панель кнопок", "чат", "зрители", "статистика",
+      "offline", "online", "start chat"
+    ],
+    content: `
+Интерфейс Performer App Flirt4Free. Пять зон: панель кнопок (верх), превью видео (лево), чат (центр), зрители Users (право), статистика (низ-лево): Time Online, Credits, Tips, Number of Shows, Max Customers. Статусы: Offline и Online. Первый вход: нажать Start Chat.
+    `,
+  },
+  {
+    title: "Подключение OBS — Flirt4Free",
+    href: "/flirt4free-guide/obs-setup",
+    section: "Начало работы",
+    keywords: [
+      "flirt4free", "f4f", "obs", "server url", "stream key",
+      "broadcast info", "вещание", "видео", "1920x1080",
+      "fps", "bitrate", "мультистриминг", "multiple output"
+    ],
+    content: `
+Подключение OBS к Flirt4Free. Setup → Broadcast Info: скопировать Server URL и Stream Key. OBS: Настройки → Вещание, Service: Custom, вставить URL и Key. Видео: 1920×1080, 30 fps, 10000 kbps. Порядок: Start Streaming в OBS → 5-10 сек → Start Chat в Performer App. Мультистриминг через Multiple Output.
+    `,
+  },
+  {
+    title: "Кнопки управления — Flirt4Free",
+    href: "/flirt4free-guide/control-buttons",
+    section: "Начало работы",
+    keywords: [
+      "flirt4free", "f4f", "кнопки", "start chat", "break",
+      "fake", "change rate", "start group", "start party",
+      "show offers", "alert monitor", "games"
+    ],
+    content: `
+Кнопки управления Flirt4Free: Start Chat (запуск сессии Online), Start Break (перерыв с заставкой), Start Fake (заранее записанное видео), Change Rate (изменить цену Private), Start Group (групповое шоу), Start Party (платный вход), Show Offers (акции), Alert Monitor (VIP-уведомления), Games (интерактивные игры).
+    `,
+  },
+  {
+    title: "Типы шоу — Flirt4Free",
+    href: "/flirt4free-guide/show-types",
+    section: "Начало работы",
+    keywords: [
+      "flirt4free", "f4f", "шоу", "free chat", "private",
+      "vip", "group show", "party show", "voyeur",
+      "чаевые", "tips", "rate", "goal", "билеты"
+    ],
+    content: `
+Типы шоу Flirt4Free: Free Chat (бесплатный просмотр, доход от Tips), Private/VIP (поминутный тариф Rate, Voyeur-подглядки, самый высокий доход), Group Show (коллективные скидывания на Goal), Party Show (платный вход по билетам, контент объявляется заранее).
+    `,
+  },
+  {
+    title: "Типы юзеров — Flirt4Free",
+    href: "/flirt4free-guide/user-types",
+    section: "Начало работы",
+    keywords: [
+      "flirt4free", "f4f", "юзеры", "guest", "member",
+      "levels", "уровни", "незарегистрированные",
+      "зарегистрированные", "vip"
+    ],
+    content: `
+Типы юзеров Flirt4Free: Guest (без регистрации — только смотреть, мотивировать на регистрацию), Member (базовый — чат, кредиты, участие в шоу), Levels (уровни по тратам — чем выше уровень, тем больше потратил, максимальное внимание высоким уровням).
     `,
   },
   {
