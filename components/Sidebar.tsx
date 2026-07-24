@@ -45,7 +45,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Mobile overlay backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-20 bg-black/20 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -55,7 +55,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       <aside
         ref={sidebarRef}
         className={`
-          fixed left-4 top-[4.25rem] z-20 h-[calc(100vh-6rem)] w-[280px] shrink-0
+          fixed left-4 top-[4.25rem] z-40 h-[calc(100vh-6rem)] w-[280px] shrink-0
           overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg
           md:hidden
           ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"}
@@ -66,9 +66,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <TreeNavigation onNavigate={handleNavigate} />
       </aside>
 
-      {/* Desktop sidebar — static in flex flow */}
+      {/* Desktop sidebar — static in flex flow, elevated above content */}
       <aside
-        className="hidden md:block md:w-[230px] md:ml-6 md:mr-6 md:shrink-0"
+        className="hidden md:block md:w-[230px] md:ml-6 md:mr-6 md:shrink-0 relative z-10"
         aria-label="Sidebar navigation"
       >
         <div className="mt-4 h-[calc(100vh-11rem)] overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg">
