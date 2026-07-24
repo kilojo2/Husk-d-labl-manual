@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
+import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
@@ -19,7 +20,21 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
+  // Block body scroll on home page
+  useEffect(() => {
+    if (isHome) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isHome]);
+
   // Initialize theme from localStorage or system preference (avoiding setState in useEffect)
   const [theme, setTheme] = useState<ThemeId>(() => {
     if (typeof window === "undefined") return "apple";
@@ -59,7 +74,7 @@ export default function LayoutWrapper({
         <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
         <main
           id="main-content"
-          className="flex-1 overflow-y-auto px-4 py-6 md:pl-0 md:pr-6 md:py-10"
+          className={`flex-1 px-4 py-6 md:pl-0 md:pr-6 md:py-10 ${isHome ? "overflow-hidden" : "overflow-y-auto"}`}
         >
           {children}
         </main>
