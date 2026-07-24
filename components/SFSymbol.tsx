@@ -252,7 +252,7 @@ const iconMap: Record<string, React.ReactNode> = {
   ),
   "key.fill": (
     <>
-      <circle cx="6" cy="9" r="3" fill="currentColor" />
+      <circle cx="6" cy="9" r="3" fill="none" />
       <path d="M8.5 10.5L19 21M15 17h2M17 15v2" />
     </>
   ),
@@ -265,8 +265,8 @@ const iconMap: Record<string, React.ReactNode> = {
   ),
   "envelope.fill": (
     <>
-      <rect x="2" y="5" width="20" height="14" rx="2" fill="currentColor" stroke="none" />
-      <path d="M2 7l10 7 10-7" stroke="currentColor" fill="none" />
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <path d="M2 7l10 7 10-7" />
     </>
   ),
   "person.crop.circle": (
@@ -278,9 +278,9 @@ const iconMap: Record<string, React.ReactNode> = {
   ),
   "gearshape.fill": (
     <>
-      <circle cx="12" cy="12" r="10" fill="currentColor" stroke="none" />
-      <circle cx="12" cy="12" r="3" stroke="currentColor" fill="none" />
-      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" fill="none" />
+      <circle cx="12" cy="12" r="10" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
     </>
   ),
   "square.stack.3d.up": (

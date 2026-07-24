@@ -34,17 +34,19 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
           if (!hasChildren && onNavigate) onNavigate();
         }}
         className={`
-          group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-          ${depth > 0 ? 'ml-7' : ''}
+          group relative flex items-center gap-3 rounded-r-lg px-4 py-3 text-sm transition-all duration-200
+          ${depth > 0 ? 'ml-5' : ''}
           ${
             isActive
-              ? "bg-gradient-to-r from-accent to-[#5AC8FA] text-white apple-shadow-sm"
-              : "text-text-muted hover:bg-bg-surface-hover hover:text-text-primary"
+              ? "border-l-[3px] border-[#4DA6FF] bg-[rgba(77,166,255,0.08)] font-semibold text-text-primary"
+              : "border-l-[3px] border-transparent text-text-muted hover:bg-bg-surface-hover hover:text-text-primary hover:translate-x-[3px]"
           }
         `}
         aria-current={isActive ? "page" : undefined}
       >
-        <span className={`flex items-center justify-center ${isActive ? "text-white/90" : "text-text-muted group-hover:text-text-primary"}`}>
+        <span className={`flex items-center justify-center transition-colors duration-200 ${
+          isActive ? "text-[#4DA6FF]" : "text-text-muted group-hover:text-[#4DA6FF]"
+        }`}>
           <SFSymbol name={item.icon} size={16} />
         </span>
         <span className="flex-1">{item.title}</span>
