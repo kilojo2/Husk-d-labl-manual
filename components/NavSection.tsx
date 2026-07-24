@@ -43,9 +43,9 @@ export default function NavSection({
         <span className="text-sm">{emoji}</span>
         <span className={`flex-1 text-left ${accentClass}`}>{section.title}</span>
         <svg
-          className={`h-3.5 w-3.5 transition-transform duration-300 ${
+          className={`h-3.5 w-3.5 shrink-0 transition-transform duration-300 ${
             isExpanded ? "rotate-180" : ""
-          }`}
+          } text-text-muted`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
