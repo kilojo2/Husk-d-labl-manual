@@ -22,6 +22,7 @@ const MIN_SPEED = 0.4; // px/frame
 const MAX_SPEED = 2.2; // px/frame
 const MIN_SIZE = 2; // px
 const MAX_SIZE = 5; // px
+const IDLE_TIMEOUT = 400; // ms — stop spawning if no movement for this duration
 
 export default function CursorTrail() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,11 +31,18 @@ export default function CursorTrail() {
   const spawnTimerRef = useRef<number>(0);
   const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const hasMouseRef = useRef(false);
-  const lastSpawnRef = useRef<number>(0);
+  const lastMoveRef = useRef<number>(0);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const spawnSparkle = useCallback(() => {
     const container = containerRef.current;
     if (!container || !hasMouseRef.current) return;
+
+    // Idle check: don't spawn if pointer hasn't moved recently
+    if (performance.now() - lastMoveRef.current > IDLE_TIMEOUT) {
+      hasMouseRef.current = false;
+      return;
+    }
 
     const { x, y } = mouseRef.current;
     const angle = Math.random() * Math.PI * 2;
@@ -84,6 +92,23 @@ export default function CursorTrail() {
     }
   }, []);
 
+  const resetIdleTimer = useCallback(() => {
+    lastMoveRef.current = performance.now();
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => {
+      hasMouseRef.current = false;
+    }, IDLE_TIMEOUT);
+  }, []);
+
+  const setPointerPosition = useCallback(
+    (x: number, y: number) => {
+      mouseRef.current = { x, y };
+      hasMouseRef.current = true;
+      resetIdleTimer();
+    },
+    [resetIdleTimer]
+  );
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -93,6 +118,11 @@ export default function CursorTrail() {
     const animate = (now: number) => {
       const dt = now - prevTime;
       prevTime = now;
+
+      // Idle check: stop spawning if pointer hasn't moved
+      if (hasMouseRef.current && now - lastMoveRef.current > IDLE_TIMEOUT) {
+        hasMouseRef.current = false;
+      }
 
       // Spawn sparkles
       spawnTimerRef.current += dt;
@@ -129,29 +159,50 @@ export default function CursorTrail() {
       rafRef.current = requestAnimationFrame(animate);
     };
 
+    // Mouse events (desktop)
     const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-      hasMouseRef.current = true;
+      setPointerPosition(e.clientX, e.clientY);
     };
 
     const handleMouseLeave = () => {
       hasMouseRef.current = false;
     };
 
+    // Touch events (mobile) — FIX: properly handle touch lifecycle
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        setPointerPosition(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      hasMouseRef.current = false;
+    };
+
     document.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("touchmove", handleTouchMove, { passive: true });
+    document.addEventListener("touchend", handleTouchEnd);
 
     rafRef.current = requestAnimationFrame(animate);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       for (const s of sparklesRef.current) {
         s.el.remove();
       }
     };
-  }, [spawnSparkle]);
+  }, [spawnSparkle, resetIdleTimer, setPointerPosition]);
 
-  return <div ref={containerRef} className="fixed inset-0 pointer-events-none z-[9999]" />;
+  return (
+    <div
+      ref={containerRef}
+      className="fixed inset-0 pointer-events-none z-[9999]"
+    />
+  );
 }
