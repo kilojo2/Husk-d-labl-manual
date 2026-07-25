@@ -78,6 +78,7 @@ export const navigationSections: NavSection[] = [
       { title: "Словарь терминов", href: "/getting-started/dictionary", slug: "dictionary", icon: "book.closed" },
       { title: "Правила сайтов", href: "/getting-started/site-rules", slug: "site-rules", icon: "doc.text" },
       { title: "Железные правила переговоров", href: "/getting-started/negotiation-rules", slug: "negotiation-rules", icon: "hand.raised" },
+      { title: "Поднятие онлайна", href: "/getting-started/online-boost", slug: "online-boost", icon: "antenna.radiowaves.left.and.right" },
     ],
   },
   {
