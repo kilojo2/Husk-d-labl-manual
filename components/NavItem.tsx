@@ -49,7 +49,14 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
         }`}>
           <SFSymbol name={item.icon} size={16} />
         </span>
-        <span className="flex-1">{item.title}</span>
+        <span className="flex-1 flex items-center gap-2">
+          {item.title}
+          {item.isNew && (
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-none bg-green-500/15 text-green-500">
+              New!
+            </span>
+          )}
+        </span>
         {hasChildren && (
           <svg
             className={`h-3.5 w-3.5 transition-transform duration-300 ${
