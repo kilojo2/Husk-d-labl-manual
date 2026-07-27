@@ -75,18 +75,6 @@ export const navigationSections: NavSection[] = [
           { title: "Типы юзеров", href: "/flirt4free-guide/user-types", slug: "f4f-user-types", icon: "person.crop.circle" },
         ],
       },
-      {
-        title: "Гайд по SkyPrivate",
-        href: "/skyprivate-guide",
-        slug: "skyprivate-guide",
-        icon: "cloud",
-        children: [
-          { title: "Загрузка и установка", href: "/skyprivate-guide/download", slug: "skyprivate-download", icon: "square.and.arrow.down" },
-          { title: "Первичная настройка", href: "/skyprivate-guide/setup", slug: "skyprivate-setup", icon: "gearshape.fill" },
-          { title: "Тестирование и проверка", href: "/skyprivate-guide/testing", slug: "skyprivate-testing", icon: "checkmark.circle" },
-          { title: "Ошибки и рекомендации", href: "/skyprivate-guide/troubleshooting", slug: "skyprivate-troubleshooting", icon: "shield" },
-        ],
-      },
       { title: "Мануал по Lovense / Lush", href: "/lovense-guide", slug: "lovense-guide", icon: "link" },
       { title: "Гайд по настройке OBS", href: "/obs-guide", slug: "obs-guide", icon: "wrench" },
       { title: "Словарь терминов", href: "/getting-started/dictionary", slug: "dictionary", icon: "book.closed" },
