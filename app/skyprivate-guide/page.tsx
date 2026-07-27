@@ -1,209 +1,50 @@
+import Link from "next/link";
 import ArticlePage from "@/components/ArticlePage";
-import MarkdownContent from "@/components/MarkdownContent";
-import type { ContentBlock } from "@/components/MarkdownContent";
 
-const intro: ContentBlock[] = [
+const subsections = [
   {
-    type: "heading",
-    text: "Руководство по SkyPrivate: Установка и настройка",
+    href: "/skyprivate-guide/download",
+    title: "Загрузка и установка",
+    desc: "Скачивание плагина с официального сайта, процесс установки и первичный запуск.",
   },
   {
-    type: "paragraph",
-    text: "Подключение плагина, первичная настройка и проверка работоспособности",
+    href: "/skyprivate-guide/setup",
+    title: "Первичная настройка",
+    desc: "Ввод учётных данных, базовые параметры подключения и сохранение изменений.",
   },
   {
-    type: "divider",
-  },
-];
-
-const section1: ContentBlock[] = [
-  {
-    type: "subheading",
-    text: "1. Что такое SkyPrivate",
+    href: "/skyprivate-guide/testing",
+    title: "Тестирование и проверка",
+    desc: "Тестовое подключение к сервису и проверка корректности работы основных функций.",
   },
   {
-    type: "paragraph",
-    text: "SkyPrivate — это сервис, с которым интегрируется специальный плагин. Его установка не требует глубоких технических знаний и легко дается даже начинающим пользователям.",
-  },
-  {
-    type: "table",
-    headers: ["Свойство", "Описание"],
-    rows: [
-      ["Назначение", "Интегрируется с системой SkyPrivate и открывает доступ к функциям сервиса"],
-      ["Сложность установки", "Простая — справится любой ПК-пользователь"],
-      ["Кому подходит", "Абсолютно всем, в том числе новичкам, ранее не работавшим с подобным софтом"],
-    ],
-  },
-  {
-    type: "divider",
-  },
-];
-
-const section2: ContentBlock[] = [
-  {
-    type: "subheading",
-    text: "2. Шаг 1: Загрузка плагина",
-  },
-  {
-    type: "ordered-list",
-    items: [
-      "Перейдите на официальный сайт SkyPrivate.",
-      "Найдите раздел загрузки плагина.",
-      "Скачайте последнюю доступную версию на свой компьютер.",
-    ],
-  },
-  {
-    type: "note",
-    text: "Используйте для скачивания только официальный источник! Это обезопасит вас от установки повреждённых или вредоносных файлов.",
-  },
-  {
-    type: "divider",
-  },
-];
-
-const section3: ContentBlock[] = [
-  {
-    type: "subheading",
-    text: "3. Шаг 2: Процесс установки",
-  },
-  {
-    type: "paragraph",
-    text: "После загрузки файла выполните следующие действия:",
-  },
-  {
-    type: "ordered-list",
-    items: [
-      "Откройте скачанный установщик.",
-      "Нажмите кнопку «Далее».",
-      "Прочитайте и примите лицензионное соглашение.",
-      "Нажмите «Установить».",
-      "Дождитесь окончания процесса распаковки файлов.",
-    ],
-  },
-  {
-    type: "paragraph",
-    text: "Как только установка завершится, можно переходить к настройке системы.",
-  },
-  {
-    type: "divider",
-  },
-];
-
-const section4: ContentBlock[] = [
-  {
-    type: "subheading",
-    text: "4. Шаг 3: Первичная настройка",
-  },
-  {
-    type: "paragraph",
-    text: "После первого запуска плагина необходимо:",
-  },
-  {
-    type: "ordered-list",
-    items: [
-      "Ввести данные своей учётной записи (логин и пароль).",
-      "Настроить базовые параметры подключения.",
-      "Убедиться, что ваша система совместима с плагином (обычно происходит автоматически).",
-      "Обязательно сохранить внесённые изменения.",
-    ],
-  },
-  {
-    type: "divider",
-  },
-];
-
-const section5: ContentBlock[] = [
-  {
-    type: "subheading",
-    text: "5. Шаг 4: Тестирование и проверка работы",
-  },
-  {
-    type: "paragraph",
-    text: "Чтобы убедиться, что всё настроено верно:",
-  },
-  {
-    type: "ordered-list",
-    items: [
-      "Выполните тестовое подключение к сервису.",
-      "Убедитесь, что соединение устанавливается без задержек и системных ошибок.",
-      "Проверьте корректность работы основных функций.",
-    ],
-  },
-  {
-    type: "note",
-    text: "Если ошибок нет — установка завершена успешно, плагин готов к работе.",
-  },
-  {
-    type: "divider",
-  },
-];
-
-const section6: ContentBlock[] = [
-  {
-    type: "subheading",
-    text: "6. Частые ошибки и как их избежать",
-  },
-  {
-    type: "table",
-    headers: ["Проблема", "Как избежать"],
-    rows: [
-      ["Вредоносный софт или вирусы", "Загружайте плагин строго с официального сайта SkyPrivate, игнорируя сторонние форумы"],
-      ["Сбой при установке", "Проходите все шаги установщика по порядку, не прерывая процесс и не закрывая окно раньше времени"],
-      ["Ошибка авторизации", "Внимательно проверяйте раскладку клавиатуры и сверяйте логин/пароль перед сохранением"],
-      ["Некорректная работа функций", "Перед началом установки убедитесь, что вы скачали самую свежую версию плагина"],
-    ],
-  },
-  {
-    type: "divider",
-  },
-];
-
-const section7: ContentBlock[] = [
-  {
-    type: "subheading",
-    text: "7. Полезные рекомендации",
-  },
-  {
-    type: "list",
-    items: [
-      "Всегда используйте только актуальную версию программы.",
-      "Для применения всех системных изменений рекомендуется перезагрузить компьютер после установки.",
-      "Если плагин выдает критическую ошибку, лучшим решением будет его полная переустановка.",
-      "Регулярно проверяйте наличие обновлений софта.",
-    ],
-  },
-  {
-    type: "note",
-    text: "Если вам доступна видеоинструкция по установке — используйте её. Визуальная демонстрация снижает вероятность случайных ошибок и позволяет повторить действия шаг за шагом без поиска дополнительной информации.",
-  },
-  {
-    type: "divider",
-  },
-];
-
-const section8: ContentBlock[] = [
-  {
-    type: "subheading",
-    text: "8. Итог",
-  },
-  {
-    type: "paragraph",
-    text: "Выполнив этот алгоритм, вы успешно установите плагин, пройдёте первичную настройку, протестируете функционал и получите полностью готовую к работе связку с платформой SkyPrivate.",
+    href: "/skyprivate-guide/troubleshooting",
+    title: "Ошибки и рекомендации",
+    desc: "Частые ошибки, способы их избежать, полезные советы и итоговый чек-лист.",
   },
 ];
 
 export default function Page() {
   return (
-    <ArticlePage title="Руководство по SkyPrivate" description="Установка, настройка и проверка плагина SkyPrivate">
-      <MarkdownContent blocks={intro} />
-      <MarkdownContent blocks={section1} />
-      <MarkdownContent blocks={section2} />
-      <MarkdownContent blocks={section3} />
-      <MarkdownContent blocks={section4} />
-      <MarkdownContent blocks={section5} />
-      <MarkdownContent blocks={section6} />
-      <MarkdownContent blocks={section7} />
-      <MarkdownContent blocks={section8} />
+    <ArticlePage title="Гайд по SkyPrivate" description="Установка, настройка и проверка плагина SkyPrivate">
+      <h2 className="text-2xl font-bold mb-6">Содержание</h2>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        {subsections.map((s) => (
+          <Link
+            key={s.href}
+            href={s.href}
+            className="group rounded-2xl border border-border/50 bg-bg-card p-5 transition-all duration-200 hover:border-[#4DA6FF]/40 hover:bg-[rgba(77,166,255,0.04)] hover:shadow-md"
+          >
+            <h3 className="text-lg font-semibold text-text-primary group-hover:text-[#4DA6FF] transition-colors">
+              {s.title}
+            </h3>
+            <p className="mt-2 text-sm text-text-muted leading-relaxed">
+              {s.desc}
+            </p>
+          </Link>
+        ))}
+      </div>
     </ArticlePage>
   );
 }
