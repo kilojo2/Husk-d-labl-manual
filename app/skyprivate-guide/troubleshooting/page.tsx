@@ -16,7 +16,7 @@ const blocks: ContentBlock[] = [
   },
   {
     type: "subheading",
-    text: "6. Возможные ошибки",
+    text: "5. Возможные ошибки",
   },
   {
     type: "paragraph",
@@ -37,7 +37,7 @@ const blocks: ContentBlock[] = [
   },
   {
     type: "subheading",
-    text: "7. Полезные рекомендации",
+    text: "6. Полезные рекомендации",
   },
   {
     type: "list",
@@ -57,7 +57,7 @@ const blocks: ContentBlock[] = [
   },
   {
     type: "subheading",
-    text: "8. Заключение",
+    text: "7. Заключение",
   },
   {
     type: "paragraph",

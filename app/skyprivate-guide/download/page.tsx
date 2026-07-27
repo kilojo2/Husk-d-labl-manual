@@ -9,34 +9,14 @@ const blocks: ContentBlock[] = [
   },
   {
     type: "paragraph",
-    text: "Что такое SkyPrivate, скачивание плагина с официального сайта и пошаговая установка",
+    text: "Скачивание плагина с официального сайта и пошаговая установка",
   },
   {
     type: "divider",
   },
   {
     type: "subheading",
-    text: "1. Что такое SkyPrivate",
-  },
-  {
-    type: "paragraph",
-    text: "SkyPrivate — сервис, с которым интегрируется плагин. Установка не требует специальных технических знаний и подходит даже для начинающих пользователей.",
-  },
-  {
-    type: "table",
-    headers: ["Свойство", "Описание"],
-    rows: [
-      ["Назначение", "Интегрируется с системой SkyPrivate и открывает доступ к нужным функциям сервиса"],
-      ["Сложность установки", "Простая — без специальных технических знаний"],
-      ["Кому подходит", "В том числе новичкам, ранее не устанавливавшим подобные плагины"],
-    ],
-  },
-  {
-    type: "divider",
-  },
-  {
-    type: "subheading",
-    text: "2. Загрузка плагина",
+    text: "1. Загрузка плагина",
   },
   {
     type: "paragraph",
@@ -59,7 +39,7 @@ const blocks: ContentBlock[] = [
   },
   {
     type: "subheading",
-    text: "3. Установка",
+    text: "2. Установка",
   },
   {
     type: "paragraph",
@@ -87,7 +67,7 @@ const blocks: ContentBlock[] = [
 
 export default function Page() {
   return (
-    <ArticlePage title="Загрузка и установка" description="Что такое SkyPrivate, скачивание и установка плагина">
+    <ArticlePage title="Загрузка и установка" description="Скачивание и установка плагина SkyPrivate">
       <MarkdownContent blocks={blocks} />
     </ArticlePage>
   );

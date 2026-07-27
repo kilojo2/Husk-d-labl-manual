@@ -16,7 +16,7 @@ const blocks: ContentBlock[] = [
   },
   {
     type: "subheading",
-    text: "4. Первичная настройка",
+    text: "3. Первичная настройка",
   },
   {
     type: "paragraph",
