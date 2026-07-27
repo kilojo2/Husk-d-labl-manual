@@ -237,9 +237,29 @@ export default function AdminPages() {
     <div style={{ minHeight: "100vh", background: "#1c1c1e", color: "#fff", display: "flex", fontFamily: "system-ui, sans-serif" }}>
       {/* ── Sidebar: Page List ── */}
       <div style={{ width: "280px", borderRight: "1px solid rgba(255,255,255,0.06)", padding: "20px", overflowY: "auto", flexShrink: 0 }}>
-        <div style={{ marginBottom: "16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ fontSize: "16px", fontWeight: 600, margin: 0 }}>Страницы</h2>
-          <a href="/admin" style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", textDecoration: "none" }}>← Статистика</a>
+        <div style={{ marginBottom: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h2 style={{ fontSize: "16px", fontWeight: 600, margin: 0 }}>Страницы</h2>
+            <a href="/admin" style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", textDecoration: "none" }}>← Статистика</a>
+          </div>
+          <button
+            onClick={async () => {
+              if (!confirm('Запустить миграцию? Все страницы из page.tsx файлов будут перезаписаны в БД.')) return;
+              try {
+                const res = await fetch('/api/admin/migrate', { method: 'POST', credentials: 'include' });
+                const data = await res.json();
+                alert(`Миграция завершена!\nНавигация: ${data.pagesFromNav} страниц\nКонтент: ${data.pagesWithBlocks} с блоками\n${data.errors?.length ? 'Ошибок: ' + data.errors.length : ''}`);
+                loadPages();
+              } catch(e: any) { alert('Ошибка: ' + (e?.message || e)); }
+            }}
+            style={{
+              width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid rgba(255,159,10,0.3)",
+              background: "rgba(255,159,10,0.08)", color: "rgba(255,159,10,0.8)", cursor: "pointer",
+              fontSize: "12px", fontWeight: 500
+            }}
+          >
+            🔄 Миграция из page.tsx
+          </button>
         </div>
         <button
           onClick={createPage}
