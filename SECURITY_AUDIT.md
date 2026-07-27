@@ -17,8 +17,8 @@
 
 | Field | Value |
 |---|---|
-| **Severity** | 🔴 **Critical** |
-| **Confidence** | ✅ **Confirmed** — string interpolation with inline escaping is NOT parameterized |
+| **Severity** | � **High** |
+| **Confidence** | ⚠️ **Potential** — `''` escaping prevents standard injection, but absence of parameterized queries violates best practices and leaves room for future bypasses |
 | **CWE** | CWE-89: SQL Injection |
 
 **File**: `app/api/privacy/route.ts` — lines 34, 48
@@ -39,31 +39,30 @@ const result = db.exec(
 );
 ```
 
-**Why it's vulnerable**: The code escapes single quotes by doubling them (`''`), which is the SQL standard escape for string literals. However:
+**Why it's a concern**: The code escapes single quotes by doubling them (`''`), which IS the correct SQL standard escape for SQLite and effectively prevents basic SQL injection through the single-quote vector. **No exploitable SQL injection was confirmed** in the current codebase.
 
-1. This is NOT a parameterized query — it's string concatenation with manual escaping
-2. While SQLite's `''` escape is robust for single quotes, it provides zero protection against:
-   - Backslash escapes (SQLite allows `\'` in some modes)
-   - Unicode homoglyph bypasses
-   - Future sql.js parser bugs
-3. The escape is applied inconsistently — `sanitizeSearchQuery()` strips HTML but doesn't validate SQL characters
-4. If a developer later modifies the query pattern, they may forget to add escaping
+However, this is still a **serious best-practice violation**:
 
-**Example exploitation** (theoretical, depends on sql.js version):
+1. This is NOT a parameterized query — it's string concatenation with manual escaping, which is fragile
+2. If `sql.js` has any parser quirks with Unicode characters or non-ASCII quotes (e.g., U+02BC modifier letter apostrophe), the `.replace(/'/g, "''")` would miss them
+3. A future developer modifying this pattern may forget to add the escape, introducing a real injection
+4. The `sanitizeSearchQuery()` call before escaping strips HTML but doesn't validate SQL metacharacters
+
+**Example of what COULD go wrong** (theoretical, NOT confirmed exploitable):
 
 ```bash
-# Attempt 1: Basic injection via unescaped input
+# The current .replace(/'/g, "''") DOES prevent this standard injection:
 curl -X POST https://djibur-workteam.up.railway.app/api/privacy \
   -H "Content-Type: application/json" \
   -d '{"action":"access","identifier":"test'\'' OR 1=1 -- "}'
-# Result: Returns ALL visits because the query becomes:
-# SELECT ... FROM visits WHERE visitor_id = 'test'' OR 1=1 -- '
+# Result: Query becomes ... WHERE visitor_id = 'test'' OR 1=1 -- '
+# The '' is properly escaped to '''', preventing injection ✅
 
-# Attempt 2: Unicode bypass (if sql.js has Unicode quirks)
-# Uses Unicode modifier letter apostrophe (U+02BC) instead of ASCII '
-# The .replace(/'/g, "''") won't match U+02BC
-# Could bypass the escape entirely
+# However, if someone later REMOVES the .replace() accidentally:
+# The SAME payload would succeed → this is a latent risk
 ```
+
+**Conclusion**: This is a **code-quality / hardening issue**, not a confirmed exploitable vulnerability. Fix it to eliminate the latent risk entirely.
 
 **Secure fix** — use parameterized queries (`db.prepare()`):
 

@@ -1,8 +1,10 @@
 export interface ContentBlock {
-  type: "heading" | "subheading" | "paragraph" | "list" | "ordered-list" | "divider" | "note" | "link-block";
+  type: "heading" | "subheading" | "paragraph" | "list" | "ordered-list" | "divider" | "note" | "link-block" | "table";
   text?: string;
   items?: string[];
   emoji?: string;
+  headers?: string[];
+  rows?: string[][];
 }
 
 interface MarkdownContentProps {
@@ -118,6 +120,36 @@ export default function MarkdownContent({ blocks }: MarkdownContentProps) {
                     {url}
                   </a>
                 ))}
+              </div>
+            );
+
+          case "table":
+            return (
+              <div key={index} className="overflow-x-auto rounded-2xl border border-border">
+                <table className="w-full text-left text-sm">
+                  {block.headers && (
+                    <thead>
+                      <tr className="border-b border-border bg-bg-surface/50">
+                        {block.headers.map((header, i) => (
+                          <th key={i} className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                  )}
+                  <tbody>
+                    {block.rows?.map((row, rowIdx) => (
+                      <tr key={rowIdx} className="border-b border-border last:border-b-0">
+                        {row.map((cell, cellIdx) => (
+                          <td key={cellIdx} className="px-5 py-4 text-[15px] leading-relaxed text-text-primary">
+                            {formatText(cell)}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             );
 
