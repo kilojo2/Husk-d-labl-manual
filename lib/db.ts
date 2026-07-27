@@ -117,25 +117,47 @@ function createTables(database: SqlJsDatabase): void {
     )
   `);
 
-  // Indexes
+  // ═══ CMS Tables ═══════════════════════════════════════════
+
   database.run(`
-    CREATE INDEX IF NOT EXISTS idx_visits_date ON visits(visit_date)
+    CREATE TABLE IF NOT EXISTS cms_pages (
+      id              INTEGER PRIMARY KEY AUTOINCREMENT,
+      slug            TEXT NOT NULL UNIQUE,
+      title           TEXT NOT NULL DEFAULT '',
+      description     TEXT DEFAULT '',
+      section_slug    TEXT DEFAULT '',
+      sort_order      INTEGER DEFAULT 0,
+      is_published    INTEGER DEFAULT 1,
+      parent_slug     TEXT DEFAULT '',
+      icon            TEXT DEFAULT '',
+      created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at      TEXT NOT NULL DEFAULT (datetime('now'))
+    )
   `);
+
   database.run(`
-    CREATE INDEX IF NOT EXISTS idx_visits_visitor ON visits(visitor_id)
+    CREATE TABLE IF NOT EXISTS cms_blocks (
+      id              INTEGER PRIMARY KEY AUTOINCREMENT,
+      page_slug       TEXT NOT NULL,
+      sort_order      INTEGER DEFAULT 0,
+      block_type      TEXT NOT NULL,
+      content_json    TEXT NOT NULL DEFAULT '{}',
+      created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+      FOREIGN KEY (page_slug) REFERENCES cms_pages(slug) ON DELETE CASCADE
+    )
   `);
-  database.run(`
-    CREATE INDEX IF NOT EXISTS idx_visits_page ON visits(page_path)
-  `);
-  database.run(`
-    CREATE INDEX IF NOT EXISTS idx_visits_ip_hash ON visits(ip_hash)
-  `);
-  database.run(`
-    CREATE INDEX IF NOT EXISTS idx_anomaly_type ON anomaly_log(event_type)
-  `);
-  database.run(`
-    CREATE INDEX IF NOT EXISTS idx_anomaly_created ON anomaly_log(created_at)
-  `);
+
+  database.run(`CREATE INDEX IF NOT EXISTS idx_cms_blocks_page ON cms_blocks(page_slug)`);
+  database.run(`CREATE INDEX IF NOT EXISTS idx_cms_pages_section ON cms_pages(section_slug)`);
+  database.run(`CREATE INDEX IF NOT EXISTS idx_cms_pages_parent ON cms_pages(parent_slug)`);
+
+  // Indexes for visits
+  database.run(`CREATE INDEX IF NOT EXISTS idx_visits_date ON visits(visit_date)`);
+  database.run(`CREATE INDEX IF NOT EXISTS idx_visits_visitor ON visits(visitor_id)`);
+  database.run(`CREATE INDEX IF NOT EXISTS idx_visits_page ON visits(page_path)`);
+  database.run(`CREATE INDEX IF NOT EXISTS idx_visits_ip_hash ON visits(ip_hash)`);
+  database.run(`CREATE INDEX IF NOT EXISTS idx_anomaly_type ON anomaly_log(event_type)`);
+  database.run(`CREATE INDEX IF NOT EXISTS idx_anomaly_created ON anomaly_log(created_at)`);
 }
 
 /**
@@ -183,6 +205,39 @@ function migrateSchema(database: SqlJsDatabase): void {
 
     database.run(`CREATE INDEX IF NOT EXISTS idx_anomaly_type ON anomaly_log(event_type)`);
     database.run(`CREATE INDEX IF NOT EXISTS idx_anomaly_created ON anomaly_log(created_at)`);
+
+    // ═══ CMS Migration: ensure CMS tables exist (for older DBs) ═══
+    database.run(`
+      CREATE TABLE IF NOT EXISTS cms_pages (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        slug            TEXT NOT NULL UNIQUE,
+        title           TEXT NOT NULL DEFAULT '',
+        description     TEXT DEFAULT '',
+        section_slug    TEXT DEFAULT '',
+        sort_order      INTEGER DEFAULT 0,
+        is_published    INTEGER DEFAULT 1,
+        parent_slug     TEXT DEFAULT '',
+        icon            TEXT DEFAULT '',
+        created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at      TEXT NOT NULL DEFAULT (datetime('now'))
+      )
+    `);
+
+    database.run(`
+      CREATE TABLE IF NOT EXISTS cms_blocks (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        page_slug       TEXT NOT NULL,
+        sort_order      INTEGER DEFAULT 0,
+        block_type      TEXT NOT NULL,
+        content_json    TEXT NOT NULL DEFAULT '{}',
+        created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (page_slug) REFERENCES cms_pages(slug) ON DELETE CASCADE
+      )
+    `);
+
+    database.run(`CREATE INDEX IF NOT EXISTS idx_cms_blocks_page ON cms_blocks(page_slug)`);
+    database.run(`CREATE INDEX IF NOT EXISTS idx_cms_pages_section ON cms_pages(section_slug)`);
+    database.run(`CREATE INDEX IF NOT EXISTS idx_cms_pages_parent ON cms_pages(parent_slug)`);
   } catch (err) {
     console.warn("[DB] Migration skipped or already applied:", err);
   }
