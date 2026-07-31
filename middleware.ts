@@ -7,15 +7,42 @@ import { isBanned } from "@/lib/fail2ban";
 /**
  * Next.js Edge Middleware
  *
- * Runs before every API request. Performs:
- * 1. IP extraction from request headers
- * 2. IP ban check (fail2ban)
- * 3. Rate limiting (multi-tier)
- * 4. Attaches IP info as request headers for downstream handlers
- *
- * Only applies to /api/* routes to avoid overhead on static pages.
+ * Runs on every request. Performs:
+ * 1. Maintenance mode check (if MAINTENANCE_MODE=true, block all except admin)
+ * 2. IP extraction from request headers
+ * 3. IP ban check (fail2ban)
+ * 4. Rate limiting (multi-tier)
+ * 5. Attaches IP info as request headers for downstream handlers
  */
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // ═══ MAINTENANCE MODE ═══════════════════════════════════════
+  // Set MAINTENANCE_MODE=true env variable on Railway to activate.
+  // Admin and static assets remain accessible.
+  if (process.env.MAINTENANCE_MODE === "true") {
+    // Allow admin pages and API
+    if (
+      pathname.startsWith("/maintenance") ||
+      pathname.startsWith("/admin") ||
+      pathname.startsWith("/api/admin") ||
+      pathname.startsWith("/_next") ||
+      pathname.startsWith("/favicon.ico") ||
+      pathname.includes(".")
+    ) {
+      return NextResponse.next();
+    }
+
+    // Redirect everything else to maintenance page
+    const maintenanceUrl = new URL("/maintenance", request.url);
+    return NextResponse.redirect(maintenanceUrl, 307);
+  }
+
+  // ═══ API PROTECTION ═════════════════════════════════════════
+  if (!pathname.startsWith("/api/")) {
+    return NextResponse.next();
+  }
+
   // 1. Extract IP information
   const ipInfo = extractIp(request);
 
@@ -54,9 +81,8 @@ export function middleware(request: NextRequest) {
 }
 
 /**
- * Only run middleware on API routes.
- * Static pages and assets bypass middleware for performance.
+ * Match all routes for maintenance mode + API protection.
  */
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/:path*"],
 };
