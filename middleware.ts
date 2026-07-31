@@ -3,46 +3,24 @@ import type { NextRequest } from "next/server";
 import { extractIp } from "@/lib/extract-ip";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { isBanned } from "@/lib/fail2ban";
-import fs from "fs";
-import path from "path";
 
 /**
- * Next.js Edge Middleware
+ * Next.js Middleware
  *
  * Runs on every request. Performs:
- * 1. Maintenance mode check (if .maintenance file exists, block all except admin)
+ * 1. Maintenance mode check (if MAINTENANCE_MODE=true env var is set)
  * 2. IP extraction from request headers
  * 3. IP ban check (fail2ban)
  * 4. Rate limiting (multi-tier)
  * 5. Attaches IP info as request headers for downstream handlers
- *
- * NOTE: middleware runs in Edge runtime — fs is NOT available.
- * Use MAINTENANCE_MODE env var on Railway to enable maintenance mode.
  */
-
-// Read the maintenance flag at module level
-function isMaintenanceMode(): boolean {
-  // Check env var first
-  if (process.env.MAINTENANCE_MODE === "true") return true;
-
-  // Check for .maintenance file in project root
-  try {
-    const flagPath = path.join(process.cwd(), ".maintenance");
-    if (fs.existsSync(flagPath)) return true;
-  } catch { /* ignore in Edge runtime */ }
-
-  return false;
-}
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // ═══ MAINTENANCE MODE ═══════════════════════════════════════
-  // Set MAINTENANCE_MODE=true env variable on Railway, OR
-  // create a .maintenance file in the project root.
+  // Set MAINTENANCE_MODE=true env variable on Railway to activate.
   // Admin and static assets remain accessible.
   if (process.env.MAINTENANCE_MODE === "true") {
-    // Allow admin pages and API
     if (
       pathname.startsWith("/maintenance") ||
       pathname.startsWith("/admin") ||
@@ -54,7 +32,6 @@ export function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    // Redirect everything else to maintenance page
     const maintenanceUrl = new URL("/maintenance", request.url);
     return NextResponse.redirect(maintenanceUrl, 307);
   }
