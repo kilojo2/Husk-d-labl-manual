@@ -1,5 +1,7 @@
 import Image from "next/image";
 import ArticlePage from "@/components/ArticlePage";
+import QuizButton from "@/components/quiz/QuizButton";
+import { chaturbatePanelQuiz } from "@/components/quiz/questions/chaturbate-panel";
 
 export const metadata = {
   title: "Панель управления — Chaturbate",
