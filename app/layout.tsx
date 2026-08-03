@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DJIBUR Manuals — Справочник оператора",
-  description: "База знаний DJIBUR WORKTEAM для операторов вебкам-моделей",
+  title: "KILLASNAZZ Manuals — Справочник оператора",
+  description: "База знаний KILLASNAZZ WORKTEAM для операторов вебкам-моделей",
 };
 
 function isMaintenanceMode(): boolean {

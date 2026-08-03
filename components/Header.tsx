@@ -35,9 +35,9 @@ export default function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
         className="flex shrink-0 items-center gap-2.5 text-base font-semibold text-text-primary"
       >
         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-xs font-bold text-white apple-shadow-sm">
-          DM
+          KM
         </span>
-        <span className="hidden sm:inline">DJIBUR Manuals</span>
+        <span className="hidden sm:inline">KILLASNAZZ Manuals</span>
       </Link>
 
       {/* Search bar */}

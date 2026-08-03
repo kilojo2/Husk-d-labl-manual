@@ -9,10 +9,7 @@ interface Contact {
 }
 
 const contacts: Contact[] = [
-  { role: "Тимлид DJIBUR", username: "@sytener1488", url: "https://t.me/sytener1488" },
-  { role: "1 коуч", username: "@scallenvoy", url: "https://t.me/scallenvoy" },
-  { role: "2 коуч", username: "@tmestalkers", url: "https://t.me/tmestalkers" },
-  { role: "3 коуч", username: "@us_karen", url: "https://t.me/us_karen" },
+  { role: "Тимлид KILLASNAZZ", username: "@scallenvoy", url: "https://t.me/scallenvoy" },
 ];
 
 export default function TelegramContacts() {
