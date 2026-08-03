@@ -11,6 +11,14 @@ export const metadata = {
 export default function Page() {
   return (
     <ArticlePage title="Панель управления" description="Обзор панели управления трансляцией на Chaturbate">
+      <div className="flex items-center justify-between mb-4">
+        <div />
+        <QuizButton
+          title="Панель управления — Chaturbate"
+          quizSlug="chaturbate-panel"
+          questions={chaturbatePanelQuiz}
+        />
+      </div>
       <h2 className="text-2xl font-bold mb-6">Обзор панели управления</h2>
 
       <p className="text-lg leading-relaxed">

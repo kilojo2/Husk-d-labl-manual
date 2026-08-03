@@ -1,5 +1,7 @@
 import Image from "next/image";
 import ArticlePage from "@/components/ArticlePage";
+import QuizButton from "@/components/quiz/QuizButton";
+import { chaturbateTokenStatsQuiz } from "@/components/quiz/questions/chaturbate-token-stats";
 
 export const metadata = {
   title: "Статистика токенов — Chaturbate",
