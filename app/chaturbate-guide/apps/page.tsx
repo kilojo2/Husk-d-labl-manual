@@ -1,5 +1,7 @@
 import Image from "next/image";
 import ArticlePage from "@/components/ArticlePage";
+import QuizButton from "@/components/quiz/QuizButton";
+import { chaturbateAppsQuiz } from "@/components/quiz/questions/chaturbate-apps";
 
 export const metadata = {
   title: "Приложения (APPS) — Chaturbate",
@@ -9,6 +11,10 @@ export const metadata = {
 export default function Page() {
   return (
     <ArticlePage title="Приложения (APPS)" description="Настройка приложений Dream Goals, The Menu и Baboon's Hidden Show на Chaturbate">
+      <div className="flex items-center justify-between mb-4">
+        <div />
+        <QuizButton title="Приложения — Chaturbate" quizSlug="chaturbate-apps" questions={chaturbateAppsQuiz} />
+      </div>
       <h2 className="text-2xl font-bold mb-6">Блок APPS — 3 основных приложения</h2>
 
       <p className="text-lg leading-relaxed">

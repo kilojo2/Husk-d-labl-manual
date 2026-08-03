@@ -1,4 +1,6 @@
 import ArticlePage from "@/components/ArticlePage";
+import QuizButton from "@/components/quiz/QuizButton";
+import { flirt4freeInterfaceQuiz } from "@/components/quiz/questions/flirt4free-interface";
 
 export const metadata = {
   title: "Интерфейс Performer App — Flirt4Free",
@@ -8,6 +10,10 @@ export const metadata = {
 export default function Page() {
   return (
     <ArticlePage title="Интерфейс Performer App" description="Обзор рабочего экрана Performer App на Flirt4Free">
+      <div className="flex items-center justify-between mb-4">
+        <div />
+        <QuizButton title="Интерфейс Performer App — Flirt4Free" quizSlug="flirt4free-interface" questions={flirt4freeInterfaceQuiz} />
+      </div>
       <h2 className="text-2xl font-bold mb-6">Интерфейс Performer App</h2>
 
       <p className="text-lg leading-relaxed">

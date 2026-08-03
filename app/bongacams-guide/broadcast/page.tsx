@@ -1,5 +1,7 @@
 import Image from "next/image";
 import ArticlePage from "@/components/ArticlePage";
+import QuizButton from "@/components/quiz/QuizButton";
+import { bongaBroadcastQuiz } from "@/components/quiz/questions/bonga-broadcast";
 
 export const metadata = {
   title: "Запуск трансляции — BongaCams",
@@ -9,6 +11,10 @@ export const metadata = {
 export default function Page() {
   return (
     <ArticlePage title="Запуск трансляции" description="Главная страница, Dashboard и запуск трансляции на BongaCams">
+      <div className="flex items-center justify-between mb-4">
+        <div />
+        <QuizButton title="Запуск трансляции — BongaCams" quizSlug="bonga-broadcast" questions={bongaBroadcastQuiz} />
+      </div>
       <h2 className="text-2xl font-bold mb-6">Главная страница и запуск трансляции</h2>
 
       <h3 className="text-xl font-semibold mt-10 mb-4">1. Dashboard (Главная панель)</h3>

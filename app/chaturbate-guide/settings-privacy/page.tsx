@@ -1,5 +1,7 @@
 import Image from "next/image";
 import ArticlePage from "@/components/ArticlePage";
+import QuizButton from "@/components/quiz/QuizButton";
+import { chaturbateSettingsPrivacyQuiz } from "@/components/quiz/questions/chaturbate-settings-privacy";
 
 export const metadata = {
   title: "Settings & Privacy — Chaturbate",
@@ -9,6 +11,10 @@ export const metadata = {
 export default function Page() {
   return (
     <ArticlePage title="Settings & Privacy" description="Настройки приватности, геоблокировки, приватные шоу и Fan Club на Chaturbate">
+      <div className="flex items-center justify-between mb-4">
+        <div />
+        <QuizButton title="Settings & Privacy — Chaturbate" quizSlug="chaturbate-settings-privacy" questions={chaturbateSettingsPrivacyQuiz} />
+      </div>
       <h2 className="text-2xl font-bold mb-6">Блок SETTINGS & PRIVACY</h2>
 
       <p className="text-lg leading-relaxed">

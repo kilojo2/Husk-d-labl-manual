@@ -1,5 +1,7 @@
 import Image from "next/image";
 import ArticlePage from "@/components/ArticlePage";
+import QuizButton from "@/components/quiz/QuizButton";
+import { stripchatBasicsQuiz } from "@/components/quiz/questions/stripchat-basics";
 
 export const metadata = {
   title: "Основы Stripchat",
@@ -9,6 +11,10 @@ export const metadata = {
 export default function Page() {
   return (
     <ArticlePage title="Основы" description="Основное меню стрима, режим подглядок, типы зрителей и настройки">
+      <div className="flex items-center justify-between mb-4">
+        <div />
+        <QuizButton title="Основы — Stripchat" quizSlug="stripchat-basics" questions={stripchatBasicsQuiz} />
+      </div>
       <h2 className="text-2xl font-bold mb-6">Основное меню вашего стрима</h2>
 
       <p className="text-lg leading-relaxed">

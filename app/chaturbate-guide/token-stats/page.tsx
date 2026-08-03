@@ -11,6 +11,10 @@ export const metadata = {
 export default function Page() {
   return (
     <ArticlePage title="Статистика токенов" description="Финансовая статистика и отслеживание донатов на Chaturbate">
+      <div className="flex items-center justify-between mb-4">
+        <div />
+        <QuizButton title="Статистика токенов — Chaturbate" quizSlug="chaturbate-token-stats" questions={chaturbateTokenStatsQuiz} />
+      </div>
       <h2 className="text-2xl font-bold mb-6">Статистика токенов (Token Stats)</h2>
 
       <p className="text-lg leading-relaxed">
