@@ -151,6 +151,23 @@ function createTables(database: SqlJsDatabase): void {
   database.run(`CREATE INDEX IF NOT EXISTS idx_cms_pages_section ON cms_pages(section_slug)`);
   database.run(`CREATE INDEX IF NOT EXISTS idx_cms_pages_parent ON cms_pages(parent_slug)`);
 
+  // ═══ Quiz Results Table ═══════════════════════════════════
+  database.run(`
+    CREATE TABLE IF NOT EXISTS quiz_results (
+      id                INTEGER PRIMARY KEY AUTOINCREMENT,
+      operator_name     TEXT NOT NULL,
+      quiz_slug         TEXT NOT NULL,
+      quiz_title        TEXT NOT NULL,
+      score             INTEGER NOT NULL,
+      total             INTEGER NOT NULL,
+      percentage        REAL NOT NULL,
+      incorrect_json    TEXT DEFAULT '[]',
+      created_at        TEXT NOT NULL DEFAULT (datetime('now'))
+    )
+  `);
+  database.run(`CREATE INDEX IF NOT EXISTS idx_quiz_results_operator ON quiz_results(operator_name)`);
+  database.run(`CREATE INDEX IF NOT EXISTS idx_quiz_results_slug ON quiz_results(quiz_slug)`);
+
   // Indexes for visits
   database.run(`CREATE INDEX IF NOT EXISTS idx_visits_date ON visits(visit_date)`);
   database.run(`CREATE INDEX IF NOT EXISTS idx_visits_visitor ON visits(visitor_id)`);

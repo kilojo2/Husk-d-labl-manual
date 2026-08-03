@@ -1,5 +1,7 @@
 import Image from "next/image";
 import ArticlePage from "@/components/ArticlePage";
+import QuizButton from "@/components/quiz/QuizButton";
+import { chaturbateBroadcastQuiz } from "@/components/quiz/questions/chaturbate-broadcast";
 
 export const metadata = {
   title: "Запуск и подготовка — Chaturbate",
@@ -9,6 +11,14 @@ export const metadata = {
 export default function Page() {
   return (
     <ArticlePage title="Запуск и подготовка" description="Подготовка и запуск трансляции на Chaturbate">
+      <div className="flex items-center justify-between mb-4">
+        <div />
+        <QuizButton
+          title="Запуск и подготовка — Chaturbate"
+          quizSlug="chaturbate-broadcast"
+          questions={chaturbateBroadcastQuiz}
+        />
+      </div>
       <h2 className="text-2xl font-bold mb-6">Как начать трансляцию</h2>
 
       <p className="text-lg leading-relaxed">
