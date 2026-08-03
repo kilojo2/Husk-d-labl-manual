@@ -29,7 +29,7 @@ export default function Home() {
       {/* ─── Hero Section ─── */}
       <div className="text-center mb-16 sm:mb-20 animate-fade-in-up">
         <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight bg-gradient-to-b from-text-primary via-text-primary to-text-secondary bg-clip-text text-transparent select-none">
-          DJIBUR WORKTEAM
+          KILLASNAZZ Manuals
         </h1>
         <p className="mt-4 text-lg sm:text-xl text-text-secondary font-medium">
           База знаний оператора вебкам-моделей
