@@ -17,22 +17,26 @@ export default function TreeNavigation({ onNavigate, collapsed = false }: TreeNa
       <Link
         href="/"
         onClick={onNavigate}
-        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-text-secondary hover:text-accent hover:bg-accent-muted transition-all duration-200"
+        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-text-secondary hover:text-accent hover:bg-accent-muted transition-all duration-200 ${
+          collapsed ? "justify-center px-1" : ""
+        }`}
+        title={collapsed ? "Главное меню" : undefined}
       >
         <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10">
           <SFSymbol name="house.fill" size={16} className="text-accent" />
         </span>
-        Главное меню
+        {!collapsed && "Главное меню"}
       </Link>
 
       {/* Разделитель */}
-      <div className="h-px mx-2 bg-border" />
+      {!collapsed && <div className="h-px mx-2 bg-border" />}
 
       {navigationSections.map((section) => (
         <NavSection
           key={section.title}
           section={section}
           onNavigate={onNavigate}
+          collapsed={collapsed}
         />
       ))}
     </nav>

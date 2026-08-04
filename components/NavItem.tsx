@@ -10,9 +10,10 @@ interface NavItemProps {
   item: NavItemType;
   onNavigate?: () => void;
   depth?: number;
+  collapsed?: boolean;
 }
 
-export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
+export default function NavItem({ item, onNavigate, depth = 0, collapsed = false }: NavItemProps) {
   const pathname = usePathname();
   const isActive = pathname === item.href;
   const hasChildren = item.children && item.children.length > 0;
@@ -36,6 +37,7 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
         className={`
           group relative flex items-center gap-3 rounded-r-lg px-4 py-3 text-sm transition-all duration-200
           ${depth > 0 ? 'ml-5' : ''}
+          ${collapsed ? 'justify-center px-1 py-2.5' : ''}
           ${
             isActive
               ? "border-l-[3px] border-[#4DA6FF] bg-[rgba(77,166,255,0.08)] font-semibold text-text-primary"
@@ -43,21 +45,26 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
           }
         `}
         aria-current={isActive ? "page" : undefined}
+        title={collapsed ? item.title : undefined}
       >
         <span className={`flex items-center justify-center transition-colors duration-200 ${
+          collapsed ? "mx-auto" : ""
+        } ${
           isActive ? "text-[#4DA6FF]" : "text-text-muted group-hover:text-[#4DA6FF]"
         }`}>
           <SFSymbol name={item.icon} size={16} />
         </span>
-        <span className="flex-1 flex items-center gap-2">
-          {item.title}
-          {item.isNew && (
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-none bg-green-500/15 text-green-500">
-              New!
-            </span>
-          )}
-        </span>
-        {hasChildren && (
+        {!collapsed && (
+          <span className="flex-1 flex items-center gap-2">
+            {item.title}
+            {item.isNew && (
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-none bg-green-500/15 text-green-500">
+                New!
+              </span>
+            )}
+          </span>
+        )}
+        {!collapsed && hasChildren && (
           <svg
             className={`h-3.5 w-3.5 transition-transform duration-300 ${
               isExpanded ? "rotate-180" : ""
@@ -72,7 +79,7 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
         )}
       </Link>
 
-      {hasChildren && (
+      {!collapsed && hasChildren && (
         <div
           className={`overflow-hidden transition-all duration-300 ease-out ${
             isExpanded ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
@@ -80,7 +87,7 @@ export default function NavItem({ item, onNavigate, depth = 0 }: NavItemProps) {
         >
           <div className="mt-0.5 space-y-0.5">
             {item.children!.map((child) => (
-              <NavItem key={child.href} item={child} onNavigate={onNavigate} depth={depth + 1} />
+              <NavItem key={child.href} item={child} onNavigate={onNavigate} depth={depth + 1} collapsed={collapsed} />
             ))}
           </div>
         </div>

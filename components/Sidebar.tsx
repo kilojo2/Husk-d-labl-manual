@@ -69,7 +69,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       {/* Desktop sidebar — compact, collapsible */}
       <aside
-        className={`hidden md:block shrink-0 relative z-10 transition-all duration-300 ease-out ${
+        className={`hidden md:block shrink-0 relative z-10 transition-all duration-300 ease-out overflow-hidden ${
           collapsed ? "w-[60px]" : "w-[240px]"
         }`}
         aria-label="Sidebar navigation"
