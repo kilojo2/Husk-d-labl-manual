@@ -41,12 +41,7 @@ export default function QuizModal({ isOpen, onClose, title, quizSlug, questions 
   // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
-      const name = getOperatorName();
-      if (name && name !== "Аноним") {
-        setStep("quiz");
-      } else {
-        setStep("name");
-      }
+      setStep("name");
       setCurrentIndex(0);
       setAnswers(new Array(questions.length).fill(-1));
       setScore(0);
