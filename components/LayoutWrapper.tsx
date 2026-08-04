@@ -22,6 +22,7 @@ export default function LayoutWrapper({
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -35,6 +36,18 @@ export default function LayoutWrapper({
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
+  }, []);
+
+  // Listen for custom events from collapsed sidebar buttons
+  useEffect(() => {
+    const handleOpenSearch = () => setSearchOpen(true);
+    const handleOpenTheme = () => setThemeOpen(true);
+    window.addEventListener("open-search", handleOpenSearch);
+    window.addEventListener("open-theme", handleOpenTheme);
+    return () => {
+      window.removeEventListener("open-search", handleOpenSearch);
+      window.removeEventListener("open-theme", handleOpenTheme);
+    };
   }, []);
 
   // Initialize theme from localStorage or system preference (avoiding setState in useEffect)
@@ -84,7 +97,7 @@ export default function LayoutWrapper({
       <FooterCredit />
       <TelegramContacts />
       <SearchCommand isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-      <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} />
+      <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} forceOpen={themeOpen} />
     </>
   );
 }

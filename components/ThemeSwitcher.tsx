@@ -7,12 +7,18 @@ import SFSymbol from "./SFSymbol";
 interface ThemeSwitcherProps {
   currentTheme: ThemeId;
   onThemeChange: (theme: ThemeId) => void;
+  forceOpen?: boolean;
 }
 
-export default function ThemeSwitcher({ currentTheme, onThemeChange }: ThemeSwitcherProps) {
+export default function ThemeSwitcher({ currentTheme, onThemeChange, forceOpen }: ThemeSwitcherProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredTheme, setHoveredTheme] = useState<ThemeId | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Open from external trigger (collapsed sidebar settings button)
+  useEffect(() => {
+    if (forceOpen) setIsOpen(true);
+  }, [forceOpen]);
 
   // Close on click outside
   useEffect(() => {
