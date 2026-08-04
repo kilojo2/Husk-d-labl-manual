@@ -7,36 +7,30 @@ import SFSymbol from "./SFSymbol";
 
 interface TreeNavigationProps {
   onNavigate?: () => void;
-  collapsed?: boolean;
 }
 
-export default function TreeNavigation({ onNavigate, collapsed = false }: TreeNavigationProps) {
+export default function TreeNavigation({ onNavigate }: TreeNavigationProps) {
   return (
-    <nav className="flex flex-col gap-3 px-2 py-4" aria-label="Sidebar navigation">
+    <nav className="flex flex-col gap-1.5 px-1.5 py-3" aria-label="Sidebar navigation">
       {/* Главное меню */}
       <Link
         href="/"
         onClick={onNavigate}
-        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-text-secondary hover:text-accent hover:bg-accent-muted transition-all duration-200 ${
-          collapsed ? "justify-center px-1" : ""
-        }`}
-        title={collapsed ? "Главное меню" : undefined}
+        className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-text-secondary hover:text-accent hover:bg-accent/5 transition-all duration-150"
       >
-        <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10">
+        <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10 group-hover:bg-accent/15 transition-colors">
           <SFSymbol name="house.fill" size={16} className="text-accent" />
         </span>
-        {!collapsed && "Главное меню"}
+        Главное меню
       </Link>
 
-      {/* Разделитель */}
-      {!collapsed && <div className="h-px mx-2 bg-border" />}
+      <div className="h-px mx-2 bg-border/40" />
 
       {navigationSections.map((section) => (
         <NavSection
           key={section.title}
           section={section}
           onNavigate={onNavigate}
-          collapsed={collapsed}
         />
       ))}
     </nav>
