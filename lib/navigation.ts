@@ -61,7 +61,6 @@ export const navigationSections: NavSection[] = [
           { title: "Настройки безопасности", href: "/bongacams-guide/settings-security", slug: "bonga-settings-security", icon: "shield" },
         ],
       },
-      { title: "Мануал по LiveJasmin", href: "/livejasmin-guide", slug: "livejasmin-guide", icon: "play.circle" },
       {
         title: "Гайд по Flirt4Free",
         href: "/flirt4free-guide",
