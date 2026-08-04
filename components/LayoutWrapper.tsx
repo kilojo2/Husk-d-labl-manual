@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
@@ -11,6 +11,7 @@ import BackgroundOrbs from "@/components/BackgroundOrbs";
 import VisitTracker from "@/components/VisitTracker";
 import CookieConsent from "@/components/CookieConsent";
 import SearchHighlight from "@/components/SearchHighlight";
+import SearchCommand from "@/components/SearchCommand";
 import TelegramContacts from "@/components/TelegramContacts";
 import { type ThemeId } from "@/lib/themes";
 
@@ -20,11 +21,21 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
 
-  // NOTE: Removed body overflow hidden for home page — it blocked scroll on mobile
-  // when content (category cards) exceeded viewport height.
+  // Ctrl+K global search
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
 
   // Initialize theme from localStorage or system preference (avoiding setState in useEffect)
   const [theme, setTheme] = useState<ThemeId>(() => {

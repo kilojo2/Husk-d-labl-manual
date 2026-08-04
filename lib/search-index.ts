@@ -14,7 +14,7 @@ export interface SearchResult {
   score: number;
 }
 
-const searchIndex: SearchRecord[] = [
+export const searchIndex: SearchRecord[] = [
   // ─── Начало работы ───
   {
     title: "Гайд по Flirt4Free",
