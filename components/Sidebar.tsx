@@ -29,7 +29,7 @@ interface CollapsedItem {
 
 const COLLAPSED_ITEMS: CollapsedItem[] = [
   { href: "/", icon: "house.fill", title: "Главная" },
-  { href: "/chaturbate-guide", icon: "sparkles", title: "Начало работы", emoji: "🚀" },
+  { href: "/account-login", icon: "sparkles", title: "Начало работы", emoji: "🚀" },
   { href: "/broadcasting/first-20-seconds", icon: "antenna.radiowaves.left.and.right", title: "Середина работы", emoji: "⚡" },
   { href: "/situation-handling/objections", icon: "shield", title: "Профессиональный режим", emoji: "🔥" },
   { href: "#search", icon: "magnifyingglass", title: "Поиск", action: "search" },
