@@ -83,6 +83,7 @@ export default function LayoutWrapper({
       </div>
       <FooterCredit />
       <TelegramContacts />
+      <SearchCommand isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
       <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} />
     </>
   );
