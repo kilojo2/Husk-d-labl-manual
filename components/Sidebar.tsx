@@ -29,9 +29,9 @@ interface CollapsedItem {
 
 const COLLAPSED_ITEMS: CollapsedItem[] = [
   { href: "/", icon: "house.fill", title: "Главная" },
-  { href: "/account-login", icon: "sparkles", title: "Начало работы", emoji: "🚀" },
-  { href: "/broadcasting/first-20-seconds", icon: "antenna.radiowaves.left.and.right", title: "Середина работы", emoji: "⚡" },
-  { href: "/situation-handling/objections", icon: "shield", title: "Профессиональный режим", emoji: "🔥" },
+  { href: "#expand-sections", icon: "sparkles", title: "Начало работы", emoji: "🚀", action: "expand-sections" },
+  { href: "#expand-sections", icon: "antenna.radiowaves.left.and.right", title: "Середина работы", emoji: "⚡", action: "expand-sections" },
+  { href: "#expand-sections", icon: "shield", title: "Профессиональный режим", emoji: "🔥", action: "expand-sections" },
   { href: "#search", icon: "magnifyingglass", title: "Поиск", action: "search" },
   { href: "#theme", icon: "gearshape.fill", title: "Настройки", action: "theme" },
 ];
@@ -68,8 +68,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   };
 
   const handleCollapsedAction = (item: CollapsedItem) => {
-    if (item.action === "search") {
-      // Dispatch custom event for LayoutWrapper to handle
+    if (item.action === "expand-sections") {
+      setCollapsed(false);
+    } else if (item.action === "search") {
       window.dispatchEvent(new CustomEvent("open-search"));
     } else if (item.action === "theme") {
       window.dispatchEvent(new CustomEvent("open-theme"));
@@ -109,7 +110,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         }`}
         aria-label="Sidebar navigation"
       >
-        <div className="ml-4 mt-4 h-[calc(100vh-11rem)] overflow-hidden rounded-2xl border border-border/40 bg-bg-surface/70 backdrop-blur-xl shadow-sm">
+        <div className="ml-4 mt-4 h-[calc(100vh-11rem)] overflow-y-auto rounded-2xl border border-border/40 bg-bg-surface/70 backdrop-blur-xl shadow-sm">
           {/* Toggle button */}
           <div className={`flex items-center px-3 pt-3 pb-1 ${collapsed ? "justify-center" : "justify-between"}`}>
             {!collapsed && (
