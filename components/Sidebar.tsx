@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import TreeNavigation from "./TreeNavigation";
 
 interface SidebarProps {
@@ -10,6 +10,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const [collapsed, setCollapsed] = useState(false);
 
   // Close sidebar on Escape key
   useEffect(() => {
@@ -63,16 +64,40 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         `}
         aria-label="Mobile sidebar navigation"
       >
-        <TreeNavigation onNavigate={handleNavigate} />
+        <TreeNavigation onNavigate={handleNavigate} collapsed={false} />
       </aside>
 
-      {/* Desktop sidebar — static in flex flow, elevated above content */}
+      {/* Desktop sidebar — compact, collapsible */}
       <aside
-        className="hidden md:block md:w-[230px] md:ml-6 md:mr-6 md:shrink-0 relative z-10"
+        className={`hidden md:block shrink-0 relative z-10 transition-all duration-300 ease-out ${
+          collapsed ? "w-[60px]" : "w-[240px]"
+        }`}
         aria-label="Sidebar navigation"
       >
-        <div className="mt-4 h-[calc(100vh-11rem)] overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg">
-          <TreeNavigation onNavigate={handleNavigate} />
+        <div className="ml-4 mt-4 h-[calc(100vh-11rem)] overflow-y-auto rounded-[22px] apple-glass apple-shadow-lg">
+          <div className="flex items-center justify-between px-3 pt-3 pb-1">
+            {!collapsed && (
+              <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-text-muted/60 pl-1">
+                Навигация
+              </span>
+            )}
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className={`p-1.5 rounded-lg text-text-muted hover:text-text-secondary hover:bg-bg-surface-hover transition-colors ${
+                collapsed ? "mx-auto" : "ml-auto"
+              }`}
+              title={collapsed ? "Развернуть" : "Свернуть"}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                {collapsed ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                )}
+              </svg>
+            </button>
+          </div>
+          <TreeNavigation onNavigate={handleNavigate} collapsed={collapsed} />
         </div>
       </aside>
     </>

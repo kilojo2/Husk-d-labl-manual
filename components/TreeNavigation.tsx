@@ -7,9 +7,10 @@ import SFSymbol from "./SFSymbol";
 
 interface TreeNavigationProps {
   onNavigate?: () => void;
+  collapsed?: boolean;
 }
 
-export default function TreeNavigation({ onNavigate }: TreeNavigationProps) {
+export default function TreeNavigation({ onNavigate, collapsed = false }: TreeNavigationProps) {
   return (
     <nav className="flex flex-col gap-3 px-2 py-4" aria-label="Sidebar navigation">
       {/* Главное меню */}
