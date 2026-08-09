@@ -81,6 +81,7 @@ export const navigationSections: NavSection[] = [
       { title: "Железные правила переговоров", href: "/getting-started/negotiation-rules", slug: "negotiation-rules", icon: "hand.raised" },
       { title: "Поднятие онлайна", href: "/getting-started/online-boost", slug: "online-boost", icon: "antenna.radiowaves.left.and.right", isNew: true },
       { title: "Тип меню", href: "/getting-started/tip-menu", slug: "tip-menu", icon: "list.bullet", isNew: true },
+      { title: "Общение с моделью во время стримов", href: "/getting-started/model-communication", slug: "model-communication", icon: "message.fill", isNew: true },
     ],
   },
   {
