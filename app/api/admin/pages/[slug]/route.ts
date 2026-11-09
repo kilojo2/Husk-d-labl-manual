@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/admin-auth";
 
 /**
  * GET /api/admin/pages/[slug]
@@ -9,6 +10,9 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  const authError = requireAdmin(request);
+  if (authError) return authError;
+
   try {
     const db = await getDb();
     const { slug } = await params;
@@ -22,7 +26,7 @@ export async function GET(
       return NextResponse.json({ page: null, blocks: [] });
     }
 
-    const row = pageResult[0].values[0] as any;
+    const row = pageResult[0].values[0];
 
     // Get blocks
     const blocksResult = db.exec(
@@ -30,15 +34,18 @@ export async function GET(
     );
 
     const blocks = blocksResult.length > 0
-      ? blocksResult[0].values.map((b: any) => {
-          let content: any = {};
+      ? blocksResult[0].values.map((blockRow) => {
+          let content: Record<string, unknown> = {};
           try {
-            content = JSON.parse(b[3]);
+            const parsed: unknown = JSON.parse(String(blockRow[3]));
+            if (typeof parsed === "object" && parsed !== null) {
+              content = parsed as Record<string, unknown>;
+            }
           } catch { /* keep default */ }
           return {
-            id: b[0],
-            sortOrder: b[1],
-            type: b[2],
+            id: blockRow[0],
+            sortOrder: blockRow[1],
+            type: blockRow[2],
             ...content,
           };
         })

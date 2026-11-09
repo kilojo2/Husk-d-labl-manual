@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import {
+  setAnalyticsConsent,
+  useAnalyticsConsent,
+} from "@/lib/analytics-consent";
 
 /**
  * CookieConsent — GDPR-compliant consent banner.
@@ -14,28 +17,24 @@ import { useState, useEffect } from "react";
  * - Analytics (anonymized, no personal data shared)
  */
 export default function CookieConsent() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const consent = localStorage.getItem("hl_cookie_consent");
-    if (!consent) {
-      // Show after a short delay to avoid layout shift
-      const timer = setTimeout(() => setVisible(true), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  const consent = useAnalyticsConsent();
 
   const accept = () => {
-    localStorage.setItem("hl_cookie_consent", "accepted");
-    setVisible(false);
+    setAnalyticsConsent("accepted");
   };
 
   const reject = () => {
-    localStorage.setItem("hl_cookie_consent", "rejected");
-    setVisible(false);
+    setAnalyticsConsent("rejected");
+    fetch("/api/track", {
+      method: "DELETE",
+      credentials: "include",
+      keepalive: true,
+    }).catch(() => {
+      // Consent is still stored locally even if server-side deletion fails.
+    });
   };
 
-  if (!visible) return null;
+  if (consent !== null) return null;
 
   return (
     <div

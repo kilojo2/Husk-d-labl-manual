@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isDuplicate, startDedupCleanup } from "@/lib/dedup";
-import { recordVisit } from "@/lib/tracker";
+import { deleteVisitorData, recordVisit } from "@/lib/tracker";
 import { sanitizeSearchQuery } from "@/lib/sanitize";
 import { extractIp } from "@/lib/extract-ip";
 import { encryptIp } from "@/lib/crypto";
 import { startCleanupScheduler } from "@/lib/cleanup";
 import { startRotationScheduler } from "@/lib/log-rotation";
 
-// Initialize background services on module load (server-side only)
-if (typeof globalThis !== "undefined") {
+function ensureTrackingServicesStarted(): void {
   startDedupCleanup();
   startCleanupScheduler();
   startRotationScheduler();
@@ -28,6 +27,24 @@ function generateVisitorId(): string {
     const v = c === "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
+}
+
+function sanitizeText(value: unknown, maxLength: number): string {
+  return sanitizeSearchQuery(typeof value === "string" ? value : "", maxLength);
+}
+
+function sanitizeDimension(value: unknown, maximum: number): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
+  return Math.min(Math.abs(Math.trunc(value)), maximum);
+}
+
+function isValidVisitorId(value: string | undefined): value is string {
+  return Boolean(
+    value &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+        value,
+      ),
+  );
 }
 
 /**
@@ -54,7 +71,18 @@ export async function POST(request: NextRequest) {
     // 1. Parse and validate body
     const body = await request.json();
 
-    const pagePath = sanitizeSearchQuery(body.pagePath || "", 255);
+    if (body.analyticsConsent !== true) {
+      return NextResponse.json(
+        { error: "Analytics consent is required" },
+        { status: 403 },
+      );
+    }
+
+    // Start runtime services only after the visitor has explicitly consented.
+    // Importing this module during `next build` must remain side-effect free.
+    ensureTrackingServicesStarted();
+
+    const pagePath = sanitizeText(body.pagePath, 255);
     if (!pagePath) {
       return NextResponse.json({ error: "pagePath is required" }, { status: 400 });
     }
@@ -67,10 +95,11 @@ export async function POST(request: NextRequest) {
 
     // 3. Get or create visitor cookie
     const existingCookie = request.cookies.get("hl_visitor");
+    const existingVisitorId = existingCookie?.value;
     let visitorId: string;
 
-    if (existingCookie?.value) {
-      visitorId = existingCookie.value;
+    if (isValidVisitorId(existingVisitorId)) {
+      visitorId = existingVisitorId;
     } else {
       visitorId = generateVisitorId();
     }
@@ -79,11 +108,12 @@ export async function POST(request: NextRequest) {
     if (isDuplicate(visitorId, pagePath)) {
       // Still set the cookie if it's new, but don't record
       const response = NextResponse.json({ ok: true, deduplicated: true });
-      if (!existingCookie) {
+      if (!isValidVisitorId(existingVisitorId)) {
         response.cookies.set("hl_visitor", visitorId, {
           maxAge: 86400, // 24 hours
           path: "/",
           httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
           sameSite: "lax",
         });
       }
@@ -93,11 +123,11 @@ export async function POST(request: NextRequest) {
     // 5. Record the visit with IP data
     await recordVisit({
       pagePath,
-      pageTitle: sanitizeSearchQuery(body.pageTitle || "", 255),
-      referrer: sanitizeSearchQuery(body.referrer || "", 500),
-      userAgent: sanitizeSearchQuery(body.userAgent || "", 500),
-      screenWidth: Math.min(Math.abs(body.screenWidth || 0), 7680),
-      screenHeight: Math.min(Math.abs(body.screenHeight || 0), 4320),
+      pageTitle: sanitizeText(body.pageTitle, 255),
+      referrer: sanitizeText(body.referrer, 500),
+      userAgent: sanitizeText(body.userAgent, 500),
+      screenWidth: sanitizeDimension(body.screenWidth, 7680),
+      screenHeight: sanitizeDimension(body.screenHeight, 4320),
       visitorId,
       ipAddressEncrypted,
       ipHash: ipInfo.ipHash,
@@ -110,6 +140,7 @@ export async function POST(request: NextRequest) {
       maxAge: 86400, // 24 hours
       path: "/",
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
     });
 
@@ -118,4 +149,34 @@ export async function POST(request: NextRequest) {
     console.error("Visit tracking error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
+}
+
+/** Withdraw analytics consent and remove data linked to the visitor cookie. */
+export async function DELETE(request: NextRequest) {
+  const visitorId = request.cookies.get("hl_visitor")?.value;
+  let deletionFailed = false;
+
+  try {
+    if (visitorId) {
+      await deleteVisitorData(visitorId.slice(0, 64));
+    }
+  } catch (error) {
+    deletionFailed = true;
+    console.error("Visitor data deletion error:", error);
+  }
+
+  const response = NextResponse.json(
+    deletionFailed
+      ? { ok: false, error: "Failed to delete stored visitor data" }
+      : { ok: true },
+    { status: deletionFailed ? 500 : 200 },
+  );
+  response.cookies.set("hl_visitor", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+    path: "/",
+  });
+  return response;
 }

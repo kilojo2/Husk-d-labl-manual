@@ -65,7 +65,7 @@ export function extractIp(request: NextRequest): IpInfo {
   }
 
   // 4. Socket fallback (Next.js request.ip)
-  const socketIp = (request as any).ip || "0.0.0.0";
+  const socketIp = (request as NextRequest & { ip?: string }).ip || "0.0.0.0";
   return buildIpInfo(socketIp, []);
 }
 

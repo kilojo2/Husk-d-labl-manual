@@ -1,13 +1,19 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useId } from "react";
 import { useRouter } from "next/navigation";
 import SFSymbol from "./SFSymbol";
 import SearchResultsDropdown from "./SearchResultsDropdown";
 import { sanitizeSearchQuery } from "@/lib/sanitize";
 import { search, type SearchResult } from "@/lib/search-index";
 
-export default function SearchBar() {
+interface SearchBarProps {
+  /** "header" — компактное поле в шапке; "hero" — крупное поле на главной */
+  variant?: "header" | "hero";
+}
+
+export default function SearchBar({ variant = "header" }: SearchBarProps) {
+  const isHero = variant === "hero";
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -15,6 +21,7 @@ export default function SearchBar() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resultsId = useId();
 
   /** Navigate to a page with the search query as a URL parameter */
   const navigateWithQuery = useCallback(
@@ -115,12 +122,12 @@ export default function SearchBar() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative w-full max-w-sm"
+      className={`relative w-full ${isHero ? "max-w-none" : "max-w-sm"}`}
       role="search"
     >
       <div className="relative">
-        <div className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary">
-          <SFSymbol name="magnifyingglass" size={16} />
+        <div className={`pointer-events-none absolute top-1/2 -translate-y-1/2 text-text-secondary ${isHero ? "left-5" : "left-3.5"}`}>
+          <SFSymbol name="magnifyingglass" size={isHero ? 20 : 16} />
         </div>
         <input
           ref={inputRef}
@@ -132,19 +139,23 @@ export default function SearchBar() {
             if (results.length > 0) setIsOpen(true);
           }}
           placeholder="Поиск по справочнику..."
-          className="w-full rounded-full border border-border bg-bg-surface/80 py-2 pl-10 pr-4 text-sm text-text-primary placeholder-text-muted transition-all duration-200 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 apple-shadow-sm"
+          className={`w-full rounded-full border border-border bg-bg-surface/80 text-text-primary placeholder-text-muted transition-all duration-200 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 ${
+            isHero
+              ? "py-4 pl-12 pr-4 text-base apple-glass apple-shadow-md"
+              : "py-2 pl-10 pr-4 text-sm apple-shadow-sm"
+          }`}
           role="combobox"
           aria-label="Поиск по справочнику"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-autocomplete="list"
-          aria-controls="search-results"
+          aria-controls={resultsId}
           autoComplete="off"
           maxLength={200}
         />
       </div>
 
-      <div id="search-results">
+      <div id={resultsId}>
         <SearchResultsDropdown
           results={results}
           query={query}

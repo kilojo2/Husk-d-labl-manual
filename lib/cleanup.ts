@@ -17,6 +17,7 @@ const RETENTION_DAYS_VISITS = 90;
 const RETENTION_DAYS_STATS = 365;
 const RETENTION_DAYS_ANOMALY = 30;
 const CLEANUP_INTERVAL_MS = 86400000; // Run once per day
+let cleanupTimer: ReturnType<typeof setInterval> | null = null;
 
 /**
  * Delete records older than the configured retention period.
@@ -78,13 +79,16 @@ export async function cleanupOldRecords(): Promise<void> {
  * Start periodic cleanup. Call once on server startup.
  */
 export function startCleanupScheduler(): void {
+  if (cleanupTimer) return;
+
   // Run on startup (fire and forget)
   cleanupOldRecords().catch(() => {});
 
   // Run periodically
-  setInterval(() => {
+  cleanupTimer = setInterval(() => {
     cleanupOldRecords().catch(() => {});
   }, CLEANUP_INTERVAL_MS);
+  cleanupTimer.unref?.();
 
   console.log(`[CLEANUP] Scheduler started (interval: ${CLEANUP_INTERVAL_MS / 3600000}h)`);
 }

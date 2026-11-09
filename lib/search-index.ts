@@ -102,29 +102,6 @@ export const searchIndex: SearchRecord[] = [
     `,
   },
   {
-    title: "Мануал по LiveJasmin",
-    href: "/livejasmin-guide",
-    section: "Начало работы",
-    keywords: [
-      "livejasmin", "live jasmin", "fastproxy", "прокси", "proxy",
-      "shinebrowser", "расширения", "extensions", "режим разработчика",
-      "вход", "login", "аккаунт", "account", "трансляция",
-      "broadcast", "настройка", "settings", "в онлайн", "модель"
-    ],
-    content: `
-Мануал по работе с LiveJasmin. Подготовка к работе, установка FastProxy для пользователей из РФ, вход в аккаунт и настройка трансляции.
-
-Подготовка к работе (для пользователей из РФ)
-Перед входом на сайт необходимо установить расширение FastProxy, так как LiveJasmin может быть недоступен без использования прокси. Скачать FastProxyOnline_17_Chrome_Release из Яндекс Диска, распаковать zip-архив. В ShineBrowser: 3 точки → Расширения → Управление расширениями → Режим разработчика → Загрузить распакованное расширение → выбрать папку FastProxyOnline_17_Chrome_Release.
-
-Вход в аккаунт
-Переходим на сайт LiveJasmin Model, нажимаем справа сверху "Войти", входим в аккаунт по данным модели из анкеты.
-
-Настройка трансляции
-Листаем главную страницу LiveJasmin чуть ниже, находим "В онлайн сейчас", ставим настройки согласно инструкции.
-    `,
-  },
-  {
     title: "Гайд по настройке OBS",
     href: "/obs-guide",
     section: "Начало работы",
@@ -696,6 +673,62 @@ export const searchIndex: SearchRecord[] = [
     content:
       "Как оставаться живой и естественной на трансляции. Избегание шаблонного поведения, проявление эмоций, создание настоящей связи со зрителями.",
   },
+  {
+    title: "Вход в аккаунты",
+    href: "/account-login",
+    section: "Начало работы",
+    keywords: [
+      "stripchat", "вход", "аккаунт", "shinebrowser", "почта", "код",
+      "войти", "пароль", "стрип",
+    ],
+    content:
+      "Вход в аккаунт Stripchat через ShineBrowser: красный блок StripChat, кнопка «Войти в аккаунт без пароля», ввод почты от коуча, получение кода и ссылки.",
+  },
+  {
+    title: "Общение с моделью во время стримов",
+    href: "/getting-started/model-communication",
+    section: "Начало работы",
+    keywords: [
+      "общение", "модель", "стрим", "мембер", "голос", "амплуа", "пауза",
+      "мотивация", "поддержка", "мягкий тон", "никнейм", "трансляция",
+    ],
+    content:
+      "Удержание мемберов через голосовое взаимодействие, формирование амплуа модели, заполнение пауз, мягкое общение и поддержка модели во время трансляций.",
+  },
+  {
+    title: "Поднятие онлайна",
+    href: "/getting-started/online-boost",
+    section: "Начало работы",
+    keywords: [
+      "онлайн", "зрители", "поднять", "дразнение", "позы", "цели",
+      "чужие стримы", "просмотры", "мало зрителей",
+    ],
+    content:
+      "Что делать, если на стриме мало зрителей: усилить визуальное дразнение, менять позы, пересмотреть цели, заходить на чужие стримы.",
+  },
+  {
+    title: "Тип меню",
+    href: "/getting-started/tip-menu",
+    section: "Начало работы",
+    keywords: [
+      "тип меню", "ноу нюд", "no nude", "полу нюд", "semi nude",
+      "фулл нюд", "full nude", "дразнилки", "услуги", "чаевые", "tip",
+    ],
+    content:
+      "Категории услуг Tip Menu: Ноу-нюд (No Nude), Полу-нюд (Semi Nude), Фулл-нюд (Full Nude) — база, лайт, дразнилки и горячие действия.",
+  },
+  {
+    title: "Мануал по Lovense / Lush",
+    href: "/lovense-guide",
+    section: "Начало работы",
+    keywords: [
+      "lovense", "lush", "игрушка", "qr код", "cam extension", "obs toolset",
+      "чаевые", "tip", "give control", "connect", "подключение", "вибрация",
+    ],
+    content:
+      "Подключение Lovense Lush через QR-код, установка Lovense Cam Extension и OBS ToolSet, настройка цен и уровней чаевых, типичные проблемы и их решение.",
+  },
+
 ];
 
 /**
@@ -727,54 +760,110 @@ function generateSnippet(content: string, words: string[]): string {
 }
 
 /**
- * Search the index for articles matching the query.
- * Uses AND logic: all query words must match at least somewhere.
- * Ranking: title match (10pts) > keyword match (5pts) > content match (2pts).
+ * Нормализация: lowercase, ё→е, пунктуация → пробелы, схлопывание пробелов.
+ */
+function normalize(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/[^a-zа-я0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Лёгкий русско-английский стеммер: итеративно отсекает типовые окончания,
+ * связывая основные словоформы («цель» ≈ «цели» ≈ «целей»).
+ * Не полный морфоанализ, но достаточно для локального поиска.
+ */
+const SUFFIXES = [
+  // 4 символа
+  "иями", "ание", "ение",
+  // 3 символа
+  "ами", "ями", "ого", "ему", "ыми", "его", "ому", "иях", "иям", "ием", "ией",
+  // 2 символа
+  "ую", "ях", "ям", "ем", "ию", "ью", "ия", "ья", "ей", "ий", "ый", "ой",
+  "ее", "ие", "ое", "ые", "ся", "ть", "ти",
+  // 1 символ
+  "а", "я", "ы", "и", "е", "у", "о", "ь", "й",
+];
+
+function stem(word: string): string {
+  let s = word;
+  let changed = true;
+  while (changed && s.length > 3) {
+    changed = false;
+    for (const suffix of SUFFIXES) {
+      if (s.endsWith(suffix) && s.length - suffix.length >= 3) {
+        s = s.slice(0, -suffix.length);
+        changed = true;
+        break;
+      }
+    }
+  }
+  return s;
+}
+
+function tokensFor(text: string): string[] {
+  return normalize(text).split(" ").filter(Boolean).map(stem);
+}
+
+/**
+ * Проверяет совпадение стема запроса с набором стемов поля.
+ * Возвращает "exact" (равенство), "prefix" (поле начинается со стема запроса —
+ * для частичного ввода) или null.
+ */
+function matchKind(queryStem: string, fieldStems: string[]): "exact" | "prefix" | null {
+  if (fieldStems.some((s) => s === queryStem)) return "exact";
+  if (fieldStems.some((s) => s.startsWith(queryStem))) return "prefix";
+  return null;
+}
+
+/**
+ * Поиск по индексу.
+ * Совпадение — по нормализованным стемам (границы слов + префикс).
+ * Ранжирование: совпадение в заголовке > в keywords > в content,
+ * плюс буст за совпадение всех слов запроса (AND-приоритет при OR-выдаче).
  */
 export function search(query: string): SearchResult[] {
-  const words = query
-    .toLowerCase()
-    .split(/\s+/)
-    .filter(Boolean);
+  const queryWords = normalize(query).split(" ").filter(Boolean);
+  if (queryWords.length === 0) return [];
 
-  if (words.length === 0) return [];
+  const queryStems = queryWords.map(stem);
 
   const results: SearchResult[] = [];
 
   for (const record of searchIndex) {
+    const titleStems = tokensFor(record.title);
+    const keywordStems = record.keywords.flatMap((k) => tokensFor(k));
+    const contentStems = tokensFor(record.content);
+
     let score = 0;
-    const lowerTitle = record.title.toLowerCase();
-    const lowerContent = record.content.toLowerCase();
-    const lowerKeywords = record.keywords.map((k) => k.toLowerCase());
+    let matchedCount = 0;
 
-    let allWordsMatched = true;
+    for (const q of queryStems) {
+      let best = 0;
 
-    for (const word of words) {
-      let wordMatched = false;
+      const titleMatch = matchKind(q, titleStems);
+      if (titleMatch === "exact") best = Math.max(best, 10);
+      else if (titleMatch === "prefix") best = Math.max(best, 8);
 
-      if (lowerTitle.includes(word)) {
-        score += 10;
-        wordMatched = true;
-      }
-      if (lowerKeywords.some((k) => k.includes(word))) {
-        score += 5;
-        wordMatched = true;
-      }
-      if (lowerContent.includes(word)) {
-        score += 2;
-        wordMatched = true;
-      }
+      if (matchKind(q, keywordStems)) best = Math.max(best, 5);
+      if (matchKind(q, contentStems)) best = Math.max(best, 2);
 
-      if (!wordMatched) {
-        allWordsMatched = false;
-        break;
+      if (best > 0) {
+        score += best;
+        matchedCount++;
       }
     }
 
-    if (allWordsMatched) {
-      const snippet = generateSnippet(record.content, words);
-      results.push({ ...record, snippet, score });
-    }
+    if (matchedCount === 0) continue;
+
+    // Приоритет записям, где совпали все слова запроса
+    if (matchedCount === queryStems.length) score += 50;
+
+    const snippet = generateSnippet(record.content, queryWords);
+    results.push({ ...record, snippet, score });
   }
 
   return results.sort((a, b) => b.score - a.score).slice(0, 10);

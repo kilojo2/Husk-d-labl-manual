@@ -1,37 +1,47 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { themes, type ThemeId } from "@/lib/themes";
 import SFSymbol from "./SFSymbol";
 
 interface ThemeSwitcherProps {
   currentTheme: ThemeId;
   onThemeChange: (theme: ThemeId) => void;
-  forceOpen?: boolean;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
 }
 
-export default function ThemeSwitcher({ currentTheme, onThemeChange, forceOpen }: ThemeSwitcherProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function ThemeSwitcher({ currentTheme, onThemeChange, isOpen, onOpenChange }: ThemeSwitcherProps) {
   const [hoveredTheme, setHoveredTheme] = useState<ThemeId | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Open from external trigger (collapsed sidebar settings button)
-  useEffect(() => {
-    if (forceOpen) setIsOpen(true);
-  }, [forceOpen]);
+  // Keep all open/close actions synchronized with the parent.
+  const closeMenu = useCallback(() => {
+    onOpenChange(false);
+  }, [onOpenChange]);
 
   // Close on click outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
+        closeMenu();
       }
     }
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
+  }, [isOpen, closeMenu]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeMenu();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [isOpen, closeMenu]);
 
   const current = themes.find((t) => t.id === currentTheme) ?? themes[0];
 
@@ -47,7 +57,7 @@ export default function ThemeSwitcher({ currentTheme, onThemeChange, forceOpen }
 
       {/* Main toggle button — iOS-style rounded square icon */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => onOpenChange(!isOpen)}
         onMouseEnter={() => setHoveredTheme(currentTheme)}
         onMouseLeave={() => setHoveredTheme(null)}
         className="flex h-12 w-12 items-center justify-center rounded-2xl text-white apple-shadow-md transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95"
@@ -67,7 +77,7 @@ export default function ThemeSwitcher({ currentTheme, onThemeChange, forceOpen }
                 key={theme.id}
                 onClick={() => {
                   onThemeChange(theme.id);
-                  setIsOpen(false);
+                  closeMenu();
                 }}
                 onMouseEnter={() => setHoveredTheme(theme.id)}
                 onMouseLeave={() => setHoveredTheme(null)}

@@ -1,17 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { ADMIN_SESSION_COOKIE } from "@/lib/admin-auth";
 
 /**
  * POST /api/admin/logout
  *
- * Invalidates the admin session by deleting the httpOnly cookie.
- * The server-side session will naturally expire (or be cleaned up by
- * the periodic cleanup interval), but the cookie deletion ensures
- * the client cannot reuse it.
+ * Ends the browser session by deleting the signed httpOnly cookie.
  */
-export async function POST(_request: NextRequest) {
+export async function POST() {
   const response = NextResponse.json({ ok: true });
 
-  response.cookies.set("admin_session", "", {
+  response.cookies.set(ADMIN_SESSION_COOKIE, "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",

@@ -11,7 +11,7 @@
  * automatic IP banning via the fail2ban system.
  */
 
-import { getDb } from "./db";
+import { getDb, saveDb } from "./db";
 import { reportViolation } from "./fail2ban";
 import type { IpInfo } from "./extract-ip";
 
@@ -86,7 +86,7 @@ function logAnomaly(event: AnomalyEvent): void {
 
   // Also persist to database
   try {
-    persistAnomaly(event);
+    void persistAnomaly(event).catch(() => {});
   } catch {
     // Silently fail — anomaly logging should never crash the app
   }
@@ -102,6 +102,7 @@ async function persistAnomaly(event: AnomalyEvent): Promise<void> {
      VALUES (?, ?, ?, datetime('now'))`,
     [event.type, event.ipHash, event.details]
   );
+  saveDb();
 }
 
 /**
@@ -126,8 +127,8 @@ export async function getAnomalyStats(): Promise<{ type: string; count: number }
 
   if (result.length === 0) return [];
 
-  return result[0].values.map((row: any[]) => ({
-    type: row[0] as string,
-    count: row[1] as number,
+  return result[0].values.map((row) => ({
+    type: String(row[0]),
+    count: Number(row[1]),
   }));
 }

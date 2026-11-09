@@ -101,7 +101,7 @@ export function checkRateLimit(ipHash: string): RateLimitResult {
  * Runs every 60 seconds.
  */
 if (typeof globalThis !== "undefined") {
-  setInterval(() => {
+  const cleanupTimer = setInterval(() => {
     const now = Date.now();
     for (const [key, record] of rateLimitMap.entries()) {
       if (now > record.resetAt) {
@@ -109,4 +109,5 @@ if (typeof globalThis !== "undefined") {
       }
     }
   }, 60000);
+  cleanupTimer.unref?.();
 }

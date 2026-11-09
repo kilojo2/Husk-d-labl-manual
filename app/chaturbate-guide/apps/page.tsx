@@ -18,7 +18,7 @@ export default function Page() {
       <h2 className="text-2xl font-bold mb-6">Блок APPS — 3 основных приложения</h2>
 
       <p className="text-lg leading-relaxed">
-        Приложения (Apps) — ключевой инструмент для монетизации стрима. Три главных приложения: Dream Goals, The Menu и Baboon's Hidden Show.
+        Приложения (Apps) — ключевой инструмент для монетизации стрима. Три главных приложения: Dream Goals, The Menu и Baboon&apos;s Hidden Show.
       </p>
 
       <h3 className="text-xl font-semibold mt-10 mb-4">1. Цели (Dream Goals)</h3>
@@ -128,10 +128,10 @@ export default function Page() {
         Добавьте все платные действия и укажите количество токенов за каждое. Меню отобразится в чате для зрителей.
       </p>
 
-      <h3 className="text-xl font-semibold mt-10 mb-4">3. Подглядки (Baboon's Hidden Show)</h3>
+      <h3 className="text-xl font-semibold mt-10 mb-4">3. Подглядки (Baboon&apos;s Hidden Show)</h3>
 
       <p className="text-lg leading-relaxed">
-        Найдите и установите приложение <strong>Baboon's Hidden Show</strong>.
+        Найдите и установите приложение <strong>Baboon&apos;s Hidden Show</strong>.
       </p>
 
       <p className="text-lg leading-relaxed mt-4">

@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, saveDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/admin-auth";
 
 /**
  * GET /api/admin/pages
  * Returns all CMS pages.
  */
 export async function GET(request: NextRequest) {
+  const authError = requireAdmin(request);
+  if (authError) return authError;
+
   try {
     const db = await getDb();
     const result = db.exec(`
@@ -15,7 +19,7 @@ export async function GET(request: NextRequest) {
     `);
 
     const pages = result.length > 0
-      ? result[0].values.map((row: any) => ({
+      ? result[0].values.map((row) => ({
           slug: row[0],
           title: row[1],
           description: row[2],
@@ -42,6 +46,9 @@ export async function GET(request: NextRequest) {
  * Body: { slug, title, description?, sectionSlug?, sortOrder?, icon?, parentSlug?, isPublished?, blocks? }
  */
 export async function POST(request: NextRequest) {
+  const authError = requireAdmin(request);
+  if (authError) return authError;
+
   try {
     const db = await getDb();
     const body = await request.json();
@@ -86,11 +93,15 @@ export async function POST(request: NextRequest) {
         VALUES (?, ?, ?, ?, datetime('now'))
       `);
 
-      blocks.forEach((block: any, index: number) => {
+      blocks.forEach((block, index: number) => {
+        const blockType =
+          typeof block === "object" && block !== null && "type" in block
+            ? String(block.type)
+            : "paragraph";
         stmt.run([
           slug,
           index,
-          block.type || "paragraph",
+          blockType,
           JSON.stringify(block),
         ]);
       });
@@ -111,6 +122,9 @@ export async function POST(request: NextRequest) {
  * Delete a page and its blocks.
  */
 export async function DELETE(request: NextRequest) {
+  const authError = requireAdmin(request);
+  if (authError) return authError;
+
   try {
     const db = await getDb();
     const { searchParams } = new URL(request.url);

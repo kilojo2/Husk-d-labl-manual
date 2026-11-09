@@ -36,7 +36,11 @@ export default function AdminQuizzes() {
     } catch { /* ignore */ }
   }, [filterName, filterQuiz]);
 
-  useEffect(() => { if (authenticated) loadResults(); }, [authenticated, loadResults]);
+  useEffect(() => {
+    if (!authenticated) return;
+    const timer = setTimeout(() => void loadResults(), 0);
+    return () => clearTimeout(timer);
+  }, [authenticated, loadResults]);
 
   if (authenticated === null) return <div style={{ minHeight: "100vh", background: "#1c1c1e", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>Загрузка...</div>;
   if (!authenticated) return <div style={{ minHeight: "100vh", background: "#1c1c1e", color: "#ff453a", display: "flex", alignItems: "center", justifyContent: "center" }}>Требуется авторизация. Перейдите на /admin</div>;

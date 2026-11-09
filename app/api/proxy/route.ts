@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin-auth";
 
 /**
  * POST /api/proxy
@@ -13,6 +14,9 @@ import { NextRequest, NextResponse } from "next/server";
  *   - Maximum response size: 5 MB
  */
 export async function POST(request: NextRequest) {
+  const authError = requireAdmin(request);
+  if (authError) return authError;
+
   try {
     const { url, method = "GET", headers = {}, body } = await request.json();
 
@@ -48,6 +52,7 @@ export async function POST(request: NextRequest) {
     // Prepare fetch options
     const fetchOptions: RequestInit = {
       method: safeMethod,
+      redirect: "error",
       headers: {
         "User-Agent": "KILLASNAZZ-Proxy/1.0",
         "Accept": "application/json, text/plain, */*",
@@ -77,7 +82,7 @@ export async function POST(request: NextRequest) {
       const maxSize = 5 * 1024 * 1024; // 5 MB
       const truncated = text.length > maxSize ? text.slice(0, maxSize) : text;
 
-      let contentType = response.headers.get("content-type") || "text/plain";
+      const contentType = response.headers.get("content-type") || "text/plain";
 
       return new NextResponse(truncated, {
         status: response.status,
@@ -90,16 +95,18 @@ export async function POST(request: NextRequest) {
           "Access-Control-Allow-Headers": "Content-Type",
         },
       });
-    } catch (fetchError: any) {
+    } catch (fetchError: unknown) {
       clearTimeout(timeout);
+      const message = fetchError instanceof Error ? fetchError.message : String(fetchError);
       return NextResponse.json(
-        { error: "Proxy request failed", details: fetchError.message },
+        { error: "Proxy request failed", details: message },
         { status: 502 }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: "Invalid request", details: error.message },
+      { error: "Invalid request", details: message },
       { status: 400 }
     );
   }

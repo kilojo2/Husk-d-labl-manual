@@ -69,7 +69,9 @@ export default function AdminPages() {
   }, []);
 
   useEffect(() => {
-    if (authenticated) loadPages();
+    if (!authenticated) return;
+    const timer = setTimeout(() => void loadPages(), 0);
+    return () => clearTimeout(timer);
   }, [authenticated, loadPages]);
 
   // Load single page with blocks
@@ -209,7 +211,7 @@ export default function AdminPages() {
         setMessage("✅ Сохранено!");
         loadPages();
       }
-    } catch (e) {
+    } catch {
       setMessage("Ошибка соединения");
     } finally {
       setSaving(false);
@@ -227,7 +229,7 @@ export default function AdminPages() {
         setBlocks([]);
       }
       loadPages();
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
   };
 
   if (authenticated === null) return <div style={{ minHeight: "100vh", background: "#1c1c1e", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>Загрузка...</div>;
@@ -250,7 +252,9 @@ export default function AdminPages() {
                 const data = await res.json();
                 alert(`Миграция завершена!\nНавигация: ${data.pagesFromNav} страниц\nКонтент: ${data.pagesWithBlocks} с блоками\n${data.errors?.length ? 'Ошибок: ' + data.errors.length : ''}`);
                 loadPages();
-              } catch(e: any) { alert('Ошибка: ' + (e?.message || e)); }
+              } catch (error: unknown) {
+                alert('Ошибка: ' + (error instanceof Error ? error.message : String(error)));
+              }
             }}
             style={{
               width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid rgba(255,159,10,0.3)",

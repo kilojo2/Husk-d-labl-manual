@@ -15,7 +15,7 @@ export default function Page() {
         <div />
         <QuizButton title="Рассылка — Chaturbate" quizSlug="chaturbate-announcements" questions={chaturbateAnnouncementsQuiz} />
       </div>
-      <h2 className="text-2xl font-bold mb-6">Рассылка (Announce you're online)</h2>
+      <h2 className="text-2xl font-bold mb-6">Рассылка (Announce you&apos;re online)</h2>
 
       <p className="text-lg leading-relaxed font-semibold">Что это такое?</p>
 
@@ -34,7 +34,7 @@ export default function Page() {
 
       <ol className="list-decimal list-inside space-y-4 text-lg ml-4 mt-4">
         <li>
-          <strong>Шаг 1.</strong> На главной странице панели управления нажмите кнопку <strong>Announce you're online</strong>.
+          <strong>Шаг 1.</strong> На главной странице панели управления нажмите кнопку <strong>Announce you&apos;re online</strong>.
         </li>
       </ol>
 

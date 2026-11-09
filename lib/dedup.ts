@@ -27,6 +27,7 @@ export function startDedupCleanup(): void {
       }
     }
   }, CLEANUP_INTERVAL_MS);
+  cleanupTimer.unref?.();
 }
 
 /**

@@ -17,8 +17,9 @@ import path from "path";
 import { closeDb } from "./db";
 
 const MAX_DB_SIZE_MB = 100; // Rotate when DB exceeds 100MB
-const ARCHIVE_DIR = "data/archives";
+const ARCHIVE_DIR = "archives";
 const CHECK_INTERVAL_MS = 3600000; // Check every hour
+let rotationTimer: ReturnType<typeof setInterval> | null = null;
 
 /**
  * Get the database file path (same logic as db.ts).
@@ -33,10 +34,10 @@ function getDbPath(): string {
 export function checkRotation(): void {
   const dbPath = getDbPath();
 
-  if (!fs.existsSync(dbPath)) return;
+  if (!fs.existsSync(/* turbopackIgnore: true */ dbPath)) return;
 
   try {
-    const stats = fs.statSync(dbPath);
+    const stats = fs.statSync(/* turbopackIgnore: true */ dbPath);
     const sizeMB = stats.size / (1024 * 1024);
 
     if (sizeMB > MAX_DB_SIZE_MB) {
@@ -56,21 +57,27 @@ function rotateDatabase(dbPath: string, sizeMB: number): void {
     closeDb();
 
     // 2. Create archive directory
-    const archiveDir = path.join(path.dirname(dbPath), ARCHIVE_DIR);
-    if (!fs.existsSync(archiveDir)) {
-      fs.mkdirSync(archiveDir, { recursive: true });
+    const archiveDir = path.join(
+      /* turbopackIgnore: true */ path.dirname(/* turbopackIgnore: true */ dbPath),
+      ARCHIVE_DIR
+    );
+    if (!fs.existsSync(/* turbopackIgnore: true */ archiveDir)) {
+      fs.mkdirSync(/* turbopackIgnore: true */ archiveDir, { recursive: true });
     }
 
     // 3. Archive old data
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const archiveName = `visits-${timestamp}.db`;
-    const archivePath = path.join(archiveDir, archiveName);
+    const archivePath = path.join(/* turbopackIgnore: true */ archiveDir, archiveName);
 
-    fs.copyFileSync(dbPath, archivePath);
+    fs.copyFileSync(
+      /* turbopackIgnore: true */ dbPath,
+      /* turbopackIgnore: true */ archivePath
+    );
 
     // 4. Truncate the original file (start fresh)
     // The database will be re-initialized on the next getDb() call
-    fs.writeFileSync(dbPath, Buffer.alloc(0));
+    fs.writeFileSync(/* turbopackIgnore: true */ dbPath, Buffer.alloc(0));
 
     console.log(
       `[ROTATION] Database archived: ${archiveName} (${sizeMB.toFixed(1)} MB → ${archiveDir})`
@@ -84,11 +91,14 @@ function rotateDatabase(dbPath: string, sizeMB: number): void {
  * Start the rotation scheduler. Call once on server startup.
  */
 export function startRotationScheduler(): void {
+  if (rotationTimer) return;
+
   // Check on startup
   checkRotation();
 
   // Check periodically
-  setInterval(checkRotation, CHECK_INTERVAL_MS);
+  rotationTimer = setInterval(checkRotation, CHECK_INTERVAL_MS);
+  rotationTimer.unref?.();
 
   console.log(`[ROTATION] Scheduler started (check interval: ${CHECK_INTERVAL_MS / 3600000}h)`);
 }

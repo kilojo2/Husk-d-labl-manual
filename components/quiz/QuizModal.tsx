@@ -40,14 +40,16 @@ export default function QuizModal({ isOpen, onClose, title, quizSlug, questions 
 
   // Reset state when modal opens
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+    const timer = setTimeout(() => {
       setStep("name");
       setCurrentIndex(0);
       setAnswers(new Array(questions.length).fill(-1));
       setScore(0);
       setSubmitted(false);
       setSaving(false);
-    }
+    }, 0);
+    return () => clearTimeout(timer);
   }, [isOpen, questions.length]);
 
   // Save result to server

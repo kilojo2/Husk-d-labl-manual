@@ -121,8 +121,28 @@ export function getSectionBySlug(slug: string): NavSection | undefined {
 
 export function getArticleBySlug(slug: string): NavItem | undefined {
   for (const section of navigationSections) {
-    const item = section.items.find((item) => item.slug === slug);
-    if (item) return item;
+    for (const item of section.items) {
+      if (item.slug === slug) return item;
+      const child = item.children?.find((candidate) => candidate.slug === slug);
+      if (child) return child;
+    }
   }
+  return undefined;
+}
+
+/** Find the navigation entry represented by a public route. */
+export function getArticleByHref(href: string): NavItem | undefined {
+  const normalizedHref = href.length > 1 ? href.replace(/\/$/, "") : href;
+
+  for (const section of navigationSections) {
+    for (const item of section.items) {
+      if (item.href === normalizedHref) return item;
+      const child = item.children?.find(
+        (candidate) => candidate.href === normalizedHref,
+      );
+      if (child) return child;
+    }
+  }
+
   return undefined;
 }

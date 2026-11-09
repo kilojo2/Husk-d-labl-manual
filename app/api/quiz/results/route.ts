@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/admin-auth";
 
 /**
  * GET /api/quiz/results
@@ -7,6 +8,9 @@ import { getDb } from "@/lib/db";
  * Query params: ?operator=name&quiz=slug (optional filters)
  */
 export async function GET(request: NextRequest) {
+  const authError = requireAdmin(request);
+  if (authError) return authError;
+
   try {
     const db = await getDb();
     const { searchParams } = new URL(request.url);
@@ -34,7 +38,7 @@ export async function GET(request: NextRequest) {
     const result = db.exec(query);
     const rows = result.length > 0 ? result[0].values : [];
 
-    const results = rows.map((row: any) => ({
+    const results = rows.map((row) => ({
       id: row[0],
       operatorName: row[1],
       quizSlug: row[2],

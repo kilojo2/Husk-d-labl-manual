@@ -37,8 +37,8 @@ export function addNoise(trueValue: number, epsilon = 0.3): number {
  * Apply differential privacy to a stats object.
  * Adds noise to visitor counts while leaving metadata intact.
  */
-export function privatizeStats<T extends Record<string, any>>(stats: T): T {
-  const privatized = { ...stats };
+export function privatizeStats<T extends Record<string, unknown>>(stats: T): T {
+  const privatized: Record<string, unknown> = { ...stats };
 
   // Add noise to numeric visitor-related fields
   for (const key of Object.keys(privatized)) {
@@ -51,12 +51,12 @@ export function privatizeStats<T extends Record<string, any>>(stats: T): T {
         key.toLowerCase().includes("unique") ||
         key.toLowerCase().includes("count")
       ) {
-        (privatized as any)[key] = addNoise(val, 0.3);
+        privatized[key] = addNoise(val, 0.3);
       }
     }
   }
 
-  return privatized;
+  return privatized as T;
 }
 
 /**

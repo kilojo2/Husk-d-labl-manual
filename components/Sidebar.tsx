@@ -10,15 +10,6 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-function getSectionMeta(title: string): { emoji: string } {
-  switch (title) {
-    case "Начало работы": return { emoji: "🚀" };
-    case "Середина работы": return { emoji: "⚡" };
-    case "Профессиональный режим": return { emoji: "🔥" };
-    default: return { emoji: "" };
-  }
-}
-
 interface CollapsedItem {
   href: string;
   icon: string;

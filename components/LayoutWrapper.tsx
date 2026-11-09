@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense, useCallback } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
@@ -50,24 +50,43 @@ export default function LayoutWrapper({
     };
   }, []);
 
-  // Initialize theme from localStorage or system preference (avoiding setState in useEffect)
-  const [theme, setTheme] = useState<ThemeId>(() => {
-    if (typeof window === "undefined") return "apple";
-    
-    const saved = localStorage.getItem("hl-theme") as ThemeId | null;
-    const validThemes: ThemeId[] = ["apple", "apple-dark", "retro", "retro-dark"];
-    
-    if (saved && validThemes.includes(saved)) {
-      return saved;
-    }
-    
-    // No saved preference — check system dark mode
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    return prefersDark ? "apple-dark" : "apple";
-  });
+  // Детерминированный первый рендер (SSR и гидратация) — предотвращает
+  // hydration mismatch. Сохранённая тема применяется до первой отрисовки
+  // inline-скриптом в app/layout.tsx, а в состояние React синхронизируется
+  // после гидратации (паттерн next.js "preventing-flash-before-hydration").
+  const [theme, setTheme] = useState<ThemeId>("apple");
 
-  // Persist theme to localStorage and update <html> data-theme attribute
   useEffect(() => {
+    let resolved: ThemeId = "apple";
+    try {
+      const saved = localStorage.getItem("hl-theme") as ThemeId | null;
+      const validThemes: ThemeId[] = ["apple", "apple-dark", "retro", "retro-dark"];
+      if (saved && validThemes.includes(saved)) {
+        resolved = saved;
+      } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        resolved = "apple-dark";
+      }
+    } catch {
+      resolved = "apple";
+    }
+    // Разовая синхронизация с localStorage после гидратации (внешнее
+    // хранилище — разрешённый кейс для setState в эффекте); правило
+    // отключено точечно, т.к. альтернатива useSyncExternalStore здесь
+    // избыточна для значения, читаемого один раз при монтировании.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTheme(resolved);
+  }, []);
+
+  // Persist theme to localStorage and update <html> data-theme attribute.
+  // Первый запуск после гидратации пропускается: DOM (data-theme) и
+  // localStorage уже корректны благодаря inline-скрипту в layout.tsx —
+  // запись серверного дефолта в этот момент вызывала бы вспышку светлой темы.
+  const skipFirstPersistRef = useRef(true);
+  useEffect(() => {
+    if (skipFirstPersistRef.current) {
+      skipFirstPersistRef.current = false;
+      return;
+    }
     localStorage.setItem("hl-theme", theme);
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
@@ -97,7 +116,7 @@ export default function LayoutWrapper({
       <FooterCredit />
       <TelegramContacts />
       <SearchCommand isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-      <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} forceOpen={themeOpen} />
+      <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} isOpen={themeOpen} onOpenChange={setThemeOpen} />
     </>
   );
 }

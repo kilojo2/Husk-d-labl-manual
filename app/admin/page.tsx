@@ -78,8 +78,6 @@ interface StatsData {
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null); // null = loading
   const [data, setData] = useState<StatsData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [loginToken, setLoginToken] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -92,8 +90,6 @@ export default function AdminPage() {
   // The admin_session httpOnly cookie is sent automatically with every request.
 
   const fetchStats = useCallback(async () => {
-    setLoading(true);
-    setError("");
     try {
       const res = await fetch("/api/stats", {
         // No Authorization header — admin_session cookie is sent automatically
@@ -104,16 +100,14 @@ export default function AdminPage() {
         return;
       }
       if (!res.ok) {
-        setError(`Ошибка ${res.status}`);
+        setAuthenticated(false);
         return;
       }
       const json: StatsData = await res.json();
       setData(json);
       setAuthenticated(true);
     } catch {
-      setError("Не удалось загрузить статистику");
-    } finally {
-      setLoading(false);
+      setAuthenticated(false);
     }
   }, []);
 
@@ -189,7 +183,8 @@ export default function AdminPage() {
 
   // Check auth on mount
   useEffect(() => {
-    fetchStats();
+    const timer = setTimeout(() => void fetchStats(), 0);
+    return () => clearTimeout(timer);
   }, [fetchStats]);
 
   // Auto-refresh every 30 seconds when authenticated

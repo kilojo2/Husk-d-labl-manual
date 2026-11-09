@@ -1,51 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
-
-/**
- * F8 fix: Timing-safe string comparison.
- */
-function safeCompare(a: string, b: string): boolean {
-  const bufA = Buffer.from(a, "utf8");
-  const bufB = Buffer.from(
-    b.slice(0, bufA.length).padEnd(bufA.length, "\0"),
-    "utf8"
-  );
-  try {
-    return crypto.timingSafeEqual(bufA, bufB);
-  } catch {
-    return false;
-  }
-}
-
-/**
- * In-memory session store.
- * In production, replace with Redis or a database-backed store.
- */
-const adminSessions = new Map<
-  string,
-  { expiresAt: number; createdAt: number }
->();
-
-// Export for use in stats routes
-export function isAdminSessionValid(sessionId: string): boolean {
-  const session = adminSessions.get(sessionId);
-  if (!session) return false;
-  if (Date.now() > session.expiresAt) {
-    adminSessions.delete(sessionId);
-    return false;
-  }
-  return true;
-}
-
-// Clean up expired sessions periodically
-setInterval(() => {
-  const now = Date.now();
-  for (const [id, session] of adminSessions) {
-    if (now > session.expiresAt) {
-      adminSessions.delete(id);
-    }
-  }
-}, 60000); // Every minute
+import {
+  ADMIN_SESSION_COOKIE,
+  ADMIN_SESSION_MAX_AGE_SECONDS,
+  createAdminSession,
+  verifyAdminToken,
+} from "@/lib/admin-auth";
 
 /**
  * POST /api/admin/login
@@ -101,8 +60,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Timing-safe comparison
-    if (!safeCompare(token, adminToken)) {
+    // Exact, timing-safe comparison. Correct prefixes are not valid tokens.
+    if (!verifyAdminToken(token)) {
       // Artificial delay on failure
       await new Promise((resolve) => setTimeout(resolve, 1000));
       return NextResponse.json(
@@ -111,23 +70,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate session ID
-    const sessionId = crypto.randomBytes(32).toString("hex");
-
-    // Store session (8 hour expiry)
-    adminSessions.set(sessionId, {
-      createdAt: Date.now(),
-      expiresAt: Date.now() + 8 * 3600000,
-    });
+    const session = createAdminSession();
 
     const response = NextResponse.json({ ok: true });
 
     // Set httpOnly cookie — JavaScript CANNOT read this
-    response.cookies.set("admin_session", sessionId, {
+    response.cookies.set(ADMIN_SESSION_COOKIE, session, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 28800, // 8 hours
+      maxAge: ADMIN_SESSION_MAX_AGE_SECONDS,
       path: "/",
     });
 

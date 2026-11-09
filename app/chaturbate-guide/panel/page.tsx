@@ -39,7 +39,7 @@ export default function Page() {
 
       <ul className="list-disc list-inside space-y-2 text-lg ml-4 mt-4">
         <li><strong>Broadcast yourself</strong> — получение RTMP-адреса и ключа трансляции для OBS</li>
-        <li><strong>Announce you're online</strong> — рассылка уведомлений подписчикам</li>
+        <li><strong>Announce you&apos;re online</strong> — рассылка уведомлений подписчикам</li>
         <li><strong>Token Stats</strong> — статистика токенов и донатов</li>
         <li><strong>Goals (цели)</strong> — настройка и управление целями трансляции</li>
         <li><strong>Apps</strong> — установка и настройка приложений</li>

@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, saveDb } from "@/lib/db";
 import { navigationSections } from "@/lib/navigation";
+import { requireAdmin } from "@/lib/admin-auth";
 import fs from "fs";
 import path from "path";
 
 type PageMeta = {
   slug: string;
+  href: string;
   title: string;
   description: string;
   sectionSlug: string;
@@ -14,11 +16,23 @@ type PageMeta = {
   icon: string;
 };
 
+type MigratedBlock = {
+  type: string;
+  text?: string;
+  emoji?: string;
+  items?: string[];
+  headers?: string[];
+  rows?: string[][];
+};
+
 /**
  * POST /api/admin/migrate
  * Reads all existing page.tsx files and navigation, then populates cms_pages + cms_blocks.
  */
 export async function POST(request: NextRequest) {
+  const authError = requireAdmin(request);
+  if (authError) return authError;
+
   const db = await getDb();
 
   // ═══ 1. Collect all pages from navigation ═══════════════════
@@ -39,6 +53,7 @@ export async function POST(request: NextRequest) {
         // Parent page
         pagesFromNav.push({
           slug,
+          href: item.href,
           title: item.title,
           description: "",
           sectionSlug,
@@ -51,6 +66,7 @@ export async function POST(request: NextRequest) {
         item.children.forEach((child, childIdx) => {
           pagesFromNav.push({
             slug: child.slug,
+            href: child.href,
             title: child.title,
             description: "",
             sectionSlug,
@@ -62,6 +78,7 @@ export async function POST(request: NextRequest) {
       } else {
         pagesFromNav.push({
           slug,
+          href: item.href,
           title: item.title,
           description: "",
           sectionSlug,
@@ -79,7 +96,7 @@ export async function POST(request: NextRequest) {
   const appDir = path.join(process.cwd(), "app");
 
   let savedCount = 0;
-  let errors: string[] = [];
+  const errors: string[] = [];
 
   const readRecursive = (dir: string): string[] => {
     const files: string[] = [];
@@ -131,10 +148,8 @@ export async function POST(request: NextRequest) {
       let slug = path.dirname(relativePath).replace(/\\/g, "/");
       if (slug === "." || slug === "") slug = "home";
 
-      // Convert app-directory path to navigation slug
+      // Extract metadata from the source component.
       // e.g. "chaturbate-guide/broadcast" → "chaturbate-broadcast"
-      const navSlug = slug.replace(/\//g, "-");
-
       // Extract meta
       const titleMatch = content.match(/title="([^"]*)"/);
       const descMatch = content.match(/description="([^"]*)"/);
@@ -142,7 +157,9 @@ export async function POST(request: NextRequest) {
       const description = descMatch ? descMatch[1] : "";
 
       // Find matching nav page for section/parent info
-      const navPage = pagesFromNav.find((p) => p.slug === navSlug);
+      const routeHref = slug === "home" ? "/" : `/${slug}`;
+      const navPage = pagesFromNav.find((page) => page.href === routeHref);
+      const navSlug = navPage?.slug ?? slug.replace(/\//g, "-");
       const sectionSlug = navPage?.sectionSlug || "";
       const parentSlug = navPage?.parentSlug || "";
       const sortOrder = navPage?.sortOrder ?? 0;
@@ -177,16 +194,17 @@ export async function POST(request: NextRequest) {
         "INSERT INTO cms_blocks (page_slug, sort_order, block_type, content_json, created_at) VALUES (?, ?, ?, ?, datetime('now'))"
       );
 
-      blocks.forEach((block: any, index: number) => {
+      blocks.forEach((block, index: number) => {
         stmt.run([navSlug, index, block.type || "paragraph", JSON.stringify(block)]);
       });
       stmt.free();
 
       savedCount++;
       console.log(`  ✅ ${navSlug} (${blocks.length} blocks) from ${slug}`);
-    } catch (err: any) {
-      console.error(`  ❌ ${file}: ${err.message}`);
-      errors.push(`${file}: ${err.message}`);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`  ❌ ${file}: ${message}`);
+      errors.push(`${file}: ${message}`);
     }
   }
 
@@ -217,8 +235,8 @@ export async function POST(request: NextRequest) {
 /**
  * Extract ContentBlock[] arrays from a TypeScript file content.
  */
-function extractBlocks(content: string): any[] {
-  const allBlocks: any[] = [];
+function extractBlocks(content: string): MigratedBlock[] {
+  const allBlocks: MigratedBlock[] = [];
 
   // Find all const/let/var xxx: ContentBlock[] = [...] or const xxx = [...]
   const regex = /(?:const|let|var)\s+(\w+)\s*(?::\s*(?:ContentBlock\[\]\s*=\s*|=\s*))(\[[\s\S]*?\]);/g;
@@ -281,7 +299,7 @@ function extractBlocks(content: string): any[] {
           }
         }
 
-        const block: any = { type: typeField };
+        const block: MigratedBlock = { type: typeField };
         if (textField !== undefined) block.text = textField;
         if (emojiField !== undefined) block.emoji = emojiField;
         if (items.length > 0) block.items = items;

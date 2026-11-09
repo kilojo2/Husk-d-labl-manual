@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Link from "next/link";
-import { search, type SearchResult } from "@/lib/search-index";
+import { search } from "@/lib/search-index";
 
 interface SearchCommandProps {
   isOpen: boolean;
@@ -11,23 +11,20 @@ interface SearchCommandProps {
 
 export default function SearchCommand({ isOpen, onClose }: SearchCommandProps) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const results = useMemo(() => search(query), [query]);
 
   useEffect(() => {
     if (isOpen) {
-      setQuery("");
-      setResults([]);
-      setSelectedIndex(0);
-      setTimeout(() => inputRef.current?.focus(), 50);
+      const timer = setTimeout(() => {
+        setQuery("");
+        setSelectedIndex(0);
+        inputRef.current?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    setResults(search(query));
-    setSelectedIndex(0);
-  }, [query]);
 
   // Keyboard navigation
   const handleKeyDown = useCallback(
@@ -91,7 +88,10 @@ export default function SearchCommand({ isOpen, onClose }: SearchCommandProps) {
           <input
             ref={inputRef}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelectedIndex(0);
+            }}
             onKeyDown={handleKeyDown}
             placeholder="Поиск инструкций..."
             style={{

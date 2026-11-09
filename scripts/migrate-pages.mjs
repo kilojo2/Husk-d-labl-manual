@@ -62,7 +62,7 @@ function extractContentBlocks(content) {
     const rawArray = match[2];
     try {
       // Clean up the array text to be parseable JSON
-      let cleaned = rawArray
+      const cleaned = rawArray
         .replace(/,\s*\]/g, ']') // trailing comma
         .replace(/\{\s*type:\s*"([^"]+)"/g, '{"type":"$1"') // quote type values
         .replace(/,\s*text:\s*"([^"]*)"/g, ',"text":"$1"') // text field
@@ -77,7 +77,7 @@ function extractContentBlocks(content) {
       // Simple approach: use Function to evaluate the array literal
       // This is safe because we're reading our own source files
       try {
-        const parsed = new Function('return ' + rawArray)();
+        const parsed = new Function('return ' + cleaned)();
         if (Array.isArray(parsed)) {
           blocks.push(...parsed);
         }
@@ -126,24 +126,6 @@ async function login() {
 }
 
 // ── Save page to API ───────────────────────────────────────────
-async function savePage(slug, title, description, blocks) {
-  const res = await fetch(`${API_BASE}/api/admin/pages`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      slug,
-      title,
-      description,
-      blocks,
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || `HTTP ${res.status}`);
-  }
-}
-
 // ── Main ───────────────────────────────────────────────────────
 async function main() {
   console.log('🔍 Scanning for page.tsx files in', APP_DIR);
@@ -156,7 +138,7 @@ async function main() {
   try {
     cookie = await login();
     console.log('✅ Logged in\n');
-  } catch (err) {
+  } catch {
     console.error('❌ Login failed. Make sure ADMIN_TOKEN is correct and the server is running.');
     console.error('   Server URL:', API_BASE);
     process.exit(1);

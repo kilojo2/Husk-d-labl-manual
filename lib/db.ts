@@ -11,28 +11,53 @@ import fs from "fs";
 import path from "path";
 
 let db: SqlJsDatabase | null = null;
+let loadedDbPath: string | null = null;
+let loadedMtimeMs: number | null = null;
 
 function getDbPath(): string {
-  return process.env.DATABASE_PATH || path.join(process.cwd(), "data", "visits.db");
+  return process.env.DATABASE_PATH || path.join(/* turbopackIgnore: true */ process.cwd(), "data", "visits.db");
+}
+
+function getFileMtimeMs(dbPath: string): number | null {
+  try {
+    return fs.statSync(/* turbopackIgnore: true */ dbPath).mtimeMs;
+  } catch {
+    return null;
+  }
 }
 
 /**
  * Initialize (or re-open) the SQLite database and ensure all tables exist.
  */
 export async function getDb(): Promise<SqlJsDatabase> {
-  if (db) return db;
-
-  const SQL = await initSqlJs();
   const dbPath = getDbPath();
-  const dir = path.dirname(dbPath);
+  const diskMtimeMs = getFileMtimeMs(dbPath);
 
-  // Ensure the data directory exists
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  if (
+    db &&
+    loadedDbPath === dbPath &&
+    loadedMtimeMs === diskMtimeMs
+  ) {
+    return db;
   }
 
-  if (fs.existsSync(dbPath)) {
-    const buffer = fs.readFileSync(dbPath);
+  // Next.js can load this module in separate server bundles (Proxy and route
+  // handlers). Reload when another bundle has persisted a newer DB snapshot.
+  if (db) {
+    db.close();
+    db = null;
+  }
+
+  const SQL = await initSqlJs();
+  const dir = path.dirname(/* turbopackIgnore: true */ dbPath);
+
+  // Ensure the data directory exists
+  if (!fs.existsSync(/* turbopackIgnore: true */ dir)) {
+    fs.mkdirSync(/* turbopackIgnore: true */ dir, { recursive: true });
+  }
+
+  if (fs.existsSync(/* turbopackIgnore: true */ dbPath)) {
+    const buffer = fs.readFileSync(/* turbopackIgnore: true */ dbPath);
     db = new SQL.Database(buffer);
   } else {
     db = new SQL.Database();
@@ -44,6 +69,8 @@ export async function getDb(): Promise<SqlJsDatabase> {
 
   createTables(db);
   migrateSchema(db);
+  loadedDbPath = dbPath;
+  loadedMtimeMs = diskMtimeMs;
 
   return db;
 }
@@ -92,6 +119,7 @@ function createTables(database: SqlJsDatabase): void {
       date         TEXT NOT NULL,
       views        INTEGER NOT NULL DEFAULT 0,
       unique_views INTEGER NOT NULL DEFAULT 0,
+      updated_at   TEXT NOT NULL DEFAULT (datetime('now')),
       UNIQUE(page_path, date)
     )
   `);
@@ -186,7 +214,7 @@ function migrateSchema(database: SqlJsDatabase): void {
     const columns = database.exec("PRAGMA table_info(visits)");
     const existingColumns: string[] =
       columns.length > 0
-        ? columns[0].values.map((c: any) => c[1])
+        ? columns[0].values.map((column) => String(column[1]))
         : [];
 
     if (!existingColumns.includes("ip_hash")) {
@@ -196,6 +224,21 @@ function migrateSchema(database: SqlJsDatabase): void {
       database.run(`ALTER TABLE visits ADD COLUMN country TEXT DEFAULT ''`);
       database.run(`ALTER TABLE visits ADD COLUMN city TEXT DEFAULT ''`);
       database.run(`CREATE INDEX IF NOT EXISTS idx_visits_ip_hash ON visits(ip_hash)`);
+    }
+
+    const pageStatsColumns = database.exec("PRAGMA table_info(page_stats)");
+    const existingPageStatsColumns: string[] =
+      pageStatsColumns.length > 0
+        ? pageStatsColumns[0].values.map((column) => String(column[1]))
+        : [];
+
+    if (!existingPageStatsColumns.includes("updated_at")) {
+      database.run(
+        "ALTER TABLE page_stats ADD COLUMN updated_at TEXT NOT NULL DEFAULT ''",
+      );
+      database.run(
+        "UPDATE page_stats SET updated_at = datetime('now') WHERE updated_at = ''",
+      );
     }
 
     // Create new tables if they don't exist (safe even if already created above)
@@ -269,7 +312,9 @@ export function saveDb(): void {
   const dbPath = getDbPath();
   const data = db.export();
   const buffer = Buffer.from(data);
-  fs.writeFileSync(dbPath, buffer);
+  fs.writeFileSync(/* turbopackIgnore: true */ dbPath, buffer);
+  loadedDbPath = dbPath;
+  loadedMtimeMs = getFileMtimeMs(dbPath);
 }
 
 /**
@@ -281,4 +326,6 @@ export function closeDb(): void {
     db.close();
     db = null;
   }
+  loadedDbPath = null;
+  loadedMtimeMs = null;
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { navigationSections } from "@/lib/navigation";
 import SFSymbol from "@/components/SFSymbol";
 import ContinueLearning from "@/components/ContinueLearning";
+import SearchBar from "@/components/SearchBar";
 
 export default function Home() {
   return (
@@ -17,17 +18,8 @@ export default function Home() {
       </div>
 
       {/* ── Search bar (prominent) ── */}
-      <div className="w-full max-w-[600px] mb-12 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
-        <div className="flex items-center gap-3 px-5 py-4 rounded-2xl apple-glass apple-shadow-md cursor-text
-                        hover:border-accent/30 transition-all duration-300 group">
-          <svg className="w-5 h-5 text-text-muted group-hover:text-accent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <span className="flex-1 text-sm text-text-muted">Поиск по справочнику...</span>
-          <kbd className="hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-bg-surface-hover text-[11px] font-medium text-text-muted border border-border">
-            Ctrl K
-          </kbd>
-        </div>
+      <div className="relative z-40 w-full max-w-[600px] mb-12 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
+        <SearchBar variant="hero" />
       </div>
 
       {/* ── Популярное ── */}

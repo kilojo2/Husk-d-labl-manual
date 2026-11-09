@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import { deleteVisitorData } from "@/lib/tracker";
 
 /**
  * POST /api/privacy
@@ -44,12 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === "delete") {
-      const db = await getDb();
-
-      // F1 fix: Parameterized query — impossible to inject
-      const stmt = db.prepare(`DELETE FROM visits WHERE visitor_id = ?`);
-      stmt.run([sanitizedId]);
-      stmt.free();
+      await deleteVisitorData(sanitizedId);
 
       return NextResponse.json({
         ok: true,

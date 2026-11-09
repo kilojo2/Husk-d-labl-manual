@@ -1,128 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import { getDb } from "@/lib/db";
 import { privatizeDailyStats } from "@/lib/differential-privacy";
 import { getBanList } from "@/lib/fail2ban";
 import { getRecentAnomalies, getAnomalyStats } from "@/lib/anomaly-monitor";
-import { isAdminSessionValid } from "@/app/api/admin/login/route";
-
-/**
- * F8 fix: Timing-safe string comparison using crypto.timingSafeEqual.
- */
-function safeCompare(a: string, b: string): boolean {
-  const bufA = Buffer.from(a, "utf8");
-  const bufB = Buffer.from(
-    b.slice(0, bufA.length).padEnd(bufA.length, "\0"),
-    "utf8"
-  );
-  try {
-    return crypto.timingSafeEqual(bufA, bufB);
-  } catch {
-    return false;
-  }
-}
-
-/**
- * F13 fix: In-memory brute force protection for Bearer token auth.
- */
-interface AuthFailureRecord {
-  count: number;
-  until: number;
-}
-const adminAuthFailures = new Map<string, AuthFailureRecord>();
-const MAX_AUTH_FAILURES = 5;
-const AUTH_LOCKOUT_MS = 900000; // 15 minutes
-
-function getIpHashForAuth(request: NextRequest): string {
-  const cfIp = request.headers.get("cf-connecting-ip");
-  const realIp = request.headers.get("x-real-ip");
-  const xff = request.headers.get("x-forwarded-for");
-  const raw = cfIp || realIp || xff?.split(",")[0]?.trim() || "unknown";
-  let hash = 0;
-  for (let i = 0; i < raw.length; i++) {
-    hash = ((hash << 5) - hash) + raw.charCodeAt(i);
-    hash = hash & hash;
-  }
-  return (hash >>> 0).toString(16).padStart(8, "0");
-}
-
-/**
- * Unified authentication check.
- * Returns true if the request is authenticated via admin_session cookie OR Bearer token.
- */
-async function authenticateRequest(
-  request: NextRequest
-): Promise<{ ok: boolean; errorResponse?: NextResponse }> {
-  // F7: Check httpOnly cookie session first (no brute-force needed)
-  const sessionId = request.cookies.get("admin_session")?.value;
-  if (sessionId && isAdminSessionValid(sessionId)) {
-    return { ok: true };
-  }
-
-  // Fallback: Bearer token with brute-force protection (F13)
-  const ipHash = getIpHashForAuth(request);
-
-  // Check lockout
-  const failRecord = adminAuthFailures.get(ipHash);
-  if (
-    failRecord &&
-    failRecord.count >= MAX_AUTH_FAILURES &&
-    Date.now() < failRecord.until
-  ) {
-    const retryAfter = Math.ceil((failRecord.until - Date.now()) / 1000);
-    return {
-      ok: false,
-      errorResponse: NextResponse.json(
-        { error: "Too many authentication attempts. Try again later." },
-        { status: 429, headers: { "Retry-After": String(retryAfter) } }
-      ),
-    };
-  }
-
-  const adminToken = process.env.ADMIN_TOKEN;
-  if (!adminToken) {
-    return {
-      ok: false,
-      errorResponse: NextResponse.json(
-        { error: "ADMIN_TOKEN not configured on server" },
-        { status: 500 }
-      ),
-    };
-  }
-
-  const authHeader = request.headers.get("authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return {
-      ok: false,
-      errorResponse: NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      ),
-    };
-  }
-
-  const token = authHeader.slice(7);
-
-  if (!safeCompare(token, adminToken)) {
-    const record = failRecord || {
-      count: 0,
-      until: Date.now() + AUTH_LOCKOUT_MS,
-    };
-    record.count++;
-    adminAuthFailures.set(ipHash, record);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    return {
-      ok: false,
-      errorResponse: NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
-      ),
-    };
-  }
-
-  adminAuthFailures.delete(ipHash);
-  return { ok: true };
-}
+import { requireAdmin } from "@/lib/admin-auth";
 
 /**
  * GET /api/stats
@@ -137,10 +18,8 @@ async function authenticateRequest(
  *   - Parameterized queries (F5)
  */
 export async function GET(request: NextRequest) {
-  const auth = await authenticateRequest(request);
-  if (!auth.ok) {
-    return auth.errorResponse!;
-  }
+  const authError = requireAdmin(request);
+  if (authError) return authError;
 
   try {
     const db = await getDb();
@@ -254,7 +133,7 @@ export async function GET(request: NextRequest) {
 
     const recent =
       recentResult.length > 0
-        ? recentResult[0].values.map((row: any[]) => ({
+        ? recentResult[0].values.map((row) => ({
             pagePath: row[0],
             pageTitle: row[1],
             referrer: row[2],

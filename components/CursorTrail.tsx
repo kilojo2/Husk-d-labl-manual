@@ -185,6 +185,7 @@ export default function CursorTrail() {
     document.addEventListener("touchend", handleTouchEnd);
 
     rafRef.current = requestAnimationFrame(animate);
+    const sparkles = sparklesRef.current;
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
@@ -193,7 +194,7 @@ export default function CursorTrail() {
       document.removeEventListener("touchend", handleTouchEnd);
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      for (const s of sparklesRef.current) {
+      for (const s of sparkles) {
         s.el.remove();
       }
     };

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { useAnalyticsConsent } from "@/lib/analytics-consent";
 
 /**
  * VisitTracker — Client component that fires a POST /api/track
@@ -14,9 +15,12 @@ import { usePathname } from "next/navigation";
  */
 export default function VisitTracker() {
   const pathname = usePathname();
+  const consent = useAnalyticsConsent();
   const trackedPath = useRef<string | null>(null);
 
   useEffect(() => {
+    if (consent !== "accepted") return;
+
     // Skip if we've already tracked this path (prevents double-fire in dev)
     if (trackedPath.current === pathname) return;
     trackedPath.current = pathname;
@@ -32,6 +36,7 @@ export default function VisitTracker() {
       userAgent: navigator.userAgent,
       screenWidth: window.screen.width,
       screenHeight: window.screen.height,
+      analyticsConsent: true,
     };
 
     // Primary: fetch with keepalive
@@ -44,7 +49,10 @@ export default function VisitTracker() {
       // Fallback: Image beacon (works even when fetch is blocked)
       try {
         const img = new Image();
-        img.src = `/api/track/beacon?d=${btoa(JSON.stringify(payload))}`;
+        const encodedPayload = btoa(
+          encodeURIComponent(JSON.stringify(payload)),
+        );
+        img.src = `/api/track/beacon?d=${encodeURIComponent(encodedPayload)}`;
         img.style.display = "none";
         document.body.appendChild(img);
         setTimeout(() => {
@@ -56,7 +64,7 @@ export default function VisitTracker() {
         // Silently fail — tracking should never break the user experience
       }
     });
-  }, [pathname]);
+  }, [consent, pathname]);
 
   return null;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 
 interface Progress {
   lastPath: string;
@@ -10,17 +10,35 @@ interface Progress {
   progress: number;
 }
 
-export default function ContinueLearning() {
-  const [progress, setProgress] = useState<Progress | null>(null);
+const STORAGE_KEY = "learning_progress";
+const CHANGE_EVENT = "learning-progress-change";
 
-  useEffect(() => {
+function subscribe(onStoreChange: () => void): () => void {
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) onStoreChange();
+  };
+  window.addEventListener("storage", handleStorage);
+  window.addEventListener(CHANGE_EVENT, onStoreChange);
+  return () => {
+    window.removeEventListener("storage", handleStorage);
+    window.removeEventListener(CHANGE_EVENT, onStoreChange);
+  };
+}
+
+function readProgress(): string | null {
+  return window.localStorage.getItem(STORAGE_KEY);
+}
+
+export default function ContinueLearning() {
+  const serialized = useSyncExternalStore(subscribe, readProgress, () => null);
+  const progress = useMemo<Progress | null>(() => {
+    if (!serialized) return null;
     try {
-      const stored = localStorage.getItem("learning_progress");
-      if (stored) setProgress(JSON.parse(stored));
+      return JSON.parse(serialized) as Progress;
     } catch {
-      // ignore
+      return null;
     }
-  }, []);
+  }, [serialized]);
 
   if (!progress) return null;
 
@@ -71,11 +89,11 @@ export default function ContinueLearning() {
  */
 export function saveLearningProgress(path: string, title: string, sectionName: string) {
   try {
-    const existing = localStorage.getItem("learning_progress");
+    const existing = localStorage.getItem(STORAGE_KEY);
     const current = existing ? JSON.parse(existing) : { progress: 0 };
     const newProgress = Math.min(100, (current.progress || 0) + 1);
     localStorage.setItem(
-      "learning_progress",
+      STORAGE_KEY,
       JSON.stringify({
         lastPath: path,
         lastTitle: title,
@@ -83,6 +101,7 @@ export function saveLearningProgress(path: string, title: string, sectionName: s
         progress: newProgress,
       })
     );
+    window.dispatchEvent(new Event(CHANGE_EVENT));
   } catch {
     // ignore
   }
